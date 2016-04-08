@@ -1,0 +1,155 @@
+.hidden {
+    visibility: hidden;
+    display: none;
+}
+
+.SVDnote {
+    margin: 0 0 0 0;
+    color: #fff;
+}
+
+.SVDnote strong {
+    color: #fff;
+}
+
+.QVALnote {
+    margin: 0 0 0 0;
+    color: #fff;
+}
+
+.QVALnote strong {
+    color: #fff;
+}
+
+.mes {
+    float: none;
+    margin-right: 8px;
+    width: 80px;
+    padding: 6px 0 6px 0;
+}
+
+label {
+    margin: 5px 0;
+    color: #FFF
+}
+
+.sel_controls {
+    margin: 0 auto 0 auto;
+}
+
+.sel_controls td {
+    padding: 0 0.8em 0.6em 0.8em;
+}
+
+
+#startsel {
+    margin-left: 302px;
+    margin-bottom: 30px;
+    margin-top: 30px;
+}
+
+.btn {
+    transition: all .3s ease;
+    border: 1px solid  #e0e0e0;
+    background-color:  #e0e0e0;
+    color: #000;
+    border-radius: 0;
+    -webkit-box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.3);
+    -moz-box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.3);
+    box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.3);
+}
+
+.btn:hover {
+    background-color:  #ccc!important;
+    border-color:  #ccc!important;
+    transition: all .3s ease!important;
+    color: #000;
+}
+
+.btn.active {
+    background-color:  #ccc!important;
+    border-color:  #ccc!important;
+    color: #000;
+}
+
+.btn-primary:focus {
+    background-color:  #ccc!important;
+    border-color:  #ccc!important;
+    color: #000;
+}
+
+.is-hidden {
+    visibility: hidden
+}
+
+.is-visible {
+    visibility: visible
+}
+
+.btn-primary {
+
+}
+
+.btn-result {
+    margin: 0 1em 2em 1em;
+    width: 220px;
+    display: inline-block;
+}
+
+.selection-heading {
+    text-align: center;
+    font-size: 2em
+}
+
+.involve-table {
+    vertical-align: middle;
+    padding: 5px 10px
+}
+
+.involve-result {
+    background-color:  #3f51b5;
+    border: 1px  #3f51b5;
+    border-radius: 4px;
+    margin-left: 408px;
+    margin-right: 408px;
+    margin-bottom: 15px;
+    text-align: center
+}
+
+.involve {
+    visibility: hidden;
+    display: none;
+}
+
+.show {
+    border-radius: 4px!important;
+    margin-left: 3px!important;
+    background-color:  #3f51b5;
+}
+
+output {
+    display: table-cell;
+    padding: 3px 5px 2px;
+    color: #FFF;
+    font-weight: 600;
+    font-size: 100%;
+    text-align: center;
+    text-decoration: none;
+    white-space: nowrap;
+    vertical-align: middle;
+    -webkit-transition: all .5s ease;
+    -moz-transition: all .5s ease;
+    -o-transition: all .5s ease;
+    -ms-transition: all .5s ease;
+    transition: all .5s ease;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: -moz-none;
+    -o-user-select: none;
+    user-select: none
+}
+
+.range {
+    display: table-cell;
+    vertical-align: middle
+}

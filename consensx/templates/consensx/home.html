@@ -1,0 +1,212 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<head>
+
+<!-- Meta Tags -->
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+<title>CoNSENsX</title>
+
+<meta name="description" content="COmpliance of NMR Structural
+                                  ENSembles with eXperimental data" />
+
+<!-- Bootstrap -->
+<link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+<!-- Main Style -->
+<link href="{% static 'css/main.css' %}" rel="stylesheet">
+
+<link rel="shortcut icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
+<link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
+
+</head>
+
+
+<body>
+
+
+
+
+<!-- Our Shortcodes Section -->
+<div id="shortcodes" class="page" style="padding: 30px 0 0 0;">
+    <div class="container">
+
+        <!-- Title Page -->
+        <div class="row">
+            <div class="span12">
+                <div class="title-page">
+                    <h2 class="title"><b class="red">CoNSEnsX<sup>+</sup></b></h2>
+                    <h3 class="title-description"><b class="red">Co</b>mpliance of <b class="red">N</b>MR-derived <b class="red">S</b>tructural <b class="red">Ens</b>embles with e<b class="red">x</b>perimental data<br>+ selection</h3>
+                </div>
+            </div>
+        </div>
+        <!-- End Title Page -->
+
+        <!-- Start Accordion/Toggle Section -->
+        <div class="row">
+
+            <div class="col-lg-6">
+                <h3 class="spec">Start calculation</h3>
+
+                <div class="accordion" id="accordionArea">
+                    <form name="csx_form" action="" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <table  border="0">
+                        <tr class="form_param"><td>Ensemble: &nbsp;</td>
+                            <td><input type="file" id="pdb_file" name="pdb_upload" class="inputfile inputfile-1" data-multiple-caption="{count} files selected" multiple />
+                            <label for="pdb_file"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17"><path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z"/></svg> <span>Upload PDB file&hellip;</span></label></td>
+                        </tr>
+<!--                         <tr class="form_param"><td>&nbsp;</td>
+                            <td>or PDB ID: &nbsp;<input id="pdb_id" name="pdb_web" placeholder="1D3Z" type="text"></td>
+                        </tr> -->
+                        <tr class="form_param"><td>NOE restraints: &nbsp;</td>
+                            <td><input type="file" id="xplor_file" name="xplor_upload" class="inputfile inputfile-1" data-multiple-caption="{count} files selected" multiple />
+                            <label for="xplor_file"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17"><path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z"/></svg> <span>Upload NMR-Star file&hellip;</span></label></td>
+                        </tr>
+                        <tr class="form_param"><td>NMR parameters: &nbsp;</td>
+                            <td><input type="file" id="bmrb_file" name="bmrb_upload" class="inputfile inputfile-1" data-multiple-caption="{count} files selected" multiple />
+                            <label for="bmrb_file"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17"><path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z"/></svg> <span>Upload NMR-Star file&hellip;</span></label></td>
+                        </tr>
+                    </table>
+                    <br>Karplus equation parameter set: <select name="KARPLUS">
+                    <option selected="selected" value="1">Wang &amp; Bax 1996</option>
+                    <option value="2">Hu &amp; Bax 1997</option>
+                    <option value="3">Habeck, Rieping &amp; Nilges 2005</option>
+                    </select><br><br>
+                    <input id="fit_box" name="superimpose" value="1" type="checkbox">  Fit models in PDB<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;on range:
+                    <input id="fit_range" name="fit_range" placeholder="1-72" type="text">&nbsp;(optional)<br>
+                    <!-- <input name="noeviolanal" value="1" type="checkbox">  Perfom NOE violation analysis<br><br> -->
+                    <input name="r3average" value="1" type="checkbox">  Use r-3 averaging between models (NOE)<br>
+                    <input name="RDCSVD" value="1" type="checkbox" checked>  Use SVD for RDC back-calculation<br>
+                    RDC LC model:   <select name="RDCLC">
+                    <option selected="selected" value="bic">bicelles</option>
+                    <option value="pf1">Pf1 phages</option>
+                    </select><br><br>
+                    <table id="bottom_table" border="0">
+                        <tr><td><input id="reset_button" type="reset" value="Reset form", style="width: 16em;  height: 4em;"></td>
+                            <td><input id="submit_button" type="submit" value="Ready and fire!", style="width: 16em;  height: 4em;"></td>
+                        </tr>
+                    </table>
+                    </form>
+                </div>
+                <!-- End Accordion -->
+            </div>
+
+            <div class="col-lg-6">
+                <h3 class="spec">Info</h3>
+
+                <p class="info_text">The server is specifically designed for structural ensembles that were generated to reflect the internal dynamics of proteins at a given time scale. Such ensembles are typically generated by restrained molecular dynamics methods or selection-based approaches. CoNSEnsX+ provides an ensemble-averaged analysis of all experimental parameters recognized in the input and offers a simple greedy selection approach to identify the sub-ensemble best reflecting the parameters chosen. </p>
+
+                <!-- Start Toggle -->
+                <div class="accordion" id="toggleArea">
+
+                    <div class="accordion-group">
+                        <div class="accordion-heading togglize">
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#toggleArea" href="#collapseOne">
+                                Usage
+                                <span class="font-icon-plus"></span>
+                                <span class="font-icon-minus"></span>
+                            </a>
+                        </div>
+                        <div id="collapseOne" class="accordion-body collapse">
+                            <div class="accordion-inner">
+                                Input a multi-model PDB file, a BMRB format NOE
+                                distance restraint file (optional, V2 NMR Restraints
+                                at the <a href="http://www.rcsb.org">Protein Data Bank</a>)
+                                and a BMRB restraint file to check the accuracy of
+                                the protein structural ensemble against experimental
+                                data. For a detailed description, see the
+                                <a href="http://consensx.itk.ppke.hu/public/Descriptionpage.html">description page</a>.
+                                For reference on accepted file formatting, please consult the
+                                <a href="test_data/test_data.zip" download>downloadable test data</a>.
+                                You can run a test calculation on the
+                                test data anytime, to check if the server is working.
+                                <div style="text-align: center;">
+                                <form name="csx_test" action="" method="post">
+                                    <input id="submit_test" type="submit" value="Run test calculation!">
+                                </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-group">
+                        <div class="accordion-heading togglize">
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#toggleArea" href="#collapseTwo">
+                            Citing
+                            <span class="font-icon-plus"></span>
+                            <span class="font-icon-minus"></span>
+                        </a>
+                        </div>
+                        <div id="collapseTwo" class="accordion-body collapse">
+                            <div class="accordion-inner">
+                                When publishing results obtained with CoNSEnsX, you are kindly asked to cite the relevant references from these:
+                        <ul>
+                        <li>Ángyán et al. (2010):  <a href="http://www.biomedcentral.com/1472-6807/10/39">CoNSEnsX: an ensemble view of protein structures and NMR-derived experimental data.</a> BMC Struct. Biol. 10:39</li>
+                        <li>Ángyán et al. (2008):  <a href="http://bioinformatics.oxfordjournals.org/content/24/2/272.long">Fast protein fold estimation from NMR-derived distance restraints</a>. Bioinformatics 24:272. (PRIDE-NMR reference)</li>
+                        <li>Neal et al. (2003): Rapid and accurate calculation of protein 1H. 13C amd 15N chemical shifts. J. Biomol. NMR 26:215.</li>
+                        <li>Zweckstetter &amp; Bax (2000): Prediction of
+                        sterically induced alignment in a dilute liquid crystalline phase: aid
+                        to protein strcuture determination by NMR. J. Am. Chem. Soc. 122:3791</li>
+                        </ul>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-group">
+                        <div class="accordion-heading togglize">
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#toggleArea" href="#collapseThird">
+                            Contact
+                            <span class="font-icon-plus"></span>
+                            <span class="font-icon-minus"></span>
+                        </a>
+                        </div>
+                        <div id="collapseThird" class="accordion-body collapse">
+                            <div class="accordion-inner">
+                                Questions and suggestions regarding the CoNSEnsX server should
+                                go to <a href="mailto:gaspari.zoltan@itk.ppke.hu?Subject=CoNSEnsX" target="_top">Zoltán Gáspári</a>
+                                (gaspari.zoltan at itk.ppke.hu)
+                            </div>
+                        </div>
+                    </div>
+
+                    {% if error %}
+                    <div class='errormsg'><b class='red' style='color : #E57373;'>ERROR:</b> {{ error }}</div>
+                    {% endif %}
+
+                    <div style="display: inline-block;" class="loader hidden">
+                      <div class="box"></div>
+                      <div class="box"></div>
+                      <div class="box"></div>
+                      <div class="box"></div>
+                    </div>
+                    <div style="display: inline-block;" class="loader_text hidden">
+                        <h3 class="spec">Calculation in progress</h3>
+                        <p>You will be redirected automatically</p>
+                    </div>
+
+                </div>
+                <!-- End Toggle -->
+            </div>
+
+        </div>
+        <!-- End Accordion/Toggle Section -->
+
+    </div>
+</div>
+<!-- End Shortcodes Section -->
+
+
+
+
+
+
+<!-- Js -->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> <!-- jQuery Core -->
+<script src="{% static 'js/bootstrap.min.js' %}"></script> <!-- Bootstrap -->
+<script src="{% static 'js/script.js' %}"></script>
+<!-- End Js -->
+</body>
+</html>
