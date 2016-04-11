@@ -124,7 +124,8 @@
                                 test data anytime, to check if the server is working.
                                 <div style="text-align: center;">
                                 <form name="csx_test" action="" method="post">
-                                    <input id="submit_test" type="submit" value="Run test calculation!">
+                                {% csrf_token %}
+                                    <input id="submit_test" name="submit_test" type="submit" value="Run test calculation!">
                                 </form>
                                 </div>
                             </div>

@@ -78,8 +78,6 @@ def calcRDC(RDC_lists, pdb_models, my_path, SVD_enabled, lc_model):
         csx_func.callPalesOn(my_path, pdb_models, RDC_dict,
                              lc_model, SVD_enabled)
 
-        csx_out.writeRDC_table_open(my_path, "RDC list", list_num + 1)
-
         for RDC_type in sorted(list(RDC_dict.keys())):
             print("RDC list", list_num + 1, RDC_type)
 
@@ -154,13 +152,10 @@ def calcRDC(RDC_lists, pdb_models, my_path, SVD_enabled, lc_model):
                                   )
 
         os.remove(pales_out)
-        csx_out.writeRDC_table_close(my_path)
 
 
 def calcS2(S2_dict, my_path, calculate_on_models=None, fit=None, fit_range=None):
     """Back calculate order paramteres from given S2 dict and PDB models"""
-    csx_out.write_table_open(my_path, "Order parameters (S<sup>2</sup>)")
-
     model_data = csx_obj.PDB_model.model_data
 
     if not calculate_on_models:
@@ -209,8 +204,6 @@ def calcS2(S2_dict, my_path, calculate_on_models=None, fit=None, fit_range=None)
                                  correl, q_value, rmsd,
                                  corr_graph_name, graph_name, "S2_" + S2_type)
 
-    csx_out.write_table_close(my_path)
-
 
 def calcS2_sidechain(S2_sidechain, my_path, fit=None):
     """Back calculate order paramteres from given S2 dict and PDB models"""
@@ -223,9 +216,6 @@ def calcS2_sidechain(S2_sidechain, my_path, fit=None):
         'ALA' : {'CB':'CA'},
         'MET' : {'CE':'SD'}
     }
-
-    table_name = "Sidechain order parameters (S<sup>2</sup>)"
-    csx_out.write_table_open(my_path, table_name)
 
     model_data = csx_obj.PDB_model.model_data
 
@@ -361,7 +351,6 @@ def calcS2_sidechain(S2_sidechain, my_path, fit=None):
                              len(S2_sidechain),
                              correl, q_value, RMSD,
                              "Sidechain")
-    csx_out.write_table_close(my_path)
 
 
 def calcJCouplings(param_set, Jcoup_dict, my_PDB, my_path):
@@ -369,7 +358,6 @@ def calcJCouplings(param_set, Jcoup_dict, my_PDB, my_path):
     type_dict = {}
     model_list = csx_obj.PDB_model.model_data
     dihed_lists = csx_func.calcDihedAngles(model_list)
-    csx_out.write_table_open(my_path, "Coupling constants (J-coupling)")
 
     for Jcoup_type in sorted(list(Jcoup_dict.keys())):
 
@@ -434,7 +422,6 @@ def calcJCouplings(param_set, Jcoup_dict, my_PDB, my_path):
 
     Jcoup_model_data_path = my_path + "/Jcoup_model.pickle"
     pickle.dump(type_dict, open(Jcoup_model_data_path, 'wb'))
-    csx_out.write_table_close(my_path)
 
 
 def calcChemShifts(ChemShift_lists, pdb_models, my_path):
@@ -448,10 +435,6 @@ def calcChemShifts(ChemShift_lists, pdb_models, my_path):
     pickle.dump(model_data, open(CS_model_data_path, 'wb'))
 
     for list_num, CS_list in enumerate(ChemShift_lists):
-
-        csx_out.writeRDC_table_open(my_path, "Chemical shift list",
-                                    list_num + 1)
-
         for CS_type in sorted(list(CS_list.keys())):
             model_corrs = []
 
@@ -513,10 +496,8 @@ def calcChemShifts(ChemShift_lists, pdb_models, my_path):
                                   corr_graph_name, graph_name,
                                   mod_corr_graph_name, "CS_" + CS_type)
 
-    csx_out.writeRDC_table_close(my_path)
 
-
-def calcNOEviolations(args, saveShifts, my_path, r3_averaging):
+def calcNOEviolations(PDB_file, saveShifts, my_path, r3_averaging):
     """Back calculate NOE distance violations from given RDC lists and PDB
     models"""
     # parse data to restraint objects returned from pypy process
@@ -528,7 +509,7 @@ def calcNOEviolations(args, saveShifts, my_path, r3_averaging):
     restraints = csx_obj.Restraint_Record.getNOERestraints()
     # restraints = csx_obj.Restraint_Record.all_restraints
 
-    PDB_coords    = csx_func.pdb2coords(args.PDB_file)
+    PDB_coords    = csx_func.pdb2coords(PDB_file)
     prev_id       = -1
     avg_distances = {}
     measured_avg  = {}
