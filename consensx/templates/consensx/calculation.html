@@ -18,10 +18,10 @@
   <script src="{% static 'js/involve.js' %}"></script>
 
   <!-- Add fancyBox -->
-  <link rel="stylesheet" href="{% static 'fancybox/source/jquery.fancybox.css?v=2.1.5' %}" type="text/css" media="screen" />
-  <script type="text/javascript" src="{% static 'fancybox/source/jquery.fancybox.pack.js?v=2.1.5' %}"></script>
-  <link rel="stylesheet" href="{% static 'fancybox/source/helpers/jquery.fancybox-thumbs.css?v=1.0.7' %}" type="text/css" media="screen" />
-  <script type="text/javascript" src="{% static 'fancybox/source/helpers/jquery.fancybox-thumbs.js?v=1.0.7' %}"></script>
+  <link rel="stylesheet" href="{% static 'fancybox/source/jquery.fancybox.css' %}" type="text/css" media="screen" />
+  <script type="text/javascript" src="{% static 'fancybox/source/jquery.fancybox.pack.js' %}"></script>
+  <link rel="stylesheet" href="{% static 'fancybox/source/helpers/jquery.fancybox-thumbs.css' %}" type="text/css" media="screen" />
+  <script type="text/javascript" src="{% static 'fancybox/source/helpers/jquery.fancybox-thumbs.js' %}"></script>
 
   <script type="text/javascript">
     $(document).ready(function() {
@@ -121,10 +121,43 @@
           </button>
         </form>
 
+      </div>
 
 
 
-    </div>
+
+      <div class="results">
+      <h4 class="table-source">NOE violations and PRIDE-NMR</h4>
+      <table class="result_table">
+
+          <td><table class="NOE_PRIME_table">
+          <tr><td><strong>NOE distance violation</strong></td></tr>
+          <tr><td>Total # of violations:</td><td>{{ NOE_PRIDE_data.NOE_violations }}</td></tr>
+          </table></td>
+          <td width="10"></td>
+          <td><a class="fancybox" title="NOE violations" href="NOE_hist.svg"><img width="320" src="NOE_hist.svg"></a></td>
+
+          <td width="30"></td>
+
+          <td><table class="NOE_PRIME_table">
+          <tr><td><strong>PRIDE-NMR</strong></td></tr>
+          <tr><td>Model with best score:</td><td>{{ NOE_PRIDE_data.best_score }}</td></tr>
+          <tr><td>Model with worst score:</td><td>{{ NOE_PRIDE_data.worst_score }}</td></tr>
+          <tr><td>Average score:</td><td>{{ NOE_PRIDE_data.average_score }}</td></tr>
+          <tr><td>Standard Deviation:</td><td>{{ NOE_PRIDE_data.deviation }}</td></tr>
+          </table></td>
+          <td width="10">{{ PRIDE_hist }}</td>
+          <td><a class="fancybox" title="NOE violations" href="/{{ PRIDE_hist }}"><img width="320" src="/{{ PRIDE_hist }}"></a></td>
+
+      </table>
+      </div>
+
+
+
+
+
+
+
   </div>
   </div>
 </div>

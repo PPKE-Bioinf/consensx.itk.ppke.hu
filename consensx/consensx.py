@@ -72,10 +72,27 @@ def run_calculation(request, calc_id):
                                                     my_path, DB_entry.r3average)
         NOE_violations = str(NOE_violations) + " distance restraints found"
         PRIDE_data = csx_calc.calcNMR_Pride(pdb_models, my_path)
+
+        NOE_PRIDE_data = {
+            "NOE_violations": NOE_violations,
+            "NOE_hist": os.path.join(settings.MEDIA_ROOT, my_id,
+                                     "NOE_hist.svg"),
+            "best_score": PRIDE_data[0],
+            "worst_score": PRIDE_data[1],
+            "average_score": '{0:.3f}'.format(PRIDE_data[2]),
+            "deviation": '{0:.3f}'.format(PRIDE_data[3]),
+            "PRIDE_hist": str(os.path.join(settings.MEDIA_ROOT, my_id,
+                                                 "PRIDE-NMR_score.svg"))
+        }
+
+
+        print(str(os.path.join(settings.MEDIA_ROOT, my_id,
+                                                 "PRIDE-NMR_score.svg")))
         data_found = True
     else:
         NOE_name = "[NOT PRESENT]"
         NOE_violations = ""
+        NOE_PRIDE_data = None
 
 
     #----------------------  Read  and parse STR file   -----------------------#
@@ -144,7 +161,8 @@ def run_calculation(request, calc_id):
             "n_model": model_count,
             "my_NOE": NOE_name,
             "n_NOE" : NOE_violations,
-            "my_STR": STR_name
+            "my_STR": STR_name,
+            "NOE_PRIDE_data": NOE_PRIDE_data
         })
     else:
         return "NO DATA FOUND IN STAR-NMR FILE"
