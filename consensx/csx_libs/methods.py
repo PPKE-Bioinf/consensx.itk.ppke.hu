@@ -8,8 +8,6 @@ import string
 import random
 import prody
 import time
-import hashlib
-import pickle
 import numpy as np
 import matplotlib
 matplotlib.use('Agg')
@@ -76,26 +74,6 @@ def natural_sort(l):
     convert = lambda text: int(text) if text.isdigit() else text.lower()
     alphanum_key = lambda key: [convert(c) for c in re.split('([0-9]+)', key)]
     return sorted(l, key=alphanum_key)
-
-
-def getID(args):
-    """Generates unique ID for calculation"""
-    chars = string.ascii_uppercase + string.digits
-
-    if args.i:
-        my_id = args.i
-    else:
-        if os.path.exists("calculations"):
-            while True:
-                my_id    = ''.join(random.choice(chars) for _ in range(6))
-                used_IDs = os.listdir("calculations")
-                if my_id not in used_IDs:
-                    break
-        else:
-            my_id = ''.join(random.choice(chars) for _ in range(6))
-    my_path = "calculations/" + my_id + '/'
-    print("Job started with ID: \033[0;35m" + my_id + "\033[0m")
-    return my_id, my_path
 
 
 def check_3rd_party(install_dir):
@@ -720,27 +698,25 @@ def callPalesOn(my_path, pdb_files, RDC_dict, lc_model, SVD_enable):
               str(o + 1) + '/' + str(len(pdb_files)), end="\r")
         sys.stdout.flush()
 
-        print("CALL PALES!!!!!!!!!! " + ThirdParty.pales)
-        os.system("ls")
-        # try:
-        #     if SVD_enable:                          # if SVD is enabled
-        #         p = subprocess.Popen([ThirdParty.pales,
-        #                         "-inD", "pales_dummy.txt",
-        #                         "-pdb", pdb_file,           # pdb file
-        #                         '-' + lc_model,             # rdc lc model
-        #                         "-bestFit"],                # SVD
-        #                         stdout=outfile,
-        #                         stderr=DEVNULL)
-        #         p.wait() #now wait
-        #     else:                               # if SVD is disabled (default)
-        #         subprocess.call([ThirdParty.pales,
-        #                         "-inD", "pales_dummy.txt",
-        #                         "-pdb", pdb_file,           # pdb file
-        #                         '-' + lc_model],            # rdc lc model
-        #                         stdout=outfile,
-        #                         stderr=DEVNULL)
-        # except OSError as e:
-        #     print("Execution failed:", e, file=sys.stderr)
+        try:
+            if SVD_enable:                          # if SVD is enabled
+                p = subprocess.Popen([ThirdParty.pales,
+                                "-inD", "pales_dummy.txt",
+                                "-pdb", pdb_file,           # pdb file
+                                '-' + lc_model,             # rdc lc model
+                                "-bestFit"],                # SVD
+                                stdout=outfile,
+                                stderr=DEVNULL)
+                p.wait() #now wait
+            else:                               # if SVD is disabled (default)
+                subprocess.call([ThirdParty.pales,
+                                "-inD", "pales_dummy.txt",
+                                "-pdb", pdb_file,           # pdb file
+                                '-' + lc_model],            # rdc lc model
+                                stdout=outfile,
+                                stderr=DEVNULL)
+        except OSError as e:
+            print("Execution failed:", e, file=sys.stderr)
         outfile.close()
         DEVNULL.close()
 
@@ -1218,11 +1194,11 @@ def calcJCoup(param_set, calced, experimental, Jcoup_type):
        note: all angles must be in radian"""
     JCoup_calced    = {}
 
-    if param_set == '1':
+    if param_set == 1:
         my_karplus = Jcoup_dict1
-    elif param_set == '2':
+    elif param_set == 2:
         my_karplus = Jcoup_dict2
-    elif param_set == '3':
+    elif param_set == 3:
         my_karplus = Jcoup_dict3
 
     A     = my_karplus['A']

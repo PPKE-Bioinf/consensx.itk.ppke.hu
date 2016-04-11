@@ -25,8 +25,17 @@ def home(request):
     if request.method == 'POST': # if the form has been submitted...
         # generate ID for calcilation
         my_id = ''.join(random.choice(chars) for _ in range(6))
-        my_path = os.path.join(BASE_DIR, 'static', 'calculations', my_id)
+        my_path = os.path.join(BASE_DIR, 'media', my_id)
         os.mkdir(my_path)
+
+        # check if POST is a test submit
+        try:
+            if request.POST['submit_test']:
+                # IMPLEMET TEST CALC HERE!
+                return render(request, "consensx/calculation.html")
+        except:
+            pass
+
 
         PDB_file = request.FILES['pdb_upload']  # get PDB file
         handle_uploaded_file(PDB_file, my_path, PDB_file.name)
@@ -82,12 +91,7 @@ def home(request):
         )
         post_data.save()
 
-        csx_status = run_calculation(my_id)
+        return run_calculation(request, my_id)
 
-        # return HttpResponse(fit_range)
-        # return HttpResponse("your ID was: " + my_id + " at " + my_path +
-        #     " with " + str(csx_status))
-        return render(request, "consensx/home.html", {"error": csx_status})
     else:
-
         return render(request, "consensx/home.html")

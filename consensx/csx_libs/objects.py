@@ -267,9 +267,9 @@ class Restraint_Record(object):
 
                     # get corresponding atom names present in PDB file
                     PDB_names1 = PDB_atom_names[res.seq_ID1]
-                    print("atom_names1:", res.atom_ID1, atom_names1)
+                    # print("atom_names1:", res.atom_ID1, atom_names1)
                     resol1 = list(set(atom_names1) & set(PDB_names1))
-                    print("rasol_names1:", res.atom_ID1, resol1)
+                    # print("rasol_names1:", res.atom_ID1, resol1)
 
                 resol2 = [res.atom_ID2]
 
@@ -307,9 +307,9 @@ class Restraint_Record(object):
                             atom_names2.append(i + base)
 
                     PDB_names2 = PDB_atom_names[res.seq_ID2]
-                    print("atom_names2:", res.atom_ID2, atom_names2)
+                    # print("atom_names2:", res.atom_ID2, atom_names2)
                     resol2 = list(set(atom_names2) & set(PDB_names2))
-                    print("rasol_names2:", res.atom_ID2, resol2)
+                    # print("rasol_names2:", res.atom_ID2, resol2)
 
                 for atom1 in resol1:
                     for atom2 in resol2:
@@ -317,10 +317,10 @@ class Restraint_Record(object):
                             res.seq_ID1, res.seq_ID2, res.seq_name1,
                             res.seq_name2, atom1, atom2, res.dist_max)
 
-                        print(res.curr_distID,
-                            res.seq_ID1, res.seq_ID2,
-                            res.seq_name1, res.seq_name2, atom1,
-                            atom2, res.dist_max)
+                        # print(res.curr_distID,
+                        #     res.seq_ID1, res.seq_ID2,
+                        #     res.seq_name1, res.seq_name2, atom1,
+                        #     atom2, res.dist_max)
 
                         Restraint_Record.resolved_restraints.append(new)
 
