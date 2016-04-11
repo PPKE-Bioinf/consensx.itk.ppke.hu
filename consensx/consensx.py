@@ -65,16 +65,22 @@ def run_calculation(request, calc_id):
 
     #----------------------  Read  and parse NOE file   -----------------------#
     if DB_entry.NOE_file:
+        NOE_name = DB_entry.NOE_file
         my_NOE = my_path + DB_entry.NOE_file
         saveShifts = csx_func.getNOE(my_NOE)
         NOE_violations = csx_calc.calcNOEviolations(my_NOE, saveShifts,
                                                     my_path, DB_entry.r3average)
+        NOE_violations = str(NOE_violations) + " distance restraints found"
         PRIDE_data = csx_calc.calcNMR_Pride(pdb_models, my_path)
         data_found = True
+    else:
+        NOE_name = "[NOT PRESENT]"
+        NOE_violations = ""
 
 
     #----------------------  Read  and parse STR file   -----------------------#
     if DB_entry.STR_file:
+        STR_name = DB_entry.STR_file
         my_STR = my_path + DB_entry.STR_file
         try:
             parsed = csx_func.parseSTR(my_STR)
@@ -123,6 +129,8 @@ def run_calculation(request, calc_id):
         if ChemShift_lists:
             csx_calc.calcChemShifts(ChemShift_lists, pdb_models, my_path)
             data_found = True
+    else:
+        STR_name = "[NOT PRESENT]"
 
 
     csx_obj.CSV_buffer.writeCSV()
@@ -132,7 +140,11 @@ def run_calculation(request, calc_id):
     if data_found:
         return render(request, "consensx/calculation.html", {
             "my_id": my_id,
-            "my_PDB": my_PDB
+            "my_PDB": DB_entry.PDB_file,
+            "n_model": model_count,
+            "my_NOE": NOE_name,
+            "n_NOE" : NOE_violations,
+            "my_STR": STR_name
         })
     else:
         return "NO DATA FOUND IN STAR-NMR FILE"
