@@ -31,7 +31,7 @@ def home(request):
         # check if POST is a test submit
         try:
             if request.POST['submit_test']:
-                # IMPLEMET TEST CALC HERE!
+                # IMPLEMENT TEST CALC HERE!
                 return render(request, "consensx/calculation.html")
         except:
             pass

@@ -52,17 +52,17 @@
     <table class="files_table">
       <tr>
         <td class="head-td">PDB file:</td>
-        <td><i>{1}</i></td>
-        <td>{2} models found</td>
+        <td><i>{{ my_PDB }}</i></td>
+        <td>{{ n_model }} models found</td>
       </tr>
       <tr>
         <td class="head-td">NOE restraint file:</td>
-        <td><i>{3}</i></td>
-        <td>{4} distance restraints found</td>
+        <td><i>{{ my_NOE }}</i></td>
+        <td>{{ n_NOE }}</td>
       </tr>
       <tr>
         <td class="head-td">BMRB file:</td>
-        <td><i>{5}</i></td>
+        <td><i>{{ my_STR }}</i></td>
         <td></td>
       </tr>
     </table>
@@ -109,7 +109,7 @@
         <tr class="form_param"><td>Overdrive: &nbsp;</td>
             <td><input type="text" id="overdrive" name="sel_overdrive" value="5"></td>
             <td>Max. ensemble size: &nbsp;</td>
-            <td><input type="text" id="max_ens_size" name="sel_max_size" value="{2}"></td>
+            <td><input type="text" id="max_ens_size" name="sel_max_size" value={{ n_model }}></td>
         </tr>
 
       </table>
@@ -120,6 +120,9 @@
             Start selection
           </button>
         </form>
+
+
+
 
     </div>
   </div>
