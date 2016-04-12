@@ -75,14 +75,12 @@ def run_calculation(request, calc_id):
 
         NOE_PRIDE_data = {
             "NOE_violations": NOE_violations,
-            "NOE_hist": os.path.join(settings.MEDIA_ROOT, my_id,
-                                     "NOE_hist.svg"),
+            "NOE_hist": my_id + "/NOE_hist.svg",
             "best_score": PRIDE_data[0],
             "worst_score": PRIDE_data[1],
             "average_score": '{0:.3f}'.format(PRIDE_data[2]),
             "deviation": '{0:.3f}'.format(PRIDE_data[3]),
-            "PRIDE_hist": str(os.path.join(settings.MEDIA_ROOT, my_id,
-                                                 "PRIDE-NMR_score.svg"))
+            "PRIDE_hist": my_id + "/PRIDE-NMR_score.svg"
         }
 
 

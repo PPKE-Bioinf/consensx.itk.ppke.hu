@@ -38,119 +38,129 @@
 
 <body>
 <div id="shortcodes" class="page" style="padding: 30px 0 0 0;">
-    <div class="container" style="width: 1240px;">
-    <div class="row" id="res-page-row" style="margin-left: 0px;">
-      <div class="span12">
-        <div class="title-page">
-            <h2 class="title"><b class="red"><a href="javascript:javascript:history.go(-1)"> CoNSEnsX<sup>+</sup></a></b></h2>
-            <h3 class="title-description"><b class="red">Co</b>mpliance of <b class="red">N</b>MR-derived <b class="red">S</b>tructural <b class="red">Ens</b>embles with e<b class="red">x</b>perimental data<br>+ selection</h3><br>
-        <h3 class="title-description">Results sheet ID: <b class="red">{{ my_id }}</b></h3>
-        </div>
+  <div class="container" style="width: 1240px;">
+  <div class="row" id="res-page-row" style="margin-left: 0px;">
+    <div class="span12">
+      <div class="title-page">
+        <h2 class="title"><b class="red"><a href="javascript:javascript:history.go(-1)"> CoNSEnsX<sup>+</sup></a></b></h2>
+        <h3 class="title-description">
+          <b class="red">Co</b>mpliance of <b class="red">N</b>MR-derived <b class="red">S</b>tructural
+          <b class="red">Ens</b>embles with e<b class="red">x</b>perimental data<br>+ selection
+        </h3><br>
+      <h3 class="title-description">Results sheet ID: <b class="red">{{ my_id }}</b></h3>
       </div>
     </div>
+  </div>
 
-    <table class="files_table">
-      <tr>
-        <td class="head-td">PDB file:</td>
-        <td><i>{{ my_PDB }}</i></td>
-        <td>{{ n_model }} models found</td>
+  <table class="files_table">
+    <tr>
+      <td class="head-td">PDB file:</td>
+      <td><i>{{ my_PDB }}</i></td>
+      <td>{{ n_model }} models found</td>
+    </tr>
+    <tr>
+      <td class="head-td">NOE restraint file:</td>
+      <td><i>{{ my_NOE }}</i></td>
+      <td>{{ n_NOE }}</td>
+    </tr>
+    <tr>
+      <td class="head-td">BMRB file:</td>
+      <td><i>{{ my_STR }}</i></td>
+      <td></td>
+    </tr>
+  </table>
+
+  <div class="container">
+
+    <div style="margin-left: auto; margin-right: auto; width: 520px;">
+
+    <a href="values.csv" download>
+    <button class="btn btn-result" id="csv_download" type="button">
+    Download calculated data (CSV)
+    </button>
+    </a>
+
+    <button class="btn btn-result" id="selection" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+    Toggle selection options
+    </button>
+
+    </div>
+
+  <div class="collapse" id="collapseExample">
+    <table class="sel_controls" border="0">
+      <tr class="form_param"><td>Compliance Measure: &nbsp;</td>
+      <td>
+      <div class="btn-group group1" data-toggle="buttons">
+
+        <label class="btn btn-primary mes">
+          <input type="radio" name="measures" class="options" value="correlation" > correlation
+        </label>
+
+        <label class="btn btn-primary mes">
+          <input type="radio" name="measures" class="options" value="q-value" > Q-value
+        </label>
+
+        <label class="btn btn-primary mes">
+          <input type="radio" name="measures" class="options" value="rmsd" > RMSD
+        </label>
+
+      </div>
+      </td>
+      <td>Min. ensemble size: &nbsp;</td>
+          <td><input type="text" id="min_ens_size" value="2" name="sel_min_size"></td>
+
       </tr>
-      <tr>
-        <td class="head-td">NOE restraint file:</td>
-        <td><i>{{ my_NOE }}</i></td>
-        <td>{{ n_NOE }}</td>
+      <tr class="form_param"><td>Overdrive: &nbsp;</td>
+          <td><input type="text" id="overdrive" name="sel_overdrive" value="5"></td>
+          <td>Max. ensemble size: &nbsp;</td>
+          <td><input type="text" id="max_ens_size" name="sel_max_size" value={{ n_model }}></td>
       </tr>
-      <tr>
-        <td class="head-td">BMRB file:</td>
-        <td><i>{{ my_STR }}</i></td>
-        <td></td>
-      </tr>
+
     </table>
-    <div class="container">
+      <form name="sel_form" action="" method="post">
+        <input type="text" id="sel_str" name="sel_string" style="visibility: hidden;">
 
-      <div style="margin-left: auto; margin-right: auto; width: 520px;">
+        <button class="btn btn-primary" id="startsel" type="submit">
+          Start selection
+        </button>
+      </form>
 
-      <a href="values.csv" download>
-      <button class="btn btn-result" id="csv_download" type="button">
-      Download calculated data (CSV)
-      </button>
-      </a>
+    </div>
 
-      <button class="btn btn-result" id="selection" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-      Toggle selection options
-      </button>
 
-      </div>
+    <div class="results">
+    <h4 class="table-source">NOE violations and PRIDE-NMR</h4>
+    <table class="result_table">
 
-    <div class="collapse" id="collapseExample">
-      <table class="sel_controls" border="0">
-        <tr class="form_param"><td>Compliance Measure: &nbsp;</td>
+        <td><table class="NOE_PRIME_table">
+        <tr><td><strong>NOE distance violation</strong></td></tr>
+        <tr><td>Total # of violations:</td><td>{{ NOE_PRIDE_data.NOE_violations }}</td></tr>
+        </table></td>
+        <td width="10"></td>
         <td>
-        <div class="btn-group group1" data-toggle="buttons">
-
-          <label class="btn btn-primary mes">
-            <input type="radio" name="measures" class="options" value="correlation" > correlation
-          </label>
-
-          <label class="btn btn-primary mes">
-            <input type="radio" name="measures" class="options" value="q-value" > Q-value
-          </label>
-
-          <label class="btn btn-primary mes">
-            <input type="radio" name="measures" class="options" value="rmsd" > RMSD
-          </label>
-
-        </div>
+          <a class="fancybox" title="NOE violations" href="{{ MEDIA_URL }}{{ NOE_PRIDE_data.NOE_hist }}">
+            <img width="320" src="{{ MEDIA_URL }}{{ NOE_PRIDE_data.NOE_hist }}">
+          </a>
         </td>
-        <td>Min. ensemble size: &nbsp;</td>
-            <td><input type="text" id="min_ens_size" value="2" name="sel_min_size"></td>
 
-        </tr>
-        <tr class="form_param"><td>Overdrive: &nbsp;</td>
-            <td><input type="text" id="overdrive" name="sel_overdrive" value="5"></td>
-            <td>Max. ensemble size: &nbsp;</td>
-            <td><input type="text" id="max_ens_size" name="sel_max_size" value={{ n_model }}></td>
-        </tr>
+        <td width="30"></td>
 
-      </table>
-        <form name="sel_form" action="" method="post">
-          <input type="text" id="sel_str" name="sel_string" style="visibility: hidden;">
+        <td><table class="NOE_PRIME_table">
+        <tr><td><strong>PRIDE-NMR</strong></td></tr>
+        <tr><td>Model with best score:</td><td>{{ NOE_PRIDE_data.best_score }}</td></tr>
+        <tr><td>Model with worst score:</td><td>{{ NOE_PRIDE_data.worst_score }}</td></tr>
+        <tr><td>Average score:</td><td>{{ NOE_PRIDE_data.average_score }}</td></tr>
+        <tr><td>Standard Deviation:</td><td>{{ NOE_PRIDE_data.deviation }}</td></tr>
+        </table></td>
+        <td width="10">{{ PRIDE_hist }}</td>
+        <td>
+          <a class="fancybox" title="Pride-NMR scores" href="{{ MEDIA_URL }}{{ NOE_PRIDE_data.PRIDE_hist }}">
+            <img width="320" src="{{ MEDIA_URL }}{{ NOE_PRIDE_data.PRIDE_hist }}">
+          </a>
+        </td>
 
-          <button class="btn btn-primary" id="startsel" type="submit">
-            Start selection
-          </button>
-        </form>
-
-      </div>
-
-
-
-
-      <div class="results">
-      <h4 class="table-source">NOE violations and PRIDE-NMR</h4>
-      <table class="result_table">
-
-          <td><table class="NOE_PRIME_table">
-          <tr><td><strong>NOE distance violation</strong></td></tr>
-          <tr><td>Total # of violations:</td><td>{{ NOE_PRIDE_data.NOE_violations }}</td></tr>
-          </table></td>
-          <td width="10"></td>
-          <td><a class="fancybox" title="NOE violations" href="NOE_hist.svg"><img width="320" src="NOE_hist.svg"></a></td>
-
-          <td width="30"></td>
-
-          <td><table class="NOE_PRIME_table">
-          <tr><td><strong>PRIDE-NMR</strong></td></tr>
-          <tr><td>Model with best score:</td><td>{{ NOE_PRIDE_data.best_score }}</td></tr>
-          <tr><td>Model with worst score:</td><td>{{ NOE_PRIDE_data.worst_score }}</td></tr>
-          <tr><td>Average score:</td><td>{{ NOE_PRIDE_data.average_score }}</td></tr>
-          <tr><td>Standard Deviation:</td><td>{{ NOE_PRIDE_data.deviation }}</td></tr>
-          </table></td>
-          <td width="10">{{ PRIDE_hist }}</td>
-          <td><a class="fancybox" title="NOE violations" href="/{{ PRIDE_hist }}"><img width="320" src="/{{ PRIDE_hist }}"></a></td>
-
-      </table>
-      </div>
+    </table>
+    </div>
 
 
 
@@ -158,8 +168,8 @@
 
 
 
-  </div>
-  </div>
+</div>
+</div>
 </div>
 </body>
 </html>
