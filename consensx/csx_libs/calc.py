@@ -7,7 +7,6 @@ import pickle
 
 from . import methods as csx_func
 from . import objects as csx_obj
-from . import output  as csx_out
 
 
 # DUMP ME!
@@ -72,7 +71,10 @@ class RDC_model_data(object):
 
 def calcRDC(RDC_lists, pdb_models, my_path, SVD_enabled, lc_model):
     """Back calculate RDC from given RDC lists and PDB models"""
+    RDC_data = {}
+
     for list_num, RDC_dict in enumerate(RDC_lists):
+        RDC_data[list_num+1] = []
 
         # Pales call, results output file "pales.out"
         csx_func.callPalesOn(my_path, pdb_models, RDC_dict,
@@ -107,17 +109,18 @@ def calcRDC(RDC_lists, pdb_models, my_path, SVD_enabled, lc_model):
 
             RDC_simple = RDC_type.replace('_', '')
 
-            corr_key = "RDC_" + str(list_num + 1) + "_" + RDC_simple + "_corr"
-            qval_key = "RDC_" + str(list_num + 1) + "_" + RDC_simple + "_qval"
-            rmsd_key = "RDC_" + str(list_num + 1) + "_" + RDC_simple + "_rmsd"
+            # TODO DB upload!
+            # corr_key = "RDC_" + str(list_num + 1) + "_" + RDC_simple + "_corr"
+            # qval_key = "RDC_" + str(list_num + 1) + "_" + RDC_simple + "_qval"
+            # rmsd_key = "RDC_" + str(list_num + 1) + "_" + RDC_simple + "_rmsd"
 
-            csx_obj.PHP_variables.PHP_dict.update(
-                {
-                corr_key: "{0}".format('{0:.3f}'.format(correl)),
-                qval_key: "{0}".format('{0:.3f}'.format(q_value)),
-                rmsd_key: "{0}".format('{0:.3f}'.format(rmsd))
-                }
-            )
+            # csx_obj.PHP_variables.PHP_dict.update(
+            #     {
+            #     corr_key: "{0}".format('{0:.3f}'.format(correl)),
+            #     qval_key: "{0}".format('{0:.3f}'.format(q_value)),
+            #     rmsd_key: "{0}".format('{0:.3f}'.format(rmsd))
+            #     }
+            # )
 
             csx_obj.CSV_buffer("RDC_" + str(list_num + 1) +
                                "(" + RDC_type + ")",
@@ -142,20 +145,29 @@ def calcRDC(RDC_lists, pdb_models, my_path, SVD_enabled, lc_model):
             csx_func.modCorrelGraph(my_path, correl, avg_model_corr,
                                     model_corrs, mod_corr_graph_name)
 
-            csx_out.writeRDC_data(my_path, RDC_type, len(RDC_dict[RDC_type]),
-                                  correl, q_value, rmsd,
-                                  corr_graph_name, graph_name,
-                                  mod_corr_graph_name,
-                                  "RDC_" + str(list_num + 1) + "_" +
-                                  # remove underscores from identifier!
-                                  "".join(RDC_type.split('_'))
-                                  )
+            my_id = my_path.split('/')[-2] + '/'
+
+            RDC_data[list_num+1].append({
+                "RDC_type": RDC_type,
+                "RDC_model_n": len(RDC_dict[RDC_type]),
+                "correlation": '{0:.3f}'.format(correl),
+                "q_value": '{0:.3f}'.format(q_value),
+                "rmsd": '{0:.3f}'.format(rmsd),
+                "corr_graph_name": my_id + corr_graph_name,
+                "graph_name": my_id + graph_name,
+                "mod_corr_graph_name": my_id + mod_corr_graph_name,
+                "input_id": "RDC_" + str(list_num + 1) + "_" +
+                            "".join(RDC_type.split('_'))
+            })
 
         os.remove(pales_out)
 
+    return RDC_data
 
-def calcS2(S2_dict, my_path, calculate_on_models=None, fit=None, fit_range=None):
+
+def calcS2(S2_dict, my_path, calculate_on_models=None, fit=None, fit_range=None,):
     """Back calculate order paramteres from given S2 dict and PDB models"""
+    S2_data = []
     model_data = csx_obj.PDB_model.model_data
 
     if not calculate_on_models:
@@ -170,17 +182,18 @@ def calcS2(S2_dict, my_path, calculate_on_models=None, fit=None, fit_range=None)
         q_value = csx_func.calcQValue(S2_calced, S2_dict[S2_type])
         rmsd    = csx_func.calcRMSD(S2_calced, S2_dict[S2_type])
 
-        corr_key = "S2_" + S2_type + "_corr"
-        qval_key = "S2_" + S2_type + "_qval"
-        rmsd_key = "S2_" + S2_type + "_rmsd"
+        # TODO DB upload!
+        # corr_key = "S2_" + S2_type + "_corr"
+        # qval_key = "S2_" + S2_type + "_qval"
+        # rmsd_key = "S2_" + S2_type + "_rmsd"
 
-        csx_obj.PHP_variables.PHP_dict.update(
-            {
-            corr_key: "{0}".format('{0:.3f}'.format(correl)),
-            qval_key: "{0}".format('{0:.3f}'.format(q_value)),
-            rmsd_key: "{0}".format('{0:.3f}'.format(rmsd))
-            }
-        )
+        # csx_obj.PHP_variables.PHP_dict.update(
+        #     {
+        #     corr_key: "{0}".format('{0:.3f}'.format(correl)),
+        #     qval_key: "{0}".format('{0:.3f}'.format(q_value)),
+        #     rmsd_key: "{0}".format('{0:.3f}'.format(rmsd))
+        #     }
+        # )
 
         csx_obj.CSV_buffer("S2 (" + S2_type + ")",
                            S2_calced, S2_dict[S2_type])
@@ -191,18 +204,27 @@ def calcS2(S2_dict, my_path, calculate_on_models=None, fit=None, fit_range=None)
         print("RMSD:   ", rmsd)
         print()
 
-        # oh-oh this shouldn't be named like this!
-        graph_name = "RDC_" + S2_type + ".svg"
+        graph_name = "S2_" + S2_type + ".svg"
         csx_func.makeGraph(my_path, S2_calced, S2_dict[S2_type], graph_name)
 
         corr_graph_name = "S2_corr_" + S2_type + ".svg"
         csx_func.makeCorrelGraph(my_path, S2_calced, S2_dict[S2_type],
                                  corr_graph_name)
 
-        csx_out.write_table_data(my_path, S2_type,
-                                 len(S2_dict[S2_type]),
-                                 correl, q_value, rmsd,
-                                 corr_graph_name, graph_name, "S2_" + S2_type)
+        my_id = my_path.split('/')[-2] + '/'
+
+        S2_data.append({
+            "S2_type": S2_type,
+            "S2_model_n": len(S2_dict[S2_type]),
+            "correlation": '{0:.3f}'.format(correl),
+            "q_value": '{0:.3f}'.format(q_value),
+            "rmsd": '{0:.3f}'.format(rmsd),
+            "corr_graph_name": my_id + corr_graph_name,
+            "graph_name": my_id + graph_name,
+            "input_id": "S2_" + S2_type
+        })
+
+    return S2_data
 
 
 def calcS2_sidechain(S2_sidechain, my_path, fit=None):
@@ -355,6 +377,7 @@ def calcS2_sidechain(S2_sidechain, my_path, fit=None):
 
 def calcJCouplings(param_set, Jcoup_dict, my_PDB, my_path):
     """Back calculate skalar coupling from given RDC lists and PDB models"""
+    Jcuop_data = []
     type_dict = {}
     model_list = csx_obj.PDB_model.model_data
     dihed_lists = csx_func.calcDihedAngles(model_list)
@@ -380,17 +403,18 @@ def calcJCouplings(param_set, Jcoup_dict, my_PDB, my_path):
         q_value = csx_func.calcQValue(JCoup_calced, Jcoup_dict[Jcoup_type])
         rmsd    = csx_func.calcRMSD(JCoup_calced, Jcoup_dict[Jcoup_type])
 
-        corr_key = "JCoup_" + Jcoup_type + "_corr"
-        qval_key = "JCoup_" + Jcoup_type + "_qval"
-        rmsd_key = "JCoup_" + Jcoup_type + "_rmsd"
+        # TODO
+        # corr_key = "JCoup_" + Jcoup_type + "_corr"
+        # qval_key = "JCoup_" + Jcoup_type + "_qval"
+        # rmsd_key = "JCoup_" + Jcoup_type + "_rmsd"
 
-        csx_obj.PHP_variables.PHP_dict.update(
-            {
-            corr_key: "{0}".format('{0:.3f}'.format(correl)),
-            qval_key: "{0}".format('{0:.3f}'.format(q_value)),
-            rmsd_key: "{0}".format('{0:.3f}'.format(rmsd))
-            }
-        )
+        # csx_obj.PHP_variables.PHP_dict.update(
+        #     {
+        #     corr_key: "{0}".format('{0:.3f}'.format(correl)),
+        #     qval_key: "{0}".format('{0:.3f}'.format(q_value)),
+        #     rmsd_key: "{0}".format('{0:.3f}'.format(rmsd))
+        #     }
+        # )
 
         csx_obj.CSV_buffer("J-couplings (" + Jcoup_type + ")",
                    JCoup_calced, Jcoup_dict[Jcoup_type])
@@ -413,26 +437,30 @@ def calcJCouplings(param_set, Jcoup_dict, my_PDB, my_path):
         csx_func.modCorrelGraph(my_path, correl, avg_model_corr, model_corrs,
                                 mod_corr_graph_name)
 
-        csx_out.write_table_data(my_path, Jcoup_type,
-                                 len(Jcoup_dict[Jcoup_type]),
-                                 correl, q_value, rmsd,
-                                 corr_graph_name, graph_name,
-                                 "JCoup_" + Jcoup_type,
-                                 mod_corr_graph_name)
+        my_id = my_path.split('/')[-2] + '/'
 
-    Jcoup_model_data_path = my_path + "/Jcoup_model.pickle"
-    pickle.dump(type_dict, open(Jcoup_model_data_path, 'wb'))
+        Jcuop_data.append({
+            "Jcoup_type": Jcoup_type,
+            "Jcoop_model_n": len(Jcoup_dict[Jcoup_type]),
+            "correlation": '{0:.3f}'.format(correl),
+            "q_value": '{0:.3f}'.format(q_value),
+            "rmsd": '{0:.3f}'.format(rmsd),
+            "corr_graph_name": my_id + corr_graph_name,
+            "graph_name": my_id + graph_name,
+            "mod_corr_graph_name": my_id + mod_corr_graph_name,
+            "input_id": "JCoup_" + Jcoup_type
+        })
+
+    return Jcuop_data
 
 
 def calcChemShifts(ChemShift_lists, pdb_models, my_path):
     """Back calculate chemical shifts from given chemical shift list and PDB
        models"""
+    CS_data = []
     CS_calced, model_data = csx_func.callShiftxOn(my_path, pdb_models)
 
     csx_obj.ChemShift_modell_data.type_dict = model_data
-
-    CS_model_data_path = my_path + "/ChemShift_model_data.pickle"
-    pickle.dump(model_data, open(CS_model_data_path, 'wb'))
 
     for list_num, CS_list in enumerate(ChemShift_lists):
         for CS_type in sorted(list(CS_list.keys())):
@@ -458,17 +486,18 @@ def calcChemShifts(ChemShift_lists, pdb_models, my_path):
             q_value = csx_func.calcQValue(exp_dict, CS_list[CS_type])
             rmsd    = csx_func.calcRMSD(exp_dict, CS_list[CS_type])
 
-            corr_key = "CS_" + CS_type + "_corr"
-            qval_key = "CS_" + CS_type + "_qval"
-            rmsd_key = "CS_" + CS_type + "_rmsd"
+            # TODO
+            # corr_key = "CS_" + CS_type + "_corr"
+            # qval_key = "CS_" + CS_type + "_qval"
+            # rmsd_key = "CS_" + CS_type + "_rmsd"
 
-            csx_obj.PHP_variables.PHP_dict.update(
-                {
-                corr_key: "{0}".format('{0:.3f}'.format(correl)),
-                qval_key: "{0}".format('{0:.3f}'.format(q_value)),
-                rmsd_key: "{0}".format('{0:.3f}'.format(rmsd))
-                }
-            )
+            # csx_obj.PHP_variables.PHP_dict.update(
+            #     {
+            #     corr_key: "{0}".format('{0:.3f}'.format(correl)),
+            #     qval_key: "{0}".format('{0:.3f}'.format(q_value)),
+            #     rmsd_key: "{0}".format('{0:.3f}'.format(rmsd))
+            #     }
+            # )
 
             csx_obj.CSV_buffer("ChemShifts (" + CS_type + ")",
                                exp_dict, CS_list[CS_type])
@@ -491,10 +520,21 @@ def calcChemShifts(ChemShift_lists, pdb_models, my_path):
             csx_func.modCorrelGraph(my_path, correl, avg_model_corr, model_corrs,
                                 mod_corr_graph_name)
 
-            csx_out.writeCS_data(my_path, CS_type, len(CS_list[CS_type]),
-                                  correl, q_value, rmsd,
-                                  corr_graph_name, graph_name,
-                                  mod_corr_graph_name, "CS_" + CS_type)
+            my_id = my_path.split('/')[-2] + '/'
+
+            CS_data.append({
+                "CS_type": CS_type,
+                "CS_model_n": len(CS_list[CS_type]),
+                "correlation": '{0:.3f}'.format(correl),
+                "q_value": '{0:.3f}'.format(q_value),
+                "rmsd": '{0:.3f}'.format(rmsd),
+                "corr_graph_name": my_id + corr_graph_name,
+                "graph_name": my_id + graph_name,
+                "mod_corr_graph_name": my_id + mod_corr_graph_name,
+                "input_id": "CS_" + CS_type
+            })
+
+    return CS_data
 
 
 def calcNOEviolations(PDB_file, saveShifts, my_path, r3_averaging):
