@@ -112,7 +112,7 @@ def get_model_list(PDB_file, model_count):
 
 
 @timeit
-def pdb_cleaner(PDB_file):
+def pdb_cleaner(my_path, PDB_file):
     """Performs some basic formatting on the given PDB file to make it suitable
        for further calculations (from RCSB to BMRB PDF format)"""
     try:
@@ -121,7 +121,9 @@ def pdb_cleaner(PDB_file):
         print(PDB_file + " was not found")
         raise SystemExit
 
-    my_pdb = open("my_pdb.pdb", 'w')
+    work_PDB = my_path + "my_pdb.pdb"
+
+    my_pdb = open(work_PDB, 'w')
     max_resnum = 0
     min_resnum = 100000
 
@@ -177,7 +179,7 @@ def pdb_cleaner(PDB_file):
     my_pdb.close()
 
     os.remove(PDB_file)
-    os.rename("my_pdb.pdb", PDB_file)
+    os.rename(work_PDB, PDB_file)
 
     # set max resnum value for CSV_buffer class
     CSV_buffer.max_resnum = max_resnum

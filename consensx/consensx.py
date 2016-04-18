@@ -50,7 +50,7 @@ def run_calculation(request, calc_id):
 
     my_PDB = my_path + DB_entry.PDB_file
 
-    csx_func.pdb_cleaner(my_PDB)                   # bringing PDB to format
+    csx_func.pdb_cleaner(my_path, my_PDB)                   # bringing PDB to format
     model_count = csx_func.pdb_splitter(my_path, my_PDB)
 
     csx_func.get_model_list(my_PDB, model_count)
@@ -82,10 +82,6 @@ def run_calculation(request, calc_id):
             "deviation": '{0:.3f}'.format(PRIDE_data[3]),
             "PRIDE_hist": my_id + "/PRIDE-NMR_score.svg"
         }
-
-
-        print(str(os.path.join(settings.MEDIA_ROOT, my_id,
-                                                 "PRIDE-NMR_score.svg")))
         data_found = True
     else:
         NOE_name = "[NOT PRESENT]"
@@ -108,42 +104,53 @@ def run_calculation(request, calc_id):
         if RDC_lists:
             SVD_enabled = DB_entry.svd_enable
             lc_model = DB_entry.rdc_lc
-            csx_calc.calcRDC(RDC_lists, pdb_models, my_path,
-                             SVD_enabled, lc_model)
+            RDC_data = csx_calc.calcRDC(RDC_lists, pdb_models, my_path,
+                                        SVD_enabled, lc_model)
             data_found = True
+        else:
+            RDC_data = None
 
         #-----------------------------  S2 calc  ------------------------------#
         S2_dict = csx_func.parseS2_STR(parsed.value)
 
         if S2_dict:
-            csx_calc.calcS2(
-                S2_dict, my_path,
-                fit=DB_entry.superimpose,
-                fit_range=DB_entry.fit_range
-            )
+            S2_data = csx_calc.calcS2(
+                           S2_dict, my_path,
+                           fit=DB_entry.superimpose,
+                           fit_range=DB_entry.fit_range
+                       )
             data_found = True
+        else:
+            S2_data = None
 
         S2_sidechain = csx_func.parse_sidechain_S2_STR(parsed.value)
 
-        if S2_sidechain:
-            csx_calc.calcS2_sidechain(S2_sidechain, my_path,
-                                      fit=DB_entry.superimpose)
-            data_found = True
+        # TODO
+        # if S2_sidechain:
+        #     csx_calc.calcS2_sidechain(S2_sidechain, my_path,
+        #                               fit=DB_entry.superimpose)
+        #     data_found = True
 
         #-------------------------  J-coupling calc  --------------------------#
         Jcoup_dict = csx_func.parseJcoup_STR(parsed.value)
 
         if Jcoup_dict:
-            csx_calc.calcJCouplings(DB_entry.karplus, Jcoup_dict,
-                                    my_PDB, my_path)
+            Jcoup_data = csx_calc.calcJCouplings(DB_entry.karplus, Jcoup_dict,
+                                                 my_PDB, my_path)
             data_found = True
+        else:
+            Jcoup_data = None
 
         #------------------------  Chemical shift calc  -----------------------#
         ChemShift_lists = csx_func.parseChemShift_STR(parsed.value)
 
         if ChemShift_lists:
-            csx_calc.calcChemShifts(ChemShift_lists, pdb_models, my_path)
+            chemshift_data = csx_calc.calcChemShifts(
+                ChemShift_lists, pdb_models, my_path
+            )
             data_found = True
+        else:
+            chemshift_data = None
     else:
         STR_name = "[NOT PRESENT]"
 
@@ -151,6 +158,8 @@ def run_calculation(request, calc_id):
     csx_obj.CSV_buffer.writeCSV()
 
     te = time.time()
+
+    print(Jcoup_data)
 
     if data_found:
         return render(request, "consensx/calculation.html", {
@@ -160,7 +169,11 @@ def run_calculation(request, calc_id):
             "my_NOE": NOE_name,
             "n_NOE" : NOE_violations,
             "my_STR": STR_name,
-            "NOE_PRIDE_data": NOE_PRIDE_data
+            "NOE_PRIDE_data": NOE_PRIDE_data,
+            "RDC_data": RDC_data,
+            "S2_data": S2_data,
+            "Jcoup_data": Jcoup_data,
+            "chemshift_data": chemshift_data
         })
     else:
         return "NO DATA FOUND IN STAR-NMR FILE"
