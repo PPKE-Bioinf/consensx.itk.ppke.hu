@@ -1,18 +1,6 @@
 $(document).ready(function() {
-
-    // parse URL variable
-    function getQueryVariable(variable) {
-       var query = window.location.search.substring(1);
-       var vars = query.split("&");
-       for (var i=0;i<vars.length;i++) {
-               var pair = vars[i].split("=");
-               if(pair[0] == variable){return pair[1];}
-       }
-       return(false);
-    }
-
     // if SVD is enabled (url), show SVD note
-    if (getQueryVariable("svd") == "1") {
+    if (RDC_calc) {
         console.log("SVD enabled!");
         $(".SVDnote").removeClass("hidden");
     }
@@ -66,7 +54,7 @@ $(document).ready(function() {
 
 
     $(".inputrange").on( 'change', function() {
-        if (getQueryVariable("svd") == "1") {
+        if (RDC_calc) {
             my_range = $( this ).attr('id').split('_');
             sel_type = my_range[0];
             sel_num  = my_range[1];

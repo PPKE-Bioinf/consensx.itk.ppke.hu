@@ -173,7 +173,8 @@ def run_calculation(request, calc_id):
             "RDC_data": RDC_data,
             "S2_data": S2_data,
             "Jcoup_data": Jcoup_data,
-            "chemshift_data": chemshift_data
+            "chemshift_data": chemshift_data,
+            "SVD_calc": DB_entry.svd_enable
         })
     else:
         return "NO DATA FOUND IN STAR-NMR FILE"
