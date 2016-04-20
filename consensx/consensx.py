@@ -153,13 +153,15 @@ def run_calculation(request, calc_id):
             chemshift_data = None
     else:
         STR_name = "[NOT PRESENT]"
+        RDC_data = None
+        S2_data = None
+        Jcoup_data = None
+        chemshift_data = None
 
 
     csx_obj.CSV_buffer.writeCSV()
 
     te = time.time()
-
-    print(Jcoup_data)
 
     if data_found:
         return render(request, "consensx/calculation.html", {

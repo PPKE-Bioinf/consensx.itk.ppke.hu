@@ -1403,10 +1403,10 @@ def makeGraph(my_path, calced, my_experimental, graph_name):
 
     # experimental values with 'None' values masked
     plt.plot(xs[exp_mask], exp_line[exp_mask],
-             linewidth=2.0, color='red', marker='o', label='exp')
+             linewidth=2.0, color='red', marker='o', label='exp', alpha=.7)
     # calculated values with 'None' values masked
     plt.plot(xs[calc_mask], calc_line[calc_mask],
-             linewidth=2.0, color='blue', marker='o', label='calc')
+             linewidth=2.0, color='blue', marker='o', label='calc', alpha=.7)
     # setting axis limits
     plt.axis([min(calced.keys()), max(calced.keys()),
               miny, maxy])
@@ -1463,7 +1463,7 @@ def makeCorrelGraph(my_path, calced, experimental, graph_name):
         diag.append(i)
 
     plt.figure(figsize=(6, 5), dpi=80)
-    plt.plot(diag, diag, linewidth=2.0, color='red')
+    plt.plot(diag, diag, linewidth=2.0, color='red', alpha=.7)
     plt.plot(exp_line, calc_line, 'bo')
     plt.axis([miny, maxy, miny, maxy])
     plt.xlabel('experimental')
@@ -1482,11 +1482,11 @@ def modCorrelGraph(my_path, correl, avg_corr, model_corrs, corr_graph_name):
     plt.figure(figsize=(6, 5), dpi=80)
 
     plt.plot(list(range(0, len(model_corrs))), [correl] * len(model_corrs),
-             linewidth=2.0, color='green', label='Ensemble corr.')
+             linewidth=2.0, color='green', label='Ensemble corr.', alpha=.7)
     plt.plot(list(range(0, len(model_corrs))), [avg_corr] * len(model_corrs),
-             linewidth=2.0, color='red', label='Avg. corr. per model')
+             linewidth=2.0, color='red', label='Avg. corr. per model', alpha=.7)
     plt.plot(list(range(0, len(model_corrs))), sorted(model_corrs),
-             linewidth=2.0, color='blue', label='Corr. per model')
+             linewidth=2.0, color='blue', label='Corr. per model', alpha=.7)
 
     plt.legend(loc='lower left')
     plt.axis([-1, len(model_corrs), 0, 1])
@@ -1512,7 +1512,7 @@ def makeNOEHist(my_path, violations):
     ticks = ['0-0.5', '0.5-1', '1-1.5', '1.5-2', '2-2.5', '2.5-3', '3<']
     index = np.arange(n_groups)
     bar_width = 0.7
-    plt.bar(index, means_men, bar_width, alpha=1, color='b')
+    plt.bar(index, means_men, bar_width, alpha=.7, color='b')
 
     plt.xlabel("Violation (Å)")
     plt.ylabel("# of NOE distance violations")
@@ -1530,9 +1530,10 @@ def makeNMRPrideGraph(my_path, graph_data, avg_score):
     graph_data.sort()
 
     plt.figure(figsize=(6, 5), dpi=80)
-    plt.plot(graph_data, linewidth=2.0, color='blue', label='Model scores')
+    plt.plot(graph_data, linewidth=2.0, color='blue', label='Model scores',
+             alpha=.7)
     plt.plot(list(range(0, len(graph_data))), [avg_score] * len(graph_data),
-             linewidth=2.0, color='green', label='Average score')
+             linewidth=2.0, color='green', label='Average score', alpha=.7)
     plt.axis([-1, len(graph_data), 0, 1])
     plt.xlabel('models by score (worse to best)')
     plt.ylabel('PRIDE-NMR score')
