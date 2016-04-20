@@ -878,7 +878,7 @@ def calcS2(model_data, calculate_on_models,
     """Returns a dictonary with the average S2 values:
     S2_calced[residue] = value"""
 
-    if fit and not PDB_model.is_fitted:
+    if fit:
         print("Start FITTING")
         reference = model_data.atomgroup[:]
         ts = time.time()
@@ -908,8 +908,6 @@ def calcS2(model_data, calculate_on_models,
 
                 t = prody.calcTransformation(mob_chain, ref_chain, weights)
                 t.apply(mobile)
-
-        PDB_model.is_fitted = True
 
         te = time.time()
 
