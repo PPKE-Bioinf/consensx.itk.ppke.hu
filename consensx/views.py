@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
 
 import random # ID generation
 import string # ID generation
@@ -7,6 +8,7 @@ import os     # mkdir
 
 from .models import CSX_upload
 from .consensx import run_calculation
+from .selection import run_selection
 # Create your views here.
 
 chars = string.ascii_uppercase + string.digits
@@ -95,3 +97,8 @@ def home(request):
 
     else:
         return render(request, "consensx/home.html")
+
+@csrf_exempt
+def selection(request):
+    if request.method == 'POST': # if the form has been submitted...
+       return run_selection()
