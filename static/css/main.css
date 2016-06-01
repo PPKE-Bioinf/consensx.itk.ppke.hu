@@ -1,3 +1,7 @@
+#shortcodes {
+  margin-top: 60px;
+}
+
 .inputfile {
     width: 0.1px;
     height: 0.1px;
@@ -66,12 +70,12 @@
 
 ::-moz-selection { /* Code for Firefox */
     color: #FFF;
-    background: #5c6bc0;
+    background: #30b0c2;
 }
 
 ::selection {
     color: #FFF;
-    background: #5c6bc0;
+    background: #30b0c2;
 }
 
 .loader_text {
@@ -160,7 +164,7 @@
 }
 
 .info_text {
-  border-left: 5px solid #f06292;
+  border-left: 5px solid #c24230;
   padding-left: 15px;
   text-align: justify;
 }
@@ -237,24 +241,25 @@ box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.3);
 }
 
 #submit_button {
-    margin: 0 10px 0 10px;
-    -webkit-box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.3);
--moz-box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.3);
-box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.3);
+  margin: 0 10px 0 10px;
+  -webkit-box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.3);
+  -moz-box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.3);
+  box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.3);
 }
 
 #submit_test {
-    padding: 10px 20px 10px 20px;
-    margin: 12px auto 5px auto;
-    -webkit-box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.3);
--moz-box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.3);
-box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.3);
-background-color: #9fa8da;
-border: 1px solid #9fa8da;
+  padding: 10px 20px 10px 20px;
+  margin: 12px auto 5px auto;
+  -webkit-box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.3);
+  -moz-box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.3);
+  box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.3);
+  background-color: #268b99;
+  border: 1px solid #268b99;
+  color: #FFF;
 }
 
 #submit_test:hover, #submit_test:active, #submit_test:focus {
-  background-color: #8790c5;
+  background-color: #217885;
   border: 1px solid #8790c5;
 }
 
@@ -267,7 +272,7 @@ border: 1px solid #9fa8da;
 }
 
 input[type="text"] {
-    border: 1px solid  #3f51b5;
+    border: 1px solid  #30b0c2;
     box-shadow: 0px 0px 0px #000;
     border-radius: 0px;
 }
@@ -275,7 +280,7 @@ input[type="text"] {
 input[type="text"]:hover,
 input[type="text"]:active,
 input[type="text"]:focus {
-    border: 1px solid  #3f51b5;
+    border: 1px solid  #30b0c2;
     box-shadow: 0px 0px 0px #000;
 }
 
@@ -343,12 +348,12 @@ body{
 	font-weight:300;
 	font-size:16px;
 	font-family: 'Titillium Web', sans-serif;
-	line-height:28px;
+	line-height:24px;
 }
 
 
 a{
-	color: #3f51b5;
+	color: #268b99;
 	text-decoration: none;
 	cursor: pointer;
 
@@ -362,7 +367,7 @@ a:hover,
 a:active,
 a:focus{
 	outline: 0;
-	color: #1a237e;
+	color: #217885;
 	text-decoration:none;
 }
 
@@ -534,7 +539,7 @@ h3.spec {
 }
 
 .title-page .title .red {
-  color:  #3f51b5;
+  color:  #30b0c2;
 }
 
 .title-page .title-description {
@@ -547,11 +552,11 @@ h3.spec {
 	font-size: 24px;
 	font-weight: 230;
 	margin: 0;
-	color:  #3f51b5;
+	color:  #30b0c2;
 }
 
 .title .red{
-  color:  #3f51b5;
+  color:  #30b0c2;
 }
 
 /* ==================================================
@@ -581,7 +586,7 @@ h3.spec {
 	position: relative;
 	display: block;
 	padding: 15px;
-	background: #5c6bc0;
+	background: #30b0c2;
 	color: #FFFFFF;
 	font-size: 18px;
 	font-weight: 600;
@@ -599,7 +604,7 @@ h3.spec {
 
 .accordion-heading:hover .accordion-toggle,
 .accordion-heading:hover .accordion-toggle.inactive {
-	background: #3f51b5;
+	background: #2b9dae;
 	color:#FFFFFF;
 }
 
