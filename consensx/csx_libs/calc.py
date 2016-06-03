@@ -110,17 +110,17 @@ def calcRDC(RDC_lists, pdb_models, my_path, SVD_enabled, lc_model):
             RDC_simple = RDC_type.replace('_', '')
 
             # TODO DB upload!
-            # corr_key = "RDC_" + str(list_num + 1) + "_" + RDC_simple + "_corr"
-            # qval_key = "RDC_" + str(list_num + 1) + "_" + RDC_simple + "_qval"
-            # rmsd_key = "RDC_" + str(list_num + 1) + "_" + RDC_simple + "_rmsd"
+            corr_key = "RDC_" + str(list_num + 1) + "_" + RDC_simple + "_corr"
+            qval_key = "RDC_" + str(list_num + 1) + "_" + RDC_simple + "_qval"
+            rmsd_key = "RDC_" + str(list_num + 1) + "_" + RDC_simple + "_rmsd"
 
-            # csx_obj.PHP_variables.PHP_dict.update(
-            #     {
-            #     corr_key: "{0}".format('{0:.3f}'.format(correl)),
-            #     qval_key: "{0}".format('{0:.3f}'.format(q_value)),
-            #     rmsd_key: "{0}".format('{0:.3f}'.format(rmsd))
-            #     }
-            # )
+            csx_obj.PHP_variables.PHP_dict.update(
+                {
+                corr_key: "{0}".format('{0:.3f}'.format(correl)),
+                qval_key: "{0}".format('{0:.3f}'.format(q_value)),
+                rmsd_key: "{0}".format('{0:.3f}'.format(rmsd))
+                }
+            )
 
             csx_obj.CSV_buffer("RDC_" + str(list_num + 1) +
                                "(" + RDC_type + ")",
@@ -160,6 +160,10 @@ def calcRDC(RDC_lists, pdb_models, my_path, SVD_enabled, lc_model):
                             "".join(RDC_type.split('_'))
             })
 
+        model_data_path = my_path + "/RDC_model_data.pickle"
+        pickle.dump(RDC_model_data, open(model_data_path, "wb"))
+        RDC_obj_attr = my_path + "/RDC_obj_attr.pickle"
+        pickle.dump(RDC_model_data.RDC_data, open(RDC_obj_attr, "wb"))
         os.remove(pales_out)
 
     return RDC_data
@@ -451,6 +455,8 @@ def calcJCouplings(param_set, Jcoup_dict, my_PDB, my_path):
             "input_id": "JCoup_" + Jcoup_type
         })
 
+    Jcoup_model_data_path = my_path + "/Jcoup_model.pickle"
+    pickle.dump(type_dict, open(Jcoup_model_data_path, 'wb'))
     return Jcuop_data
 
 
@@ -461,6 +467,9 @@ def calcChemShifts(ChemShift_lists, pdb_models, my_path):
     CS_calced, model_data = csx_func.callShiftxOn(my_path, pdb_models)
 
     csx_obj.ChemShift_modell_data.type_dict = model_data
+
+    CS_model_data_path = my_path + "/ChemShift_model_data.pickle"
+    pickle.dump(model_data, open(CS_model_data_path, 'wb'))
 
     for list_num, CS_list in enumerate(ChemShift_lists):
         for CS_type in sorted(list(CS_list.keys())):

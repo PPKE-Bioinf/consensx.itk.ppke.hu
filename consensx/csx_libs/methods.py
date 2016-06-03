@@ -8,6 +8,7 @@ import string
 import random
 import prody
 import time
+import pickle
 import numpy as np
 import matplotlib
 matplotlib.use('Agg')
@@ -105,10 +106,13 @@ def get_PDB(args):
 
 
 @timeit
-def get_model_list(PDB_file, model_count):
+def get_model_list(PDB_file, my_path, model_count):
     """Parsing PDB file into models in the PDB_model object"""
     prody.confProDy(verbosity="info")
     PDB_model(prody.parsePDB(PDB_file, ter=True), model_count)
+
+    PDB_model_path = my_path + "/PDB_model.pickle"
+    pickle.dump(PDB_model.model_data, open(PDB_model_path, 'wb'))
 
 
 @timeit
