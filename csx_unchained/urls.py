@@ -22,7 +22,7 @@ import consensx.views
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', consensx.views.home),
-    url(r'selection', consensx.views.selection),
+    url(r'selection/(?P<my_id>[a-zA-Z0-9]{6}$)', consensx.views.selection),
 ]
 
 if settings.DEBUG:

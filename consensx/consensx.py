@@ -18,6 +18,7 @@ Fork of: https://github.com/derPuntigamer/CoNSEnsX
 # standard modules
 import os
 import time
+import pickle
 
 # own modules
 import consensx.csx_libs.calc    as csx_calc
@@ -53,7 +54,7 @@ def run_calculation(request, calc_id):
     csx_func.pdb_cleaner(my_path, my_PDB)                   # bringing PDB to format
     model_count = csx_func.pdb_splitter(my_path, my_PDB)
 
-    csx_func.get_model_list(my_PDB, model_count)
+    csx_func.get_model_list(my_PDB, my_path, model_count)
 
     pdb_models = []                                # list of models (PDB)
     for file in os.listdir(my_path):
@@ -100,6 +101,8 @@ def run_calculation(request, calc_id):
 
         #-------------------------  RDC calculation  --------------------------#
         RDC_lists = csx_func.get_RDC_lists(parsed.value)
+        RDC_lists_path = my_path + "/RDC_lists.pickle"
+        pickle.dump(RDC_lists, open(RDC_lists_path, "wb"))
 
         if RDC_lists:
             SVD_enabled = DB_entry.svd_enable
@@ -112,6 +115,9 @@ def run_calculation(request, calc_id):
 
         #-----------------------------  S2 calc  ------------------------------#
         S2_dict = csx_func.parseS2_STR(parsed.value)
+        S2_dump = [S2_dict, DB_entry.superimpose, DB_entry.fit_range]
+        S2_dict_path = my_path + "/S2_dict.pickle"
+        pickle.dump(S2_dump, open(S2_dict_path, "wb"))
 
         if S2_dict:
             S2_data = csx_calc.calcS2(
@@ -133,6 +139,8 @@ def run_calculation(request, calc_id):
 
         #-------------------------  J-coupling calc  --------------------------#
         Jcoup_dict = csx_func.parseJcoup_STR(parsed.value)
+        Jcoup_dict_path = my_path + "/Jcoup_dict.pickle"
+        pickle.dump(Jcoup_dict, open(Jcoup_dict_path, "wb"))
 
         if Jcoup_dict:
             Jcoup_data = csx_calc.calcJCouplings(DB_entry.karplus, Jcoup_dict,
@@ -143,6 +151,8 @@ def run_calculation(request, calc_id):
 
         #------------------------  Chemical shift calc  -----------------------#
         ChemShift_lists = csx_func.parseChemShift_STR(parsed.value)
+        ChemShift_lists_path = my_path + "/ChemShift_lists.pickle"
+        pickle.dump(ChemShift_lists, open(ChemShift_lists_path, "wb"))
 
         if ChemShift_lists:
             chemshift_data = csx_calc.calcChemShifts(
@@ -164,6 +174,7 @@ def run_calculation(request, calc_id):
     te = time.time()
 
     if data_found:
+        print(csx_obj.PHP_variables.PHP_dict)
         return render(request, "consensx/calculation.html", {
             "my_id": my_id,
             "my_PDB": DB_entry.PDB_file,

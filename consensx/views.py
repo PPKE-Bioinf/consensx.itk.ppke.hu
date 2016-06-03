@@ -99,6 +99,8 @@ def home(request):
         return render(request, "consensx/home.html")
 
 @csrf_exempt
-def selection(request):
+def selection(request, my_id):
+    print("SELECTION ID IS: " + my_id)
+    my_path = os.path.join(BASE_DIR, 'media', my_id)
     if request.method == 'POST': # if the form has been submitted...
-       return run_selection()
+       return run_selection(my_path)
