@@ -853,7 +853,7 @@ def avgPalesRDCs(pales_out, my_RDC_type):
             atom    = line.split()[2]
             atom2   = line.split()[5]
             D       = float(line.split()[8])    # D coloumn of pales output
-            RDCtype = str(resnum2 - resnum) + "_" + atom + "_" + atom2
+            RDCtype = str(abs(resnum2 - resnum)) + "_" + atom + "_" + atom2
 
             # skip non relevant RDC data in the pales output file
             if my_RDC_type != RDCtype:

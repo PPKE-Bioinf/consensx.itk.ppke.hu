@@ -187,17 +187,17 @@ def calcS2(S2_dict, my_path, calculate_on_models=None, fit=None, fit_range=None,
         rmsd    = csx_func.calcRMSD(S2_calced, S2_dict[S2_type])
 
         # TODO DB upload!
-        # corr_key = "S2_" + S2_type + "_corr"
-        # qval_key = "S2_" + S2_type + "_qval"
-        # rmsd_key = "S2_" + S2_type + "_rmsd"
+        corr_key = "S2_" + S2_type + "_corr"
+        qval_key = "S2_" + S2_type + "_qval"
+        rmsd_key = "S2_" + S2_type + "_rmsd"
 
-        # csx_obj.PHP_variables.PHP_dict.update(
-        #     {
-        #     corr_key: "{0}".format('{0:.3f}'.format(correl)),
-        #     qval_key: "{0}".format('{0:.3f}'.format(q_value)),
-        #     rmsd_key: "{0}".format('{0:.3f}'.format(rmsd))
-        #     }
-        # )
+        csx_obj.PHP_variables.PHP_dict.update(
+            {
+            corr_key: "{0}".format('{0:.3f}'.format(correl)),
+            qval_key: "{0}".format('{0:.3f}'.format(q_value)),
+            rmsd_key: "{0}".format('{0:.3f}'.format(rmsd))
+            }
+        )
 
         csx_obj.CSV_buffer("S2 (" + S2_type + ")",
                            S2_calced, S2_dict[S2_type])
@@ -408,17 +408,17 @@ def calcJCouplings(param_set, Jcoup_dict, my_PDB, my_path):
         rmsd    = csx_func.calcRMSD(JCoup_calced, Jcoup_dict[Jcoup_type])
 
         # TODO
-        # corr_key = "JCoup_" + Jcoup_type + "_corr"
-        # qval_key = "JCoup_" + Jcoup_type + "_qval"
-        # rmsd_key = "JCoup_" + Jcoup_type + "_rmsd"
+        corr_key = "JCoup_" + Jcoup_type + "_corr"
+        qval_key = "JCoup_" + Jcoup_type + "_qval"
+        rmsd_key = "JCoup_" + Jcoup_type + "_rmsd"
 
-        # csx_obj.PHP_variables.PHP_dict.update(
-        #     {
-        #     corr_key: "{0}".format('{0:.3f}'.format(correl)),
-        #     qval_key: "{0}".format('{0:.3f}'.format(q_value)),
-        #     rmsd_key: "{0}".format('{0:.3f}'.format(rmsd))
-        #     }
-        # )
+        csx_obj.PHP_variables.PHP_dict.update(
+            {
+            corr_key: "{0}".format('{0:.3f}'.format(correl)),
+            qval_key: "{0}".format('{0:.3f}'.format(q_value)),
+            rmsd_key: "{0}".format('{0:.3f}'.format(rmsd))
+            }
+        )
 
         csx_obj.CSV_buffer("J-couplings (" + Jcoup_type + ")",
                    JCoup_calced, Jcoup_dict[Jcoup_type])
@@ -496,17 +496,17 @@ def calcChemShifts(ChemShift_lists, pdb_models, my_path):
             rmsd    = csx_func.calcRMSD(exp_dict, CS_list[CS_type])
 
             # TODO
-            # corr_key = "CS_" + CS_type + "_corr"
-            # qval_key = "CS_" + CS_type + "_qval"
-            # rmsd_key = "CS_" + CS_type + "_rmsd"
+            corr_key = "CS_" + CS_type + "_corr"
+            qval_key = "CS_" + CS_type + "_qval"
+            rmsd_key = "CS_" + CS_type + "_rmsd"
 
-            # csx_obj.PHP_variables.PHP_dict.update(
-            #     {
-            #     corr_key: "{0}".format('{0:.3f}'.format(correl)),
-            #     qval_key: "{0}".format('{0:.3f}'.format(q_value)),
-            #     rmsd_key: "{0}".format('{0:.3f}'.format(rmsd))
-            #     }
-            # )
+            csx_obj.PHP_variables.PHP_dict.update(
+                {
+                corr_key: "{0}".format('{0:.3f}'.format(correl)),
+                qval_key: "{0}".format('{0:.3f}'.format(q_value)),
+                rmsd_key: "{0}".format('{0:.3f}'.format(rmsd))
+                }
+            )
 
             csx_obj.CSV_buffer("ChemShifts (" + CS_type + ")",
                                exp_dict, CS_list[CS_type])
