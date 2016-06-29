@@ -89,30 +89,30 @@ $(document).ready(function() {
         var overdrive = $("#overdrive").val().trim();
         var measure;
         var range_selected = false;
-        var command = "";
+        var command = {};
         var i;
 
         // add selected measure to command
         for (i = 0; i < measures.length; i++) {
             if (measures[i].checked) {
                 console.log("selected measure: " + measures[i].value);
-                command += "MEASURE " + measures[i].value + "/";
+                command["MEASURE"] = measures[i].value;
                 measure = measures[i].value;
             }
         }
 
         if (min_size != "") {
-            command += "MIN_SIZE" + " " + min_size + "/";
+            command["MIN_SIZE"] = min_size;
             console.log("minimum size is: " + min_size);
         }
 
         if (max_size != "") {
-            command += "MAX_SIZE" + " " + max_size + "/";
+            command["MAX_SIZE"] = max_size;
             console.log("minimum size is: " + max_size);
         }
 
         if (overdrive != "") {
-            command += "OVERDRIVE" + " " + overdrive + "/";
+            command["OVERDRIVE"] = overdrive;
             console.log("overdrive is: " + overdrive);
         }
 
@@ -125,7 +125,8 @@ $(document).ready(function() {
         // add involved parameters to command
         for (i = 0; i < ranges.length; i++) {
             if (ranges[i].value != 0) {
-                command += ranges[i].id + " " + ranges[i].value + "/";
+                let myValue = String(ranges[i].id);
+                command[myValue] = ranges[i].value;
                 range_selected = true;
             }
         }
@@ -139,6 +140,59 @@ $(document).ready(function() {
         // UPLAD HERE!
         console.log(command);
 
-        $('#sel_str').val(command);
+        let calc_id = $('#calculation_id').text();
+
+
+        let sel_html = "\
+        <h3 style=\"text-align: center;\">Selection results</h3>\
+        <table class=\"files_table\">\
+        <tr>\
+        <td class=\"head-td\"> ---MEASURE--- </td>\
+        <td>All models: ---MODEL_COUNT--- </td>\
+        <td>Selected models: ---sel_count--- <a href=\"selected.pdb\" download>(download)</a></td>\
+        </tr>\
+        \
+        // foreach ($sel_items as $sel_item) {\
+        //     echo '<tr>';\
+        //     echo '<td class=\"head-td\" style=\"text-align: center;\">' . $sel_item . '</td>';\
+        //     echo '<td style=\"text-align: center;\">' . $full_pop[$measure][$sel_item] . '</td>';\
+        //     echo '<td style=\"text-align: center;\">' . $sel_data_array[$sel_item] . '</td>';\
+        //     echo '</tr>';\
+        // }\
+        // \
+        </table>\
+        <h3 style=\"text-align: center;\">Back-calculated data for the <b>original</b> ensemble</h3>";
+
+
+        $.ajax({
+            url: "/selection/" + calc_id,
+            type: "POST",
+            data: JSON.stringify(command),
+            contentType: "application/json",
+            complete: function(data, status){
+
+                for (let prop in data) {
+                    console.log(prop + " = " + data[prop]);
+                }
+
+                $(".selection-results").html(sel_html);
+            }
+        });
+
+
+        return false;
+
+        // var theObject = { sel_params: command };
+
+        // var jqxhr =
+        //     $.ajax({
+        //         url: "/selection",
+        //         processData : false,
+        //         type : "POST",
+        //         data: JSON.stringify(theObject)
+        //     })
+        //     .done (function(data) { console.log(data); })
+        //     .fail (function()  { alert("Error "); })
+        //     ;
     });
 });
