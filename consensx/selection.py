@@ -4,12 +4,14 @@ import sys
 import os
 import pickle
 import prody
+import json
 
 # own modules
 import consensx.csx_libs.methods as csx_func
 import consensx.csx_libs.objects as csx_obj
 
 from django.http import HttpResponse
+from django.http import JsonResponse
 
 
 def getPDBModels(path):
@@ -89,63 +91,73 @@ class DumpedData():
         DumpedData.ChemShift_isloaded = True
 
 
-def getUserSel(sel_file):
-    """Sets up user selection list from file"""
+def getUserSel(sel_dict):
+    """Sets up user selection list from the selection dictonary"""
 
     user_sel = []
 
-    for line in sel_file:
-        splitted = line.split()
+    for key, value in sel_dict.items():
+
+        print(key, value)
 
         # set MEASURE for selection
-        if splitted[0] == "MEASURE":
+        if key == "MEASURE":
             global measure
-            measure = splitted[1]
+            measure = value
             print("MEASURE is set to:", measure)
 
-        if splitted[0] == "MIN_SIZE":
+        if key == "MIN_SIZE":
             global min_size
-            min_size = int(splitted[1])
+            min_size = int(value)
 
-        if splitted[0] == "MAX_SIZE":
+        if key == "MAX_SIZE":
             global max_size
-            max_size = int(splitted[1])
+            max_size = int(value)
 
-        if splitted[0] == "OVERDRIVE":
+        if key == "OVERDRIVE":
             global overdrive
-            overdrive = int(splitted[1])
+            overdrive = int(value)
 
         # read RDC selections
-        if splitted[0].split('_')[0] == "RDC":
-            my_list = int(splitted[0].split('_')[1])
-            my_type = splitted[0].split('_')[2]
+        if key.split('_')[0] == "RDC":
+            my_list = int(key.split('_')[1])
+            my_type = key.split('_')[2]
 
+            # TODO - we could avoid this
             if my_type == "0CAC":
                 my_type = "0_CA_C"
             elif my_type == "0HACA":
                 my_type = "0_HA_CA"
             elif my_type == "0NH":
                 my_type = "0_N_H"
+            elif my_type == "1NC":
+                my_type = "1_N_C"
+            elif my_type == "0CCA":
+                my_type = "0_C_CA"
+            elif my_type == "0CAHA":
+                my_type = "0_CA_HA"
+            elif my_type == "0CACB":
+                my_type = "0_CA_CB"
 
-            my_weight = float(splitted[1])
+            my_weight = float(value)
             user_sel.append(["RDC", my_list, my_type, my_weight])
 
         # read S2 selections
-        elif splitted[0].split('_')[0] == "S2":
-            my_type   = splitted[0].split('_')[1]
-            my_weight = float(splitted[1])
+        elif key.split('_')[0] == "S2":
+            my_type   = key.split('_')[1]
+            my_weight = float(value)
             user_sel.append(["S2", my_type, my_weight])
 
         # read J-coupling selections
-        elif splitted[0].split('_')[0] == "JCoup":
-            my_type   = splitted[0].split('_')[1]
-            my_weight = float(splitted[1])
+        elif key.split('_')[0] == "JCoup":
+            my_type   = key.split('_')[1]
+            my_weight = float(value)
             user_sel.append(["JCoup", my_type, my_weight])
 
         # read chemical shifts selections
-        elif splitted[0].split('_')[0] == "CS":
-            my_type   = splitted[0].split('_')[1]
-            my_weight = float(splitted[1])
+        elif key.split('_')[0] == "CS":
+            my_type   = key.split('_')[1]
+            my_weight = float(value)
             user_sel.append(["ChemShift", my_type, my_weight])
 
     return user_sel
@@ -184,9 +196,9 @@ def averageRDCs_on(models, my_data):
     """Returns a dictonary with the average RDCs for the given RDC type:
        averageRDC[residue] = value"""
 
-    print("MODELS")
-    print(models)
-    print("MODELS END")
+    # print("MODELS")
+    # print(models)
+    # print("MODELS END")
 
     averageRDC = {}
 
@@ -202,9 +214,9 @@ def averageRDCs_on(models, my_data):
                 # print("LOL2 " + str(resnum))
                 averageRDC[resnum] = model[resnum]
 
-    print("AVERAGERDC")
-    print(averageRDC)
-    print("AVERAGERDC END")
+    # print("AVERAGERDC")
+    # print(averageRDC)
+    # print("AVERAGERDC END")
 
     for resnum in list(averageRDC.keys()):
         averageRDC[resnum] /= len(models)
@@ -281,9 +293,13 @@ def selection_on(my_path, measure, user_sel,
 
     pdb_models = getPDBModels(my_path)
 
+    print("user_sel: ", user_sel)
+
     for sel in user_sel:
+        print(sel)
         if "RDC" in sel and not DumpedData.RDC_isloaded:
             DumpedData.loadRDCDump(my_path)
+            print("RDC_lists assigned")
             RDC_lists = DumpedData.RDC_lists
             RDC_model_data = DumpedData.RDC_model_data
 
@@ -324,8 +340,8 @@ def selection_on(my_path, measure, user_sel,
         model_scores = {}
         iter_scores  = {}
 
-        print("PDBMODELS")
-        print(pdb_models)
+        # print("PDBMODELS")
+        # print(pdb_models)
 
         # iterate on all PDB models
         for num, pdb in enumerate(pdb_models):
@@ -348,11 +364,11 @@ def selection_on(my_path, measure, user_sel,
                     # for i in my_data:
                     #     print(i)
                     averageRDC = averageRDCs_on(pdb_sel, my_data)
-                    print("PDBSEL")
-                    print(pdb_sel)
-                    print("AVGRDC ")
-                    print(averageRDC)
-                    print("AVGRDC END")
+                    # print("PDBSEL")
+                    # print(pdb_sel)
+                    # print("AVGRDC ")
+                    # print(averageRDC)
+                    # print("AVGRDC END")
                     my_RDC     = RDC_lists[RDC_num - 1][RDC_type]
 
                     if measure == "correlation":
@@ -614,22 +630,18 @@ def selection_on(my_path, measure, user_sel,
             return in_selection, iter_data[-1], iter_data
 
 
-def run_selection(my_path):
+def run_selection(my_path, original_values, user_selection_JSON):
+
+    DumpedData.RDC_isloaded       = False
+    DumpedData.S2_isloaded        = False
+    DumpedData.PDB_isloaded       = False
+    DumpedData.Jcoup_isloaded     = False
+    DumpedData.ChemShift_isloaded = False
+
 
     working_dir = my_path
-    selection_file = open(my_path + "/user_selection.txt")
 
-    # MEASURE correlation
-    # MIN_SIZE 3
-    # MAX_SIZE 9
-    # OVERDRIVE 3
-    # RDC_1_0CAC 4
-    # RDC_1_0NH 4
-    # S2_CA 3
-    # JCoup_3JHAC 8
-    # CS_C 3
-
-    user_sel = getUserSel(selection_file)
+    user_sel = getUserSel(user_selection_JSON)
 
     pdb_output_name = my_path + "/raw.pdb"
 
@@ -660,41 +672,45 @@ def run_selection(my_path):
 
     # sel_calced = open(my_path + "/selection_calced.txt", 'w')
 
-    # for key, val in iter_data.items():
-    #     sel_calced.write("{} {}\n".format(key, '{0:.3f}'.format(val)))
+    for key, val in iter_data.items():
+        # sel_calced.write("{} {}\n".format(key, '{0:.3f}'.format(val)))
+        print("CALCED ", key, '{0:.3f}'.format(val))
 
     # sel_calced.close()
 
-    # DumpedData.loadPDBData(my_path)
-    # PDB_data     = DumpedData.PDB_model_data
-    # sel_ensemble = PDB_data.atomgroup.copy()
+    DumpedData.loadPDBData(my_path)
+    PDB_data     = DumpedData.PDB_model_data
+    sel_ensemble = PDB_data.atomgroup.copy()
 
-    # for model_num in reversed(range(sel_ensemble.numCoordsets())):
-    #     if model_num not in in_selection:
-    #         sel_ensemble.delCoordset(model_num)
+    for model_num in reversed(range(sel_ensemble.numCoordsets())):
+        if model_num not in in_selection:
+            sel_ensemble.delCoordset(model_num)
 
-    # print("NUM_COORDSETS: ", sel_ensemble.numCoordsets())
+    print("NUM_COORDSETS: ", sel_ensemble.numCoordsets())
 
-    # prody.alignCoordsets(sel_ensemble.calpha)
-    # prody.writePDB(pdb_output_name, sel_ensemble)
+    prody.alignCoordsets(sel_ensemble.calpha)
+    prody.writePDB(pdb_output_name, sel_ensemble)
 
-    # in_selection = [str(x+1) for x in sorted(in_selection)]
-    # dummy_pdb    = open(pdb_output_name, 'r')
-    # output_pdb   = open(my_path + "/selected.pdb", "w")
+    in_selection = [str(x+1) for x in sorted(in_selection)]
+    dummy_pdb    = open(pdb_output_name, 'r')
+    output_pdb   = open(my_path + "/selected.pdb", "w")
 
-    # for line in dummy_pdb:
-    #     output_pdb.write(line)
-    #     if 'REMARK' in line:
-    #         model_line = "REMARK ORIGINAL MODELS: "
-    #         for model_num in in_selection:
-    #             if len(model_line) < 76:
-    #                 model_line += model_num + " "
-    #             else:
-    #                 output_pdb.write(model_line + "\n")
-    #                 model_line = "REMARK ORIGINAL MODELS: "
+    for line in dummy_pdb:
+        output_pdb.write(line)
+        if 'REMARK' in line:
+            model_line = "REMARK ORIGINAL MODELS: "
+            for model_num in in_selection:
+                if len(model_line) < 76:
+                    model_line += model_num + " "
+                else:
+                    output_pdb.write(model_line + "\n")
+                    model_line = "REMARK ORIGINAL MODELS: "
 
-    #         output_pdb.write(model_line + "\n")
+            output_pdb.write(model_line + "\n")
 
-    # print(' '.join(map(str, in_selection)))
+    print(' '.join(map(str, in_selection)))
 
-    return HttpResponse("SELECTION SPEAKING!")
+
+    print("iter_data", iter_data)
+
+    return iter_data

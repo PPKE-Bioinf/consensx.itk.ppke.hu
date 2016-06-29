@@ -5,6 +5,8 @@ from django.views.decorators.csrf import csrf_exempt
 import random # ID generation
 import string # ID generation
 import os     # mkdir
+import pickle
+import json
 
 from .models import CSX_upload
 from .consensx import run_calculation
@@ -102,5 +104,38 @@ def home(request):
 def selection(request, my_id):
     print("SELECTION ID IS: " + my_id)
     my_path = os.path.join(BASE_DIR, 'media', my_id)
-    if request.method == 'POST': # if the form has been submitted...
-       return run_selection(my_path)
+    user_selection = json.loads(request.body.decode("utf-8"))
+    print("request is:\n")
+    print(user_selection)
+
+    original_values = pickle.load( open( my_path + "/calced_values.p", "rb" ) )
+
+    if request.method == 'POST': # if the AJAX request has been received...
+        sel_values = run_selection(my_path, original_values, user_selection)
+
+
+    measure = user_selection["MEASURE"]
+
+    if measure == "correlation":
+        measure = "corr"
+
+
+    print("sel_values")
+    print(sel_values)
+
+    print("original_values")
+    print(original_values)
+
+    values_dict = {}
+
+    for key, value in sel_values.items():
+        values_dict[key] = {
+            "original":  original_values[key + "_" + measure],
+            "selection": value
+        }
+
+
+    print("values_dict")
+    print(values_dict)
+
+    return HttpResponse(json.dumps(values_dict), content_type='application/json')
