@@ -686,7 +686,9 @@ def run_selection(my_path, original_values, user_selection_JSON):
         if model_num not in in_selection:
             sel_ensemble.delCoordset(model_num)
 
-    print("NUM_COORDSETS: ", sel_ensemble.numCoordsets())
+    num_coordsets = sel_ensemble.numCoordsets()
+
+    print("NUM_COORDSETS: ", num_coordsets)
 
     prody.alignCoordsets(sel_ensemble.calpha)
     prody.writePDB(pdb_output_name, sel_ensemble)
@@ -713,4 +715,4 @@ def run_selection(my_path, original_values, user_selection_JSON):
 
     print("iter_data", iter_data)
 
-    return iter_data
+    return num_coordsets, iter_data

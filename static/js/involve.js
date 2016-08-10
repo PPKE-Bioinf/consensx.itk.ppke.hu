@@ -140,40 +140,46 @@ $(document).ready(function() {
         // UPLAD HERE!
         console.log(command);
 
-        let calc_id = $('#calculation_id').text();
+        let post_rarget = "/selection/" + $('#calculation_id').text();
+
+        console.log("POST TARGET:", post_rarget);
 
 
-        let sel_html = "\
-        <h3 style=\"text-align: center;\">Selection results</h3>\
-        <table class=\"files_table\">\
-        <tr>\
-        <td class=\"head-td\"> ---MEASURE--- </td>\
-        <td>All models: ---MODEL_COUNT--- </td>\
-        <td>Selected models: ---sel_count--- <a href=\"selected.pdb\" download>(download)</a></td>\
-        </tr>\
-        \
-        // foreach ($sel_items as $sel_item) {\
-        //     echo '<tr>';\
-        //     echo '<td class=\"head-td\" style=\"text-align: center;\">' . $sel_item . '</td>';\
-        //     echo '<td style=\"text-align: center;\">' . $full_pop[$measure][$sel_item] . '</td>';\
-        //     echo '<td style=\"text-align: center;\">' . $sel_data_array[$sel_item] . '</td>';\
-        //     echo '</tr>';\
-        // }\
-        // \
-        </table>\
-        <h3 style=\"text-align: center;\">Back-calculated data for the <b>original</b> ensemble</h3>";
+
 
 
         $.ajax({
-            url: "/selection/" + calc_id,
+            url: post_rarget,
             type: "POST",
             data: JSON.stringify(command),
             contentType: "application/json",
             complete: function(data, status){
 
-                for (let prop in data) {
-                    console.log(prop + " = " + data[prop]);
+                let sel_html = "\
+                <h3 style=\"text-align: center;\">Selection results</h3>\
+                <table class=\"files_table\">\
+                <tr>\
+                <td class=\"head-td\">" + data.responseJSON.measure + "</td>\
+                <td>All models</td>\
+                <td>Selected models:" + data.responseJSON.num_coordsets + "<a href=\"selected.pdb\" download>(download)</a></td>\
+                </tr>";
+
+
+                for (var prop in data.responseJSON.values) {
+                    console.log("obj." + prop + " = " + data.responseJSON.values[prop]);
+                    sel_html += '<tr>';
+                    sel_html += '<td class=\"head-td\" style=\"text-align: center;\">' + prop + '</td>';
+                    sel_html += '<td style=\"text-align: center;\">' + data.responseJSON.values[prop].original + '</td>';
+                    sel_html += '<td style=\"text-align: center;\">' + data.responseJSON.values[prop].selection + '</td>';
+                    sel_html += '</tr>';
                 }
+
+
+
+                sel_html += "</table>\
+                <h3 style=\"text-align: center;\">Back-calculated data for the <b>original</b> ensemble</h3>";
+
+                console.log("MEASURE JS", data.responseJSON.measure);
 
                 $(".selection-results").html(sel_html);
             }
@@ -182,17 +188,5 @@ $(document).ready(function() {
 
         return false;
 
-        // var theObject = { sel_params: command };
-
-        // var jqxhr =
-        //     $.ajax({
-        //         url: "/selection",
-        //         processData : false,
-        //         type : "POST",
-        //         data: JSON.stringify(theObject)
-        //     })
-        //     .done (function(data) { console.log(data); })
-        //     .fail (function()  { alert("Error "); })
-        //     ;
     });
 });
