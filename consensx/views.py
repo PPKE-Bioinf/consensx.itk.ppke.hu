@@ -8,10 +8,10 @@ import os     # mkdir
 import pickle
 import json
 
-from .models import CSX_upload
+from .models import CSX_upload, CSX_calculation
 from .consensx import run_calculation
 from .selection import run_selection
-# Create your views here.
+
 
 chars = string.ascii_uppercase + string.digits
 
@@ -24,6 +24,11 @@ def handle_uploaded_file(f, path, filename):
         for chunk in f.chunks():
             destination.write(chunk)
 
+
+def db(request, my_id):
+    DB_entry = CSX_calculation.objects.get(id_code=my_id)
+    print("PATH", request.path)
+    return HttpResponse(DB_entry.returnHTML())
 
 def home(request):
     if request.method == 'POST': # if the form has been submitted...
@@ -105,37 +110,37 @@ def selection(request, my_id):
     print("SELECTION ID IS: " + my_id)
     my_path = os.path.join(BASE_DIR, 'media', my_id)
     user_selection = json.loads(request.body.decode("utf-8"))
-    print("request is:\n")
-    print(user_selection)
 
     original_values = pickle.load( open( my_path + "/calced_values.p", "rb" ) )
 
+    # GYULA!
     if request.method == 'POST': # if the AJAX request has been received...
-        sel_values = run_selection(my_path, original_values, user_selection)
-
+        num_coordsets, sel_values = run_selection(my_path,
+                                                  original_values,
+                                                  user_selection)
 
     measure = user_selection["MEASURE"]
 
+    return_dict = {}
+
+    return_dict["measure"] = measure
+    return_dict["num_coordsets"] = num_coordsets
+
     if measure == "correlation":
         measure = "corr"
-
-
-    print("sel_values")
-    print(sel_values)
-
-    print("original_values")
-    print(original_values)
 
     values_dict = {}
 
     for key, value in sel_values.items():
         values_dict[key] = {
-            "original":  original_values[key + "_" + measure],
-            "selection": value
+            "original": original_values[key + "_" + measure],
+            "selection": "{0:.3g}".format(value)
         }
 
 
     print("values_dict")
     print(values_dict)
 
-    return HttpResponse(json.dumps(values_dict), content_type='application/json')
+    return_dict["values"] = values_dict
+
+    return HttpResponse(json.dumps(return_dict), content_type='application/json')

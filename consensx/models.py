@@ -22,3 +22,20 @@ class CSX_upload(models.Model):
     def __str__(self):
         my_time = self.timestamp.strftime('%Y-%m-%d %H:%M:%S')
         return my_time + " --- " + self.id_code
+
+class CSX_calculation(models.Model):
+    id_code      = models.CharField(max_length=6, default=None, blank=True, null=True)
+    html_content = models.TextField(default=None, blank=True, null=True)
+    timestamp    = models.DateTimeField(auto_now_add=True)
+
+
+    class Meta:
+        verbose_name = 'Calculation result'
+        verbose_name_plural = 'Calculation results'
+
+    def __str__(self):
+        my_time = self.timestamp.strftime('%Y-%m-%d %H:%M:%S')
+        return my_time + " --- " + self.id_code
+
+    def returnHTML(self):
+        return self.html_content

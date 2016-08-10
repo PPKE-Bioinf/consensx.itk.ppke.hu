@@ -23,6 +23,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', consensx.views.home),
     url(r'selection/(?P<my_id>[a-zA-Z0-9]{6}$)', consensx.views.selection),
+    url(r'^(?P<my_id>[a-zA-Z0-9]{6}$)', consensx.views.db),
 ]
 
 if settings.DEBUG:

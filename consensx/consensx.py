@@ -27,7 +27,7 @@ import consensx.csx_libs.objects as csx_obj
 
 # Django server
 from django.shortcuts import render
-from .models import CSX_upload
+from .models import CSX_upload, CSX_calculation
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -177,7 +177,7 @@ def run_calculation(request, calc_id):
         print(csx_obj.PHP_variables.PHP_dict)
         calced_values = my_path + "/calced_values.p"
         pickle.dump(csx_obj.PHP_variables.PHP_dict, open(calced_values, "wb"))
-        return render(request, "consensx/calculation.html", {
+        rendered_page = render(request, "consensx/calculation.html", {
             "my_id": my_id,
             "my_PDB": DB_entry.PDB_file,
             "n_model": model_count,
@@ -191,5 +191,16 @@ def run_calculation(request, calc_id):
             "chemshift_data": chemshift_data,
             "SVD_calc": DB_entry.svd_enable
         })
+
+
+        print("RENDERED PAGE ---------------- START")
+        post_data = CSX_calculation(
+            html_content=rendered_page.content,
+            id_code=my_id
+        )
+        post_data.save()
+
+        print("RENDERED PAGE ------------------ END")
+        return rendered_page
     else:
         return "NO DATA FOUND IN STAR-NMR FILE"
