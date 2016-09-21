@@ -99,7 +99,7 @@
 .box {
   width: 45%;
   height: 45%;
-  background:  #3f51b5;
+  background: #30b0c2;
   opacity: 0;
   -webkit-filter: blur(1px);
   animation: load 1s linear infinite;
@@ -144,7 +144,7 @@
 }
 
 .desc-page {
-  color:  #3f51b5;
+  color:  #30b0c2;
 }
 
 .desc-div {
@@ -222,14 +222,14 @@ box-shadow: 0px 10px 10px 3px rgba(0,0,0,0.3);
 }
 
 .files_table .head-td {
-  background-color: #3f51b5;
+  background-color: #30b0c2;
   color: #FFF;
   font-weight: 600;
 }
 
 .table-source {
   text-align: center;
-  background-color: #3f51b5;
+  background-color: #30b0c2;
   padding: 10px 0 10px 0;
 }
 
@@ -385,7 +385,7 @@ img {
 
 strong {
   	/*font-weight: 500;*/
-    color: #1a237e;
+    color: #027A8B;
 }
 
 p {
@@ -424,7 +424,7 @@ hr {
 }
 
 .color-text {
-    color:  #3f51b5;
+    color:  #30b0c2;
 }
 
 .through{
@@ -609,7 +609,7 @@ h3.spec {
 }
 
 .accordion-heading .accordion-toggle.active {
-	background: #3f51b5;
+	background: #30b0c2;
 	color:#FFFFFF;
 }
 
