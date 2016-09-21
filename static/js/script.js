@@ -81,6 +81,7 @@ $(document).ready(function() {
         $(".loader_text").toggleClass('hidden');
         $(".errormsg").remove();
         $("#submit_button").prop("disabled", true);
+        $("#submit_button").css('cursor', 'not-allowed');
     });
 
     $('#submit_test').click(function() {
@@ -92,6 +93,7 @@ $(document).ready(function() {
         $(".loader_text").toggleClass('hidden');
         $(".errormsg").remove();
         $("#submit_button").prop("disabled", true);
+        $("#submit_button").css('cursor', 'not-allowed');
     });
 
     $('#fit_box').change(function() {
@@ -109,6 +111,8 @@ $(document).ready(function() {
         $(".loader").toggleClass('hidden');
         $(".loader_text").toggleClass('hidden');
         $(".errormsg").remove();
+        $("#submit_button").prop("disabled", false);
+        $("#submit_button").css('cursor', 'auto');
     });
 
     $('#reset_button').click(function() {
