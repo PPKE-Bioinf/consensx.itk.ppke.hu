@@ -1,3 +1,4 @@
+consensx/.config
 db.sqlite3
 *.pyc
 csx_unchained/__pycache__/*
