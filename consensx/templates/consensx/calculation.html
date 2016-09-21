@@ -61,7 +61,7 @@
       <div id="navbar" class="collapse navbar-collapse">
         <ul class="nav navbar-nav">
           <li id="nav_info" class="active">
-            <a href="#">Results sheet ID: <b id="calculation_id" class="red">{{ my_id }}</b></a>
+            <a href="{{ my_id }}">Results sheet ID: <b id="calculation_id" class="red">{{ my_id }}</b> (permalink)</a>
           </li>
         </ul>
       </div><!--/.nav-collapse -->
@@ -194,7 +194,7 @@
               <tr>
               <td><table class="values_table">
               <tr><td><strong>{{ RDC.RDC_type }}</strong></td><td></td></tr>
-              <tr><td>Values:</td><td>{{ RDC_model_n }}</td></tr>
+              <tr><td>Values:</td><td>{{ RDC.RDC_model_n }}</td></tr>
               <tr><td>Correlation:</td><td>{{ RDC.correlation }}</td></tr>
               <tr><td>Q-factor:</td><td>{{ RDC.q_value }} %</td></tr>
               <tr><td>RMSD:</td><td>{{ RDC.rmsd }}</td></tr>
