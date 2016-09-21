@@ -80,6 +80,7 @@ $(document).ready(function() {
         $(".loader").toggleClass('hidden');
         $(".loader_text").toggleClass('hidden');
         $(".errormsg").remove();
+        $("#submit_button").prop("disabled", true);
     });
 
     $('#submit_test').click(function() {
@@ -90,6 +91,7 @@ $(document).ready(function() {
         $(".loader").toggleClass('hidden');
         $(".loader_text").toggleClass('hidden');
         $(".errormsg").remove();
+        $("#submit_button").prop("disabled", true);
     });
 
     $('#fit_box').change(function() {
