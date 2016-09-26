@@ -38,12 +38,10 @@ def home(request):
         os.mkdir(my_path)
 
         # check if POST is a test submit
-        try:
-            if request.POST['submit_test']:
-                # IMPLEMENT TEST CALC HERE!
-                return render(request, "consensx/calculation.html")
-        except:
-            pass
+        if request.POST['submit_test']:
+            # IMPLEMENT TEST CALC HERE!
+            return run_calculation(request, my_id)
+
 
 
         PDB_file = request.FILES['pdb_upload']  # get PDB file
