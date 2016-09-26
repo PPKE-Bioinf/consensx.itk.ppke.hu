@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+
+<head>
+    <!-- Meta Tags -->
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <title>CoNSENsX usage</title>
+
+    <meta name="description" content="CoNSENsX usage page" />
+
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Main Style -->
+    <link href="css/main.css" rel="stylesheet">
+
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="span12">
+                <div class="title-page">
+                    <h2 class="title"><b class="red">CoNSEnsX<sup>+</sup></b></h2>
+                    <h3 class="title-description"><b class="red">Co</b>mpliance of <b class="red">N</b>MR-derived <b class="red">S</b>tructural <b class="red">Ens</b>embles with e<b class="red">x</b>perimental data<br>+ selection</h3><br>
+
+                    <h1>The CoNSEnsX web server - description</h1>
+                </div>
+            </div>
+        </div>
+
+
+    <div class="desc-div col-lg-6">
+
+    <h3 class="desc-page">Ensemble evaluation</h3>
+
+    <p>The server is designed to analyze structural ensembles generated to represent the internal dynamics of proteins (see e.g. Ángyán &amp; Gáspári 2013 and references therein). Such ensembles are expected to reflect NMR-derived experimental parameters in an ensemble-averaged manner, i.e. the ensemble as a whole corresponds to the parameters better than any of its constituent conformers, whereas the diversity of the conformations is related to the internal motions observed at a given time scale. For example, S<sup>2</sup> general order parameters derived from heteronuclear relaxation measurements can be used to restrain MD simulations to generate ensembles reflecting internal dynamics at the ps-ns time scale (Best &amp; Vendruscolo 2004, Lindorff-Larsen et al. 2005, Richter et al. 2007). The aim of the CoNSEnsX approach is to provide a convenient and standardized way to evaluate such ensembles. The server reports the correspondence of the ensemble to each NMR parameter separately and does not yield a single quality measure. The justification for this that the availability and reliability of different types of parameters varies from case to case, and the relevance and usability of an ensemble should be decided based on this information as well as the purpose of its generation (i.e. what biological phenomenon was intended to be addressed with it).
+    <brooo><br>
+    The server is designed to analyze as many types of parameters as possible from those supplied with the BMRB-format NMR parameter file (parsing is performed using a Python3 port of the <a href="https://github.com/mattfenwick/NMRPyStar" target="_new">NMRPyStar</a> package). Currently the server supports the following parameters:</p>
+
+    <ul>
+        <li>
+            Chemical shifts - these are back-calculated with the original SHIFTX method (Neal et al. 2003) due to its speed. Chemical shift types currently supported by the server interface are: CA, CB, HA, amide H, and amide N.
+        </li>
+        <li>
+            J-couplings - supported <sup>3</sup>J couplings are those that can be calculated from the phi dihedral angle and for which Karplus parameters are available (
+            <sup>3</sup>J<sub>H</sub><sup>N</sup><sub>H</sub><sup>ɑ</sup>,
+            <sup>3</sup>J<sub>H</sub><sup>ɑ</sup><sub>C</sub>,
+            <sup>3</sup>J<sub>H</sub><sup>N</sup><sub>C</sub><sup>β</sup>,
+            <sup>3</sup>J<sub>H</sub><sup>N</sup><sub>C</sub>
+            ). Three published Karplus parameter sets can be chosen (Wang &amp; Bax 1996, Hu &amp; Bax 1997, Habeck, Rieping &amp; Nilges 2005).
+        </li>
+        <li>
+            Residual dipolar couplings - these are back-calculated using steric PALES (Zweckstetter &amp; Bax, 2000). Multiple RDC sets in the BMRB file are evaluated separately. By default, each conformer is separately oriented by SVD to obtain the best correspondence to experimental data. This approach takes into account that the orientation of the protein can be conformer-dependent (e.g. Louhivuori et al. 2007, Salvatella, Richter &amp; Vendruscolo 2008, Montalvao, De Simone &amp; Vendruscolo 2012 etc.). It is possible to turn out SVD fit, in which case a steric alignment will be estimated for each conformer, but it is not yet possible to use separate media for distinct RDC experiments.
+        </li>
+        <li>
+            S<sup>2</sup> order parameters - backbone and side-chain order parameters are supported. The server can perform the superposition of the supplied conformers for the range of residues specified using the corresponding module of <a href="http://prody.csb.pitt.edu/" target="_new">ProDy</a> (Bakan, Meireles &amp; Bahar 2011). By default, no superposition is done (i.e. the server implicitly assumes that conformers are already superimposed).
+        </li>
+        <li>
+            NOE distance restraints - an ensemble-based check of NOE distances is performed using r<sup>-6</sup> averaging for all possible
+            <sup>1</sup>H-<sup>1</sup>H distances for restraints of any type of ambiguity and optionally r<sup>-6</sup> or r<sup>-3</sup> averaging between conformers. In addition, a  PRIDE-NMR (Ángyán et al. 2008) analysis is done on all conformers. Please note that the result of distance analysis might be different from that obtained with other methods due to different averaging.
+        </li>
+    </ul>
+    <p>The server reports the correlation and RMSD for each parameter as well as Q-factor for RDCs. In addition, a correlation plot, a per-residue correspondence plot and a plot comparing the correlation of the ensemble as a whole vs. the individual conformers and the average of per-conformer correlations.</p>
+
+
+    <h3 class="desc-page">Sub-ensemble selection</h3>
+    <p>The CoNSEnsX server is capable of selecting a sub-ensemble with the best match to selected experimental data. Selection can be initiated after a round of evaluation by specifying the parameters to be included in the selection process along with their weights (on a scale of 0 to 10). This kind of selection is admittedly subjective but allows the user to discriminate between parameters on the basis of their reliability and importance for the actual task.<br>
+    The selection algorithm currently implemented is a version of a greedy approach, starting from the single conformer best corresponding to the included parameters and gradually adding conformers requiring better correspondence whenever possible. A so-called overdrive parameter can be set to allow individual addition steps to yield worse correspondence than the previous ones - extending the ensemble by further members might yield an overall better correspondence even in such cases. The other main adjustable parameters are the minimum and maximum size of the final sub-ensemble to be returned as well as the measure by which the sub-ensembles will be evaluated (Pearson correlation, Q-factor or RMSD). The output is the correspondence of the parameters to the full ensmeble and the selected sub-ensemble as well as the sub-ensemble as a downloadable PDB file.</p>
+
+
+    <h3 class="desc-page">Test data set</h3>
+    <p>The <a href="test_data/test_data.zip" target="download">test data set</a> provided for the server is based on an ensemble calculated for the protein PAF (Penicillium Antifungal Protein), using a variant of the protocol described in <a href="http://onlinelibrary.wiley.com/doi/10.1002/chem.201404879/epdf" target="_new">Fizil et al. 2015</a> including NOE, backbone S<sup>2</sup> parameters along with two synthetic RDC sets. The NMR parameter file is based on BMRB entry <a href="http://www.bmrb.wisc.edu/data_library/summary/index.php?bmrbId=19657" target="_new">19657</a> with the addition of S<sup>2</sup> order parameters (<a href="http://onlinelibrary.wiley.com/doi/10.1111/j.1742-4658.2009.07011.x/full" target="_new">Batta et al. 2009</a>) and the two in-house generated synthetic RDC sets calculated using different arbitrary molecular orientations.<br>
+    Results of a test calculation can be accessed <a href="http://consensx.itk.ppke.hu/calculations/testresults/result_sheet.php" target="_new">here</a>.
+    </p>
+
+    <h3 class="desc-page">Limitations</h3>
+    <p>The server currently supports ensembles up to 1000 conformers.</p>
+
+    <h3 class="desc-page">Versions &amp; availability</h3>
+    <p>The current CoNSEnsX version is a complete redesign of the original one. The source code is free and available at <a href="https://github.com/derPuntigamer/CoNSEnsX" target="_new">GitHub</a><br>.
+    The first version of the server is still available at <a href="http://consensx.chem.elte.hu" target="_new">conensx.chem.elte.hu</a> and was described in: <a href="http://bmcstructbiol.biomedcentral.com/articles/10.1186/1472-6807-10-39" target="_new">Ángyán et al. BMC Strut. Biol. 2010, 10:39</a>.
+    </p>
+
+    </div>
+    <div class="desc-div col-lg-6">
+
+    <h3 class="desc-page">Tools &amp; tips</h3>
+    <p>Several scripts for conversion between different formats are provided here in the hope that they might be useful. They are simple scripts and might not cover all issues arising during format conversion. They can be freely used and modified but come with absolutely no warranty. The 'disre' format is introduced as a format highly similar to the distabce restraint format in GRONACS topology files, with all atoms explicitly named and atom pairs corresponding to the same restraint forming a group.<br>
+    We recommend that before uploading data to the CoNSEnsX server, the user goes through the following steps:</p>
+
+    <ul>
+        <li>
+            Check that the atom naming convention is the same for all three files. To get a glimpse of possible mismatches, you can have a look at <a href="http://www.bmrb.wisc.edu/ref_info/atom_nom.tbl">http://www.bmrb.wisc.edu/ref_info/atom_nom.tbl</a> or invoke ‘atomconverter_pdb-pl -h’ that lists the same table with several additional formats added.
+        </li>
+        <li>
+            Perform the necessary conversions. We recommend to convert the PDB ensemble file (‘atomconverter_pdb.pl’) as this is the most likely to deviate from the nomenclature used by NMR processing software and is also the most robust to convert (its strict format makes recognition of atom names straightforward, making easy to spot unsuccessful conversions).
+        </li>
+        <li>
+            We provide simple tools to convert DIANA/DYANA .upl and X-PLOR/CNS .tbl distance restraint files into an intermediate format ‘disre’. By default, the converters ‘upl2disre.pl’ and ‘tbl2disre.pl’ will dereference all pseudoatoms into existing ones with the aid of the (already name-converted) PDB file supplied (e.g. ALA HB# to HB1, HB2, HB3 etc.). This intermediate format can then be converted to NMR-STAR format (v2 mr file format in the PDB web site) by ‘disre2str.pl’.
+        </li>
+        <li>
+            If you plan to use NOE restraint analysis provided by the server, please consider that to use stereospecific restraints (e.g. where atoms HB1 and HB2 of residue X are listed at a different distance from atom Y) you have to be sure that stereospecific naming conventions were properly used at each relevant stage of resonance assignment and structure calculation and that each naming conversion was performed in a reproducible way so as stereospecific information was properly maintained throughout all steps (e.g. see the differences between atom naming conventions above). If you are not entirely sure, you might want to remove stereospecific information (=make all stereospecific restraints ambiguous by adding all other possible atom pairs from to the prochiral groups) with the script ‘disre2stereoambig_xplor.pl’ from the 'disre' file before converting it to NMR-STAR format. Please note that this script might lead to the generation of duplicate restraints when adding ambiguities, thus running 'disre_sort.pl -u' is highly recommended after removing stereospecific information.
+        </li>
+        <li>Scripts provided (all give usage information when invoked with -h):
+            <table class="tools">
+                <tr>
+                    <td><a href="http://consensx.itk.ppke.hu/static/tools/atomconverter_pdb.pl" download>atomcoverter_pdb.pl</a></td>
+                    <td>Converts atom names in a PDB file</td>
+                </tr>
+                <tr>
+                    <td><a href="http://consensx.itk.ppke.hu/static/tools/atomconverter_bmrb.pl" download>atomconverter_bmrb.pl</a></td>
+                    <td>Converts atom names in a PDB file</td>
+                </tr>
+                <tr>
+                    <td><a href="http://consensx.itk.ppke.hu/static/tools/tbl2disre.pl" download>tbl2disre.pl</a></td>
+                    <td>Converts an X-PLOR/CNS format distance restraint list to disre format</td>
+                </tr>
+                <tr>
+                    <td><a href="http://consensx.itk.ppke.hu/static/tools/upl2disre.pl" download>upl2disre.pl</a></td>
+                    <td>Converts a DIANA format distance restraint list to disre format</td>
+                </tr>
+                <tr>
+                    <td><a href="http://consensx.itk.ppke.hu/static/tools/disre2str.pl" download>disre2str.pl</a></td>
+                    <td>Converts a disre file to a simple NMR-Star format list</td>
+                </tr>
+                <tr>
+                    <td><a href="http://consensx.itk.ppke.hu/static/tools/disre_renum.pl" download>disre_renum.pl</a></td>
+                    <td>Renumbers residues in a disre file</td>
+                </tr>
+                 <tr>
+                    <td><a href="http://consensx.itk.ppke.hu/static/tools/disre_bins.pl" download>disre_bins.pl</a></td>
+                    <td>Rewrites distances to binned ones in a disre file</td>
+                </tr>
+                 <tr>
+                    <td><a href="http://consensx.itk.ppke.hu/static/tools/disre_sort.pl" download>disre_sort.pl</a></td>
+                    <td>Generates a sorted (unique with the option -u) disre file</td>
+                </tr>
+                 <tr>
+                    <td><a href="http://consensx.itk.ppke.hu/static/tools/disre_chk.pl" download>disre_chk.pl</a></td>
+                    <td>Checks distances in a pdb ensemble</td>
+                </tr>
+                 <tr>
+                    <td><a href="http://consensx.itk.ppke.hu/static/tools/disre2stereoambig_xplor.pl" download>disre2stereoambig_xplor.pl</a></td>
+                    <td>Removes stereospecific information from a disre file with X-PLOR atom nomenclature</td>
+                </tr>
+                 <tr>
+                    <td><a href="http://consensx.itk.ppke.hu/static/tools/disre_removeambig.pl" download>disre_removeambig.pl</a></td>
+                    <td>Removes ambiguous restraints from a disre file</td>
+                </tr>
+            </table>
+        </li>
+    </ul>
+
+    <h3 class="desc-page">References</h3>
+    <ul id="desc-references">
+    <li>Ángyán AF, Gáspári Z: Ensemble-based interpretations of NMR structural data to describe protein internal dynamics. Molecules 2013, 18:10548-10567</li>
+
+    <li>Ángyán AF, Szappanos B, Perczel A, Gáspári Z: CoNSEnsX: an ensemble view of protein structures and NMR-derived experimental data. BMC Strut. Biol. 2010, 10:39</li>
+
+    <li>Ángyán AF, Perczel A, Pongor S, Gáspári Z: Fast protein fold estimation from NMR-derived distance restraints. Bioinformatics 2008, 24:272-275.</li>
+
+    <li>Bakan A, Meireles LM, Bahar I: ProDy: Protein dynamics inferred from theory and experiments. Bioinformatics 2011, 27:1575-1577.</li>
+
+    <li>Batta G, Barna T, Gáspári Z, Sándor S, Kövér KE, Binder U, Sarg B, Kaiserer L, Chhillar AK, Eigentler A, Leiter É, Hegedüs N, Pócsi I, Lindner H, Marx F: Functional aspects of the solution structure and dynamics of PAF - a highly-stable antifungal protein from Penicillium chrysogenum. FEBS J 2009, 276:2875-2890.</li>
+
+    <li>Best RB, Vendruscolo M: Relation between native ensembles and experimental structures of proteins. Proc Natl Acad Sci USA 2006, 103:10901-10906.</li>
+
+    <li>Fizil Á, Gáspári Z, Barna T, Marx F,  Batta G: "Invisible" conformers of an antifungal disulfide protein revealed by constrained cold &amp; heat unfolding, CEST-NMR experiments and molecular dynamics calculations. Chem. Eur. J. 2015, 21:5136-5144</li>
+
+    <li>Habeck M, Rieping W, Nilges M. Bayesian estimation of Karplus parameters and torsion angles from three-bond scalar coupling constants. J Magn Reson 2005 177:160-165.</li>
+
+    <li>Hu J-S, Bax A. Determination of 𝜙 and 𝛸1 angles in proteins from 13C-13C three-bond J couplings measured by three-dimensional heteronuclear NMR. How planar is the peptide bond? J. Am. Chem. Soc. 1997, 119:6360-6358.</li>
+
+    <li>Lindorff-Larsen K, Best RB, DePristo MA, Vendruscolo M: Simultaneous determination of protein structure and dynamics. Nature 2005, 433:128-132.</li>
+
+    <li>Louhivuori M, Otten R, Lindorff-Larsen K, Annila A: Conformational fluctuations affect protein alignment in dilute liquid crystal media. J Am Chem Soc 2006, 128:4371-4376.</li>
+
+    <li>Montalvao RW, De Simone A, Vendruscolo M: Determination of structural fluctuations of proteins from structure-based calculations of residual dipolar couplings. J Biomol NMR 2012, 53:281-292.
+
+    <li>Neal S, Nip AM, Zhang N, Wishart DS: Rapid and accurate calculation of protein 1H, 13C and 15N chemical shifts. J Biomol NMR 2003, 26:215-240.</li>
+
+    <li>Richter B, Gsponer J, Várnai P, Salvatella X, Vendruscolo M: The MUMO (minimal under-restraining minimal over-restraining) method for the determination of native state ensembles of proteins. J Biomol NMR 2007, 37:117-135.</li>
+
+    <li>Salvatella X, Richter B, Vendruscolo M: Influence of the fluctuations of the alignment tensor on the analysis of the structure and dynamics of proteins using residual dipolar couplings. J Biomol NMR 2008, 40:71-81.</li>
+
+    <li>Wang AC, Bax A: Determination of the backbone dihedral angles φ in human ubiquitin from reparametrized Karplus equations. J Am Chem Soc 1996, 118:2483-2494.</li>
+
+    <li>Zweckstetter M, Bax A: Prediction of sterically induced alignment in a dilute liquid crystalline phase: aid to protein structure determination by NMR. J Am Chem Soc 2000, 122:3791-3792
+    </ul>
+    </div>
+    </div>
+</body>
