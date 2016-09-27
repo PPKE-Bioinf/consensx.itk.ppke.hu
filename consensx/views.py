@@ -38,10 +38,9 @@ def home(request):
         os.mkdir(my_path)
 
         # check if POST is a test submit
-        if request.POST['submit_test']:
+        if request.POST.get('submit_test', False):
             # IMPLEMENT TEST CALC HERE!
             return run_calculation(request, my_id)
-
 
 
         PDB_file = request.FILES['pdb_upload']  # get PDB file

@@ -130,13 +130,15 @@
                                 For reference on accepted file formatting, please consult the
                                 <a href="{% static 'test_data/test_data.zip' %}" download>downloadable test data</a>.
                                 You can run a test calculation on the
-                                test data anytime, to check if the server is working.
+                                test data anytime with the provided test data, to check if the server is working.
+                                {% comment "Remove until implemented" %}
                                 <div style="text-align: center;">
                                 <form name="csx_test" action="" method="post">
                                 {% csrf_token %}
                                     <input id="submit_test" name="submit_test" type="submit" value="Run test calculation!">
                                 </form>
                                 </div>
+                                {% endcomment %}
                             </div>
                         </div>
                     </div>
