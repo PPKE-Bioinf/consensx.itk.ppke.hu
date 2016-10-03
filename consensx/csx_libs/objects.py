@@ -2,12 +2,6 @@ import math
 import copy
 
 
-class PHP_variables(object):
-
-    """Class for storing values for PHP generation"""
-    PHP_dict = dict()
-
-
 class RDC_modell_corr(object):
 
     """Class for per model RDC correlation"""
@@ -87,7 +81,7 @@ class CSV_buffer(object):
                                      "{0:.2f}".format(data.calced[resnum])
                                      + ',')
                 except KeyError:
-                    output_csv.write(',')
+                    output_csv.write(',,')
 
             output_csv.write("\n")
 
