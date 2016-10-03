@@ -126,6 +126,9 @@ def selection(request, my_id):
     if measure == "correlation":
         measure = "corr"
 
+    if measure == "q-value":
+        measure = "qval"
+
     values_dict = {}
 
     for key, value in sel_values.items():
