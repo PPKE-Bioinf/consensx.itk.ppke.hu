@@ -2,6 +2,12 @@ import math
 import copy
 
 
+class CalcPickle(dict):
+    pass
+    """Class for storing values for pickle generation"""
+    data = dict()
+
+
 class RDC_modell_corr(object):
 
     """Class for per model RDC correlation"""

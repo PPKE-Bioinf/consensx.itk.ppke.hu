@@ -114,6 +114,14 @@ def calcRDC(RDC_lists, pdb_models, my_path, SVD_enabled, lc_model):
             qval_key = "RDC_" + str(list_num + 1) + "_" + RDC_simple + "_qval"
             rmsd_key = "RDC_" + str(list_num + 1) + "_" + RDC_simple + "_rmsd"
 
+            csx_obj.CalcPickle.data.update(
+                {
+                corr_key: "{0}".format('{0:.3f}'.format(correl)),
+                qval_key: "{0}".format('{0:.3f}'.format(q_value)),
+                rmsd_key: "{0}".format('{0:.3f}'.format(rmsd))
+                }
+            )
+
             csx_obj.CSV_buffer("RDC_" + str(list_num + 1) +
                                "(" + RDC_type + ")",
                                my_averageRDC, RDC_dict[RDC_type])
@@ -182,6 +190,14 @@ def calcS2(S2_dict, my_path, calculate_on_models=None, fit=None, fit_range=None,
         corr_key = "S2_" + S2_type + "_corr"
         qval_key = "S2_" + S2_type + "_qval"
         rmsd_key = "S2_" + S2_type + "_rmsd"
+
+        csx_obj.CalcPickle.data.update(
+            {
+            corr_key: "{0}".format('{0:.3f}'.format(correl)),
+            qval_key: "{0}".format('{0:.3f}'.format(q_value)),
+            rmsd_key: "{0}".format('{0:.3f}'.format(rmsd))
+            }
+        )
 
         csx_obj.CSV_buffer("S2 (" + S2_type + ")",
                            S2_calced, S2_dict[S2_type])
@@ -396,6 +412,14 @@ def calcJCouplings(param_set, Jcoup_dict, my_PDB, my_path):
         qval_key = "JCoup_" + Jcoup_type + "_qval"
         rmsd_key = "JCoup_" + Jcoup_type + "_rmsd"
 
+        csx_obj.CalcPickle.data.update(
+            {
+            corr_key: "{0}".format('{0:.3f}'.format(correl)),
+            qval_key: "{0}".format('{0:.3f}'.format(q_value)),
+            rmsd_key: "{0}".format('{0:.3f}'.format(rmsd))
+            }
+        )
+
         csx_obj.CSV_buffer("J-couplings (" + Jcoup_type + ")",
                    JCoup_calced, Jcoup_dict[Jcoup_type])
 
@@ -475,6 +499,14 @@ def calcChemShifts(ChemShift_lists, pdb_models, my_path):
             corr_key = "CS_" + CS_type + "_corr"
             qval_key = "CS_" + CS_type + "_qval"
             rmsd_key = "CS_" + CS_type + "_rmsd"
+
+            csx_obj.CalcPickle.data.update(
+                {
+                corr_key: "{0}".format('{0:.3f}'.format(correl)),
+                qval_key: "{0}".format('{0:.3f}'.format(q_value)),
+                rmsd_key: "{0}".format('{0:.3f}'.format(rmsd))
+                }
+            )
 
             csx_obj.CSV_buffer("ChemShifts (" + CS_type + ")",
                                exp_dict, CS_list[CS_type])
