@@ -174,6 +174,9 @@ def run_calculation(request, calc_id):
     te = time.time()
 
     if data_found:
+        print(csx_obj.CalcPickle.data)
+        calced_values = my_path + "/calced_values.p"
+        pickle.dump(csx_obj.CalcPickle.data, open(calced_values, "wb"))
         rendered_page = render(request, "consensx/calculation.html", {
             "my_id": my_id,
             "my_PDB": DB_entry.PDB_file,
@@ -188,6 +191,7 @@ def run_calculation(request, calc_id):
             "chemshift_data": chemshift_data,
             "SVD_calc": DB_entry.svd_enable
         })
+
 
         print("RENDERED PAGE ---------------- START")
         post_data = CSX_calculation(
