@@ -140,16 +140,16 @@ $(document).ready(function() {
         // UPLAD HERE!
         console.log(command);
 
-        let post_rarget = "/selection/" + $('#calculation_id').text();
-
-        console.log("POST TARGET:", post_rarget);
+        let post_target = "/selection/" + $('#calculation_id').text();
+        let selected_PDB_URL = "\"/media/" + $('#calculation_id').text() + "/selected.pdb\"";
+        console.log("POST TARGET:", post_target);
 
 
 
 
 
         $.ajax({
-            url: post_rarget,
+            url: post_target,
             type: "POST",
             data: JSON.stringify(command),
             contentType: "application/json",
@@ -161,7 +161,7 @@ $(document).ready(function() {
                 <tr>\
                 <td class=\"head-td\">" + data.responseJSON.measure + "</td>\
                 <td>All models</td>\
-                <td>Selected models:" + data.responseJSON.num_coordsets + "<a href=\"selected.pdb\" download>(download)</a></td>\
+                <td>Selected models:" + data.responseJSON.num_coordsets + "<a href=" + selected_PDB_URL + " download> (download)</a></td>\
                 </tr>";
 
 
