@@ -198,7 +198,7 @@ class Restraint_Record(object):
         if Restraint_Record.resolved_restraints:
             return Restraint_Record.resolved_restraints
 
-        pse_c = ["#", "*", "%", "+"]
+        pse_c = ["#", "*", "%", "+", "E"]
 
         restraints = Restraint_Record.all_restraints
 
@@ -208,7 +208,7 @@ class Restraint_Record(object):
         model_data = PDB_model.model_data
 
         for atom in model_data.atomgroup:
-            atom_res = atom.getResindex() + 1
+            atom_res = atom.getResnum()
 
             if atom_res in PDB_atom_names.keys():
                 PDB_atom_names[atom_res].append(atom.getName())
@@ -252,24 +252,39 @@ class Restraint_Record(object):
                                 atom_names1.append(num + base + i)
                         # permutations, if trailing number found
                         else:
-                            for i in ['1', '2', '3']:
-                                for j in ['1', '2', '3']:
-                                    atom_names1.append(base + j + i)
-                                    atom_names1.append(j + base + i)
+                            if res.seq_name1 == "ILE" and res.atom_ID1 == "MG":
+                                for i in ['1', '2', '3']:
+                                    atom_names1.append(base + str(2) + i)
+                                    atom_names1.append(i + base + str(2))
 
-                    if pseudH1:
-                        atom_names1 = []
-                        base = res.atom_ID1[:-1]
+                            elif res.seq_name1 == "THR" and res.atom_ID1 == "MG":
+                                atom_names1.append("HG1")
+                                atom_names1.append("1HG")
 
-                        for i in ['1', '2', '3']:
-                            atom_names1.append(base + i)
-                            atom_names1.append(i + base)
+                            else:
+
+
+                                for i in ['1', '2', '3']:
+                                    atom_names1.append(base + i)
+
+                                    for j in ['1', '2', '3']:
+                                        atom_names1.append(base + j + i)
+                                        # vagy fordítva
+                                        atom_names1.append(i + base + j)
+
+                    # if pseudH1:
+                    #     atom_names1 = []
+                    #     base = res.atom_ID1[:-1]
+
+                    #     for i in ['1', '2', '3']:
+                    #         atom_names1.append(base + i)
+                    #         atom_names1.append(i + base)
 
                     # get corresponding atom names present in PDB file
                     PDB_names1 = PDB_atom_names[res.seq_ID1]
                     # print("atom_names1:", res.atom_ID1, atom_names1)
                     resol1 = list(set(atom_names1) & set(PDB_names1))
-                    # print("rasol_names1:", res.atom_ID1, resol1)
+                    # print("resol_names1:", res.atom_ID1, resol1)
 
                 resol2 = [res.atom_ID2]
 
@@ -293,23 +308,40 @@ class Restraint_Record(object):
                                 atom_names2.append(base + num + i)
                                 atom_names2.append(num + base + i)
                         else:
-                            for i in ['1', '2', '3']:
-                                for j in ['1', '2', '3']:
-                                    atom_names2.append(base + j + i)
-                                    atom_names2.append(j + base + i)
+                            if res.seq_name2 == "ILE" and res.atom_ID2 == "MG":
+                                for i in ['1', '2', '3']:
+                                    atom_names2.append(base + str(2) + i)
+                                    atom_names2.append(i + base + str(2))
 
-                    if pseudH2:
-                        atom_names2 = []
-                        base = res.atom_ID2[:-1]
+                            elif res.seq_name2 == "THR" and res.atom_ID2 == "MG":
+                                atom_names2.append("HG1")
+                                atom_names2.append("1HG")
 
-                        for i in ['1', '2', '3']:
-                            atom_names2.append(base + i)
-                            atom_names2.append(i + base)
+                            else:
+                                for i in ['1', '2', '3']:
+                                    atom_names2.append(base + i)
+
+                                    for j in ['1', '2', '3']:
+                                        atom_names2.append(base + j + i)
+                                        # vagy fordítva
+                                        atom_names2.append(i + base + j)
+
+                    # if pseudH2:
+                    #     atom_names2 = []
+                    #     base = res.atom_ID2[:-1]
+
+                    #     for i in ['1', '2', '3']:
+                    #         atom_names2.append(base + i)
+                    #         atom_names2.append(i + base)
 
                     PDB_names2 = PDB_atom_names[res.seq_ID2]
                     # print("atom_names2:", res.atom_ID2, atom_names2)
                     resol2 = list(set(atom_names2) & set(PDB_names2))
-                    # print("rasol_names2:", res.atom_ID2, resol2)
+                    # print("resol_names2:", res.atom_ID2, resol2)
+
+                # print("curr_distID ->", res.curr_distID)
+                # print("resol1 ->", resol1)
+                # print("resol2 ->", resol2)
 
                 for atom1 in resol1:
                     for atom2 in resol2:
@@ -317,10 +349,10 @@ class Restraint_Record(object):
                             res.seq_ID1, res.seq_ID2, res.seq_name1,
                             res.seq_name2, atom1, atom2, res.dist_max)
 
-                        # print(res.curr_distID,
-                        #     res.seq_ID1, res.seq_ID2,
-                        #     res.seq_name1, res.seq_name2, atom1,
-                        #     atom2, res.dist_max)
+                        print(res.curr_distID,
+                            res.seq_ID1, res.seq_name1, atom1,
+                            res.seq_ID2, res.seq_name2, atom2,
+                            res.dist_max)
 
                         Restraint_Record.resolved_restraints.append(new)
 
