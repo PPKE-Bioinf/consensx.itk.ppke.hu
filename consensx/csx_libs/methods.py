@@ -1343,7 +1343,7 @@ def pdb2coords(PDB_file):
         PDB_coords[i] = {}
 
         for atom in model_data.atomgroup:
-            resnum = int(atom.getResindex()) + 1
+            resnum = int(atom.getResnum())
             name   = str(atom.getName())
 
             if resnum == prev_resnum:
