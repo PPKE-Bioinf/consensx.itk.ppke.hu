@@ -66,6 +66,10 @@ def run_calculation(request, calc_id):
 
     #----------------------  Read  and parse NOE file   -----------------------#
     if DB_entry.NOE_file:
+        # empty class variables
+        csx_obj.Restraint_Record.all_restraints = []
+        csx_obj.Restraint_Record.resolved_restraints = []
+
         NOE_name = DB_entry.NOE_file
         my_NOE = my_path + DB_entry.NOE_file
         saveShifts = csx_func.getNOE(my_NOE)
