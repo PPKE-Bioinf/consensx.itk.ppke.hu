@@ -161,7 +161,7 @@ $(document).ready(function() {
                 <tr>\
                 <td class=\"head-td\">" + data.responseJSON.measure + "</td>\
                 <td>All models</td>\
-                <td>Selected models:" + data.responseJSON.num_coordsets + "<a href=" + selected_PDB_URL + " download> (download)</a></td>\
+                <td>Selected models: " + data.responseJSON.num_coordsets + "<a href=" + selected_PDB_URL + " download> (download)</a></td>\
                 </tr>";
 
 
