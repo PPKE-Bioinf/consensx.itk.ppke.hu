@@ -23,7 +23,7 @@ $(document).ready(function() {
     $("#fit_range").prop('disabled', true);
 
     // form validation
-    $('#submit_button').click(function() {
+    $('#csx_form').submit(function() {
         // var hasPDB  = ($('#pdb_file').val() != "" ) || ($('#pdb_id').val() != "" );
         hasPDB  = false;
         hasMBMR = false;
