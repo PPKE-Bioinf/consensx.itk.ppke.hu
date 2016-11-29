@@ -1,6 +1,6 @@
 import math
 import copy
-
+import pdb
 
 class CalcPickle(dict):
     pass
@@ -56,37 +56,46 @@ class ThirdParty(object):
 class CSV_buffer(object):
 
     """Class which stores data for values.CSV"""
-    working_dir = ""
-    max_resnum = -1
-    min_resnum = 100000
-    csv_data = []
 
-    def __init__(self, name, calced, experimental):
-        self.name = name
-        self.calced = calced
-        self.exp = {}
 
-        for i in experimental:
-            self.exp[i.resnum] = i.value
+    def __init__(self, my_path):
+        self.working_dir = my_path
+        self.max_resnum = -1
+        self.min_resnum = 100000
+        self.csv_data = []
+        # self.name = name
+        # self.calced = calced
+        # self.exp = {}
 
-        CSV_buffer.csv_data.append(self)
+        # for i in experimental:
+        #     self.exp[i.resnum] = i.value
 
-    @staticmethod
-    def writeCSV():
-        filename = CSV_buffer.working_dir + "values.csv"
+        # csv_data.append(self)
+
+
+    def writeCSV(self):
+        filename = self.working_dir + "values.csv"
         output_csv = open(filename, 'w')
         output_csv.write(',')
-        for data in CSV_buffer.csv_data:
-            output_csv.write(data.name + " EXP, " + data.name + " CALC,")
+        for data in self.csv_data:
+            output_csv.write(data["name"] + " EXP, " + data["name"] + " CALC,")
         output_csv.write("\n")
-        for resnum in range(CSV_buffer.min_resnum, CSV_buffer.max_resnum):
+
+        # for i in experimental:
+        #     self.exp[i.resnum] = i.value
+
+        for resnum in range(self.min_resnum, self.max_resnum + 1):
             output_csv.write(str(resnum) + ',')
-            for data in CSV_buffer.csv_data:
+            for data in self.csv_data:
+                exp = {}
+
+                for i in data["experimental"]:
+                    exp[i.resnum] = i.value
+
                 try:
-                    output_csv.write("{0:.2f}".format(data.exp[resnum]) + ',' +
-                                     "{0:.2f}".format(data.calced[resnum])
-                                     + ',')
-                except KeyError:
+                    # pdb.set_trace()
+                    output_csv.write("{0:.2f}".format(exp[resnum]) + ',' + "{0:.2f}".format(data["calced"][resnum]) + ',')
+                except (IndexError, KeyError):
                     output_csv.write(',,')
 
             output_csv.write("\n")
@@ -198,7 +207,7 @@ class Restraint_Record(object):
         if Restraint_Record.resolved_restraints:
             return Restraint_Record.resolved_restraints
 
-        pse_c = ["#", "*", "%", "+", "E"]
+        pse_c = ["#", "*", "%", "+"]
 
         restraints = Restraint_Record.all_restraints
 
@@ -225,6 +234,10 @@ class Restraint_Record(object):
         # resolution of pseudo-atoms
         for dist_ID in NOE_dict.keys():
             for res in NOE_dict[dist_ID]:
+                # skip O atoms
+                if res.atom_ID1 == "O" or res.atom_ID2 == "O":
+                    continue
+
                 resol1 = [res.atom_ID1]
 
                 # check if first atom is a pseudo atom
@@ -272,13 +285,15 @@ class Restraint_Record(object):
                                         # vagy fordítva
                                         atom_names1.append(i + base + j)
 
-                    # if pseudH1:
-                    #     atom_names1 = []
-                    #     base = res.atom_ID1[:-1]
+                    if pseudH1:
+                        atom_names1 = []
+                        base = res.atom_ID1[:-1]
 
-                    #     for i in ['1', '2', '3']:
-                    #         atom_names1.append(base + i)
-                    #         atom_names1.append(i + base)
+                        for i in ['1', '2', '3']:
+                            atom_names1.append(base + i)
+                            atom_names1.append(i + base)
+
+                    # TODO KeyError
 
                     # get corresponding atom names present in PDB file
                     PDB_names1 = PDB_atom_names[res.seq_ID1]
@@ -326,13 +341,13 @@ class Restraint_Record(object):
                                         # vagy fordítva
                                         atom_names2.append(i + base + j)
 
-                    # if pseudH2:
-                    #     atom_names2 = []
-                    #     base = res.atom_ID2[:-1]
+                    if pseudH2:
+                        atom_names2 = []
+                        base = res.atom_ID2[:-1]
 
-                    #     for i in ['1', '2', '3']:
-                    #         atom_names2.append(base + i)
-                    #         atom_names2.append(i + base)
+                        for i in ['1', '2', '3']:
+                            atom_names2.append(base + i)
+                            atom_names2.append(i + base)
 
                     PDB_names2 = PDB_atom_names[res.seq_ID2]
                     # print("atom_names2:", res.atom_ID2, atom_names2)

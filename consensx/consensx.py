@@ -47,11 +47,11 @@ def run_calculation(request, calc_id):
 
 
     #-----------------  Setting up working directory and files  ---------------#
-    csx_obj.CSV_buffer.working_dir = my_path
+    my_CSV_buffer = csx_obj.CSV_buffer(my_path)
 
     my_PDB = my_path + DB_entry.PDB_file
 
-    csx_func.pdb_cleaner(my_path, my_PDB)                   # bringing PDB to format
+    csx_func.pdb_cleaner(my_path, my_PDB, my_CSV_buffer)
     model_count = csx_func.pdb_splitter(my_path, my_PDB)
 
     csx_func.get_model_list(my_PDB, my_path, model_count)
@@ -111,8 +111,8 @@ def run_calculation(request, calc_id):
         if RDC_lists:
             SVD_enabled = DB_entry.svd_enable
             lc_model = DB_entry.rdc_lc
-            RDC_data = csx_calc.calcRDC(RDC_lists, pdb_models, my_path,
-                                        SVD_enabled, lc_model)
+            RDC_data = csx_calc.calcRDC(my_CSV_buffer, RDC_lists, pdb_models,
+                                        my_path, SVD_enabled, lc_model)
             data_found = True
         else:
             RDC_data = None
@@ -125,10 +125,10 @@ def run_calculation(request, calc_id):
 
         if S2_dict:
             S2_data = csx_calc.calcS2(
-                           S2_dict, my_path,
+                           my_CSV_buffer, S2_dict, my_path,
                            fit=DB_entry.superimpose,
-                           fit_range=DB_entry.fit_range
-                       )
+                           fit_range=DB_entry.fit_range)
+
             data_found = True
         else:
             S2_data = None
@@ -137,7 +137,7 @@ def run_calculation(request, calc_id):
 
         # TODO
         # if S2_sidechain:
-        #     csx_calc.calcS2_sidechain(S2_sidechain, my_path,
+        #     csx_calc.calcS2_sidechain(my_CSV_buffer, S2_sidechain, my_path,
         #                               fit=DB_entry.superimpose)
         #     data_found = True
 
@@ -147,8 +147,8 @@ def run_calculation(request, calc_id):
         pickle.dump(Jcoup_dict, open(Jcoup_dict_path, "wb"))
 
         if Jcoup_dict:
-            Jcoup_data = csx_calc.calcJCouplings(DB_entry.karplus, Jcoup_dict,
-                                                 my_PDB, my_path)
+            Jcoup_data = csx_calc.calcJCouplings(my_CSV_buffer, DB_entry.karplus,
+                                                 Jcoup_dict, my_PDB, my_path)
             data_found = True
         else:
             Jcoup_data = None
@@ -160,7 +160,7 @@ def run_calculation(request, calc_id):
 
         if ChemShift_lists:
             chemshift_data = csx_calc.calcChemShifts(
-                ChemShift_lists, pdb_models, my_path
+                my_CSV_buffer, ChemShift_lists, pdb_models, my_path
             )
             data_found = True
         else:
@@ -173,7 +173,7 @@ def run_calculation(request, calc_id):
         chemshift_data = None
 
 
-    csx_obj.CSV_buffer.writeCSV()
+    my_CSV_buffer.writeCSV()
 
     te = time.time()
 
