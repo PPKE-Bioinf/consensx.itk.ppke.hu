@@ -69,7 +69,7 @@ class RDC_model_data(object):
             return min_loc
 
 
-def calcRDC(RDC_lists, pdb_models, my_path, SVD_enabled, lc_model):
+def calcRDC(my_CSV_buffer, RDC_lists, pdb_models, my_path, SVD_enabled, lc_model):
     """Back calculate RDC from given RDC lists and PDB models"""
     RDC_data = {}
 
@@ -122,9 +122,11 @@ def calcRDC(RDC_lists, pdb_models, my_path, SVD_enabled, lc_model):
                 }
             )
 
-            csx_obj.CSV_buffer("RDC_" + str(list_num + 1) +
-                               "(" + RDC_type + ")",
-                               my_averageRDC, RDC_dict[RDC_type])
+            my_CSV_buffer.csv_data.append({
+                "name": "RDC_" + str(list_num + 1) + "(" + RDC_type + ")",
+                "calced": my_averageRDC,
+                "experimental": RDC_dict[RDC_type]
+            })
 
             print("Correl: ", correl)
             print("Q-val:  ", q_value)
@@ -169,7 +171,7 @@ def calcRDC(RDC_lists, pdb_models, my_path, SVD_enabled, lc_model):
     return RDC_data
 
 
-def calcS2(S2_dict, my_path, calculate_on_models=None, fit=None, fit_range=None,):
+def calcS2(my_CSV_buffer, S2_dict, my_path, calculate_on_models=None, fit=None, fit_range=None):
     """Back calculate order paramteres from given S2 dict and PDB models"""
     S2_data = []
     model_data = csx_obj.PDB_model.model_data
@@ -199,8 +201,11 @@ def calcS2(S2_dict, my_path, calculate_on_models=None, fit=None, fit_range=None,
             }
         )
 
-        csx_obj.CSV_buffer("S2 (" + S2_type + ")",
-                           S2_calced, S2_dict[S2_type])
+        my_CSV_buffer.csv_data.append({
+            "name": "S2 (" + S2_type + ")",
+            "calced": S2_calced,
+            "experimental": S2_dict[S2_type]
+        })
 
         print(S2_type + " Order Parameters")
         print("Correl: ", correl)
@@ -231,7 +236,7 @@ def calcS2(S2_dict, my_path, calculate_on_models=None, fit=None, fit_range=None,
     return S2_data
 
 
-def calcS2_sidechain(S2_sidechain, my_path, fit=None):
+def calcS2_sidechain(my_CSV_buffer, S2_sidechain, my_path, fit=None):
     """Back calculate order paramteres from given S2 dict and PDB models"""
 
     sc_LOT = {
@@ -311,10 +316,18 @@ def calcS2_sidechain(S2_sidechain, my_path, fit=None):
             sidechain_exp2.append(record)
             sidechain_calc2[record.resnum] = record.calced
 
-    csx_obj.CSV_buffer("S2_meth", sidechain_calc1, sidechain_exp1)
+    my_CSV_buffer.csv_data.append({
+        "name": "S2_meth",
+        "calced": sidechain_calc1,
+        "experimental": sidechain_exp1
+    })
 
     if sidechain_exp2:
-        csx_obj.CSV_buffer("S2_meth (cont)", sidechain_calc2, sidechain_exp2)
+        my_CSV_buffer.csv_data.append({
+            "name": "S2_meth (cont)",
+            "calced": sidechain_calc2,
+            "experimental": sidechain_exp2
+        })
 
     # correlation calculation
     M = [0.0, 0.0, 0.0]
@@ -379,7 +392,7 @@ def calcS2_sidechain(S2_sidechain, my_path, fit=None):
                              "Sidechain")
 
 
-def calcJCouplings(param_set, Jcoup_dict, my_PDB, my_path):
+def calcJCouplings(my_CSV_buffer, param_set, Jcoup_dict, my_PDB, my_path):
     """Back calculate skalar coupling from given RDC lists and PDB models"""
     Jcuop_data = []
     type_dict = {}
@@ -420,8 +433,11 @@ def calcJCouplings(param_set, Jcoup_dict, my_PDB, my_path):
             }
         )
 
-        csx_obj.CSV_buffer("J-couplings (" + Jcoup_type + ")",
-                   JCoup_calced, Jcoup_dict[Jcoup_type])
+        my_CSV_buffer.csv_data.append({
+            "name": "J-couplings (" + Jcoup_type + ")",
+            "calced": JCoup_calced,
+            "experimental": Jcoup_dict[Jcoup_type]
+        })
 
         print("J-couplings (" + Jcoup_type + ")")
         print("Correl: ", correl)
@@ -460,7 +476,7 @@ def calcJCouplings(param_set, Jcoup_dict, my_PDB, my_path):
     return Jcuop_data
 
 
-def calcChemShifts(ChemShift_lists, pdb_models, my_path):
+def calcChemShifts(my_CSV_buffer, ChemShift_lists, pdb_models, my_path):
     """Back calculate chemical shifts from given chemical shift list and PDB
        models"""
     CS_data = []
@@ -508,8 +524,11 @@ def calcChemShifts(ChemShift_lists, pdb_models, my_path):
                 }
             )
 
-            csx_obj.CSV_buffer("ChemShifts (" + CS_type + ")",
-                               exp_dict, CS_list[CS_type])
+            my_CSV_buffer.csv_data.append({
+                "name": "ChemShifts (" + CS_type + ")",
+                "calced": exp_dict,
+                "experimental": CS_list[CS_type]
+            })
 
             print("CHEM SHIFT", CS_type)
             print("Correl: ", correl)
@@ -573,6 +592,10 @@ def calcNOEviolations(PDB_file, saveShifts, my_path, r3_averaging):
             atom1   = restraint.atom_ID1
             resnum2 = restraint.seq_ID2
             atom2   = restraint.atom_ID2
+
+            # print("RES ID", curr_id)
+            # print("RES1", resnum1, atom1, PDB_coords[model][resnum1].keys())
+            # print("RES2", resnum2, atom2, PDB_coords[model][resnum2].keys())
 
             atom_coord1 = PDB_coords[model][resnum1][atom1]
             atom_coord2 = PDB_coords[model][resnum2][atom2]

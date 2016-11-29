@@ -116,7 +116,7 @@ def get_model_list(PDB_file, my_path, model_count):
 
 
 @timeit
-def pdb_cleaner(my_path, PDB_file):
+def pdb_cleaner(my_path, PDB_file, my_CSV_buffer):
     """Performs some basic formatting on the given PDB file to make it suitable
        for further calculations (from RCSB to BMRB PDF format)"""
     try:
@@ -185,9 +185,9 @@ def pdb_cleaner(my_path, PDB_file):
     os.remove(PDB_file)
     os.rename(work_PDB, PDB_file)
 
-    # set max resnum value for CSV_buffer class
-    CSV_buffer.max_resnum = max_resnum
-    CSV_buffer.min_resnum = min_resnum
+    print("MAX RESNUM", max_resnum)
+    my_CSV_buffer.max_resnum = max_resnum
+    my_CSV_buffer.min_resnum = min_resnum
 
 
 def pdb_splitter(my_path, PDB_file):
@@ -290,8 +290,8 @@ def getNOE(NOE_file):
     for loop in loops:
         try:
             ind_ID    = loop[0].index("_Gen_dist_constraint.ID")
-            ind_seg1  = loop[0].index("_Gen_dist_constraint.Seq_ID_1")
-            ind_seg2  = loop[0].index("_Gen_dist_constraint.Seq_ID_2")
+            ind_seg1  = loop[0].index("_Gen_dist_constraint.PDB_residue_no_1")
+            ind_seg2  = loop[0].index("_Gen_dist_constraint.PDB_residue_no_2")
             ind_comp1 = loop[0].index("_Gen_dist_constraint.Comp_ID_1")
             ind_comp2 = loop[0].index("_Gen_dist_constraint.Comp_ID_2")
             ind_atom1 = loop[0].index("_Gen_dist_constraint.Atom_ID_1")
