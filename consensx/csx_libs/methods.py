@@ -269,7 +269,8 @@ def getNOE(NOE_file):
             continue
 
         if in_frame and tok[0] == "save_":
-            break
+            # break
+            in_frame = False
 
         if tok[0] == "loop_":
             loop_keys = []
@@ -277,7 +278,7 @@ def getNOE(NOE_file):
             in_loop = True
             continue
 
-        if in_loop is True and tok[0] == "stop_":
+        if in_loop is True and in_frame is True and tok[0] == "stop_":
             in_loop = False
             loops.append([loop_keys, loop_data])
 
@@ -302,9 +303,13 @@ def getNOE(NOE_file):
             continue
 
         for data in loop[1]:
-            NOE_data.append([data[ind_ID],    data[ind_seg1],  data[ind_seg2],
-                             data[ind_comp1], data[ind_comp2], data[ind_atom1],
-                             data[ind_atom2], data[ind_bnd]])
+            NOE_data.append([
+                data[ind_ID],
+                data[ind_seg1], data[ind_seg2],
+                data[ind_comp1], data[ind_comp2],
+                data[ind_atom1], data[ind_atom2],
+                data[ind_bnd]
+            ])
 
     return NOE_data
 

@@ -183,9 +183,10 @@ class Restraint_Record(object):
     all_restraints = []
     resolved_restraints = []
 
-    def __init__(self, curr_distID, seq_ID1, seq_ID2, seq_name1, seq_name2,
+    def __init__(self, csx_id, curr_distID, seq_ID1, seq_ID2, seq_name1, seq_name2,
                  atom_ID1, atom_ID2, dist_max):
 
+        self.csx_id      = int(csx_id)
         self.curr_distID = int(curr_distID)
         self.seq_ID1     = int(seq_ID1)
         self.seq_ID2     = int(seq_ID2)
@@ -199,7 +200,7 @@ class Restraint_Record(object):
 
     @staticmethod
     def getRestraintCount():
-        return Restraint_Record.all_restraints[-1].curr_distID
+        return Restraint_Record.all_restraints[-1].csx_id
 
     @staticmethod
     def getNOERestraints():
@@ -226,14 +227,14 @@ class Restraint_Record(object):
 
         # organize restraint into a dict, with distIDs as keys
         for res in restraints:
-            if res.curr_distID in NOE_dict.keys():
-                NOE_dict[res.curr_distID].append(res)
+            if res.csx_id in NOE_dict.keys():
+                NOE_dict[res.csx_id].append(res)
             else:
-                NOE_dict[res.curr_distID] = [res]
+                NOE_dict[res.csx_id] = [res]
 
         # resolution of pseudo-atoms
-        for dist_ID in NOE_dict.keys():
-            for res in NOE_dict[dist_ID]:
+        for rest_id in NOE_dict.keys():
+            for res in NOE_dict[rest_id]:
                 # skip O atoms
                 if res.atom_ID1 == "O" or res.atom_ID2 == "O":
                     continue
@@ -360,11 +361,11 @@ class Restraint_Record(object):
 
                 for atom1 in resol1:
                     for atom2 in resol2:
-                        new = Restraint_Record(res.curr_distID,
+                        new = Restraint_Record(res.csx_id, res.curr_distID,
                             res.seq_ID1, res.seq_ID2, res.seq_name1,
                             res.seq_name2, atom1, atom2, res.dist_max)
 
-                        print(res.curr_distID,
+                        print(res.csx_id, res.curr_distID,
                             res.seq_ID1, res.seq_name1, atom1,
                             res.seq_ID2, res.seq_name2, atom2,
                             res.dist_max)

@@ -265,8 +265,6 @@ def calcS2_sidechain(my_CSV_buffer, S2_sidechain, my_path, fit=None):
         # find pair for measured aa
         pair = sc_LOT[my_res][my_type]
 
-        # print(resnum, my_res, my_type, '\t-> ', pair)
-
         for model_num in range(model_data.model_count):
             model_data.atomgroup.setACSIndex(model_num)
 
@@ -569,13 +567,18 @@ def calcNOEviolations(PDB_file, saveShifts, my_path, r3_averaging):
     """Back calculate NOE distance violations from given RDC lists and PDB
     models"""
     # parse data to restraint objects returned from pypy process
+    csx_id = 1
+    prev_id = 1
     for data in saveShifts:
-        csx_obj.Restraint_Record(data[0], data[1], data[2], data[3],
+        csx_obj.Restraint_Record(csx_id, data[0], data[1], data[2], data[3],
                                  data[4], data[5], data[6], data[7])
+
+        if prev_id != data[0]:
+            prev_id = data[0]
+            csx_id += 1
 
     # fetch all restraint from class
     restraints = csx_obj.Restraint_Record.getNOERestraints()
-    # restraints = csx_obj.Restraint_Record.all_restraints
 
     PDB_coords    = csx_func.pdb2coords(PDB_file)
     prev_id       = -1
@@ -587,39 +590,35 @@ def calcNOEviolations(PDB_file, saveShifts, my_path, r3_averaging):
         avg_distances[model] = {}
 
         for restraint in restraints:
-            curr_id = int(restraint.curr_distID)
+            rest_id = int(restraint.csx_id)
             resnum1 = restraint.seq_ID1
             atom1   = restraint.atom_ID1
             resnum2 = restraint.seq_ID2
             atom2   = restraint.atom_ID2
-
-            # print("RES ID", curr_id)
-            # print("RES1", resnum1, atom1, PDB_coords[model][resnum1].keys())
-            # print("RES2", resnum2, atom2, PDB_coords[model][resnum2].keys())
 
             atom_coord1 = PDB_coords[model][resnum1][atom1]
             atom_coord2 = PDB_coords[model][resnum2][atom2]
 
             distance = (atom_coord1 - atom_coord2).magnitude()
 
-            if prev_id == curr_id:
-                avg_distances[model][curr_id].append(distance)
+            if prev_id == rest_id:
+                avg_distances[model][rest_id].append(distance)
 
             else:
-                prev_id = curr_id
-                avg_distances[model][curr_id] = []
-                str_distaces[curr_id] = restraint.dist_max
+                prev_id = rest_id
+                avg_distances[model][rest_id] = []
+                str_distaces[rest_id] = restraint.dist_max
 
-                avg_distances[model][curr_id].append(distance)
+                avg_distances[model][rest_id].append(distance)
 
     # at this point avg_distances[model][curr_id] contains distances for one
-    # model and one restraint GROUP identified with "curr_distID" number
+    # model and one restraint GROUP identified with "csx_id" number
 
-    prev_id  = -1
+    prev_id = -1
 
     for model in list(PDB_coords.keys()):
         for restraint in restraints:
-            curr_id = int(restraint.curr_distID)
+            curr_id = int(restraint.csx_id)
 
             if prev_id == curr_id:
                 continue
@@ -642,7 +641,7 @@ def calcNOEviolations(PDB_file, saveShifts, my_path, r3_averaging):
 
     # at this point avg_distances[model][curr_id] contain a single (r-6)
     # averaged distance for one model and one restraint GROUP identified with
-    # "curr_distID" number. Averaging is done on "in GROUP" distances
+    # "csx_id" number. Averaging is done on "in GROUP" distances
 
     for restraint in restraints:
         curr_id = int(restraint.curr_distID)
@@ -655,7 +654,7 @@ def calcNOEviolations(PDB_file, saveShifts, my_path, r3_averaging):
         measured_avg[curr_id] = math.pow(avg, -1.0/6)
 
     # at this point measured_avg[curr_id] is a simple dictonary containing the
-    # model averaged distances for the given "curr_distID" number
+    # model averaged distances for the given "csx_id" number
 
     avg_dist_keys = list(measured_avg.keys())
     avg_dist_keys.sort()
