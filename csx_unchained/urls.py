@@ -16,6 +16,7 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from django.conf import settings
+from django.conf.urls.static import static
 
 import consensx.views
 
@@ -24,13 +25,4 @@ urlpatterns = [
     url(r'^$', consensx.views.home),
     url(r'selection/(?P<my_id>[a-zA-Z0-9]{6}$)', consensx.views.selection),
     url(r'^(?P<my_id>[a-zA-Z0-9]{6}$)', consensx.views.db),
-]
-
-if settings.DEBUG:
-    urlpatterns.append(url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}))
-
-# if settings.DEBUG:
-#     # static files (images, css, javascript, etc.)
-#     urlpatterns += patterns('',
-#         (r'^media/(?P<path>.*)$', 'django.views.static.serve', {
-#         'document_root': settings.MEDIA_ROOT}))
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
