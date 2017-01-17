@@ -53,7 +53,7 @@
             ). Three published Karplus parameter sets can be chosen (Wang &amp; Bax 1996, Hu &amp; Bax 1997, Habeck, Rieping &amp; Nilges 2005).
         </li>
         <li>
-            Residual dipolar couplings - these are back-calculated using steric PALES (Zweckstetter &amp; Bax, 2000). Multiple RDC sets in the BMRB file are evaluated separately. By default, each conformer is separately oriented by SVD to obtain the best correspondence to experimental data. This approach takes into account that the orientation of the protein can be conformer-dependent (e.g. Louhivuori et al. 2007, Salvatella, Richter &amp; Vendruscolo 2008, Montalvao, De Simone &amp; Vendruscolo 2012 etc.). It is possible to turn out SVD fit, in which case a steric alignment will be estimated for each conformer, but it is not yet possible to use separate media for distinct RDC experiments.
+            Residual dipolar couplings - these are back-calculated using steric PALES (Zweckstetter &amp; Bax, 2000). Multiple RDC sets in the BMRB file are evaluated separately. By default, each conformer is separately oriented by SVD to obtain the best correspondence to experimental data. This approach takes into account that the orientation of the protein can be conformer-dependent (e.g. Louhivuori et al. 2007, Salvatella, Richter &amp; Vendruscolo 2008, Montalvao, De Simone &amp; Vendruscolo 2012 etc.). It is possible to turn off SVD fit, in which case a steric alignment will be estimated for each conformer, but it is not yet possible to use separate media for distinct RDC experiments.
         </li>
         <li>
             S<sup>2</sup> order parameters - backbone and side-chain order parameters are supported. The server can perform the superposition of the supplied conformers for the range of residues specified using the corresponding module of <a href="http://prody.csb.pitt.edu/" target="_new">ProDy</a> (Bakan, Meireles &amp; Bahar 2011). By default, no superposition is done (i.e. the server implicitly assumes that conformers are already superimposed).
@@ -88,7 +88,7 @@
     <div class="desc-div col-lg-6">
 
     <h3 class="desc-page">Tools &amp; tips</h3>
-    <p>Several scripts for conversion between different formats are provided here in the hope that they might be useful. They are simple scripts and might not cover all issues arising during format conversion. They can be freely used and modified but come with absolutely no warranty. The 'disre' format is introduced as a format highly similar to the distabce restraint format in GRONACS topology files, with all atoms explicitly named and atom pairs corresponding to the same restraint forming a group.<br>
+    <p>Several scripts for conversion between different formats are provided here in the hope that they might be useful. They are simple scripts and might not cover all issues arising during format conversion. They can be freely used and modified but come with absolutely no warranty. The 'disre' format is introduced as a format highly similar to the distabce restraint format in GROMACS topology files, with all atoms explicitly named and atom pairs corresponding to the same restraint forming a group.<br>
     We recommend that before uploading data to the CoNSEnsX server, the user goes through the following steps:</p>
 
     <ul>
@@ -101,10 +101,7 @@
         <li>
             We provide simple tools to convert DIANA/DYANA .upl and X-PLOR/CNS .tbl distance restraint files into an intermediate format ‘disre’. By default, the converters ‘upl2disre.pl’ and ‘tbl2disre.pl’ will dereference all pseudoatoms into existing ones with the aid of the (already name-converted) PDB file supplied (e.g. ALA HB# to HB1, HB2, HB3 etc.). This intermediate format can then be converted to NMR-STAR format (v2 mr file format in the PDB web site) by ‘disre2str.pl’.
         </li>
-        <li>
-            If you plan to use NOE restraint analysis provided by the server, please consider that to use stereospecific restraints (e.g. where atoms HB1 and HB2 of residue X are listed at a different distance from atom Y) you have to be sure that stereospecific naming conventions were properly used at each relevant stage of resonance assignment and structure calculation and that each naming conversion was performed in a reproducible way so as stereospecific information was properly maintained throughout all steps (e.g. see the differences between atom naming conventions above). If you are not entirely sure, you might want to remove stereospecific information (=make all stereospecific restraints ambiguous by adding all other possible atom pairs from to the prochiral groups) with the script ‘disre2stereoambig_xplor.pl’ from the 'disre' file before converting it to NMR-STAR format. Please note that this script might lead to the generation of duplicate restraints when adding ambiguities, thus running 'disre_sort.pl -u' is highly recommended after removing stereospecific information.
-        </li>
-        <li>Scripts provided (all give usage information when invoked with -h):
+        <li>All scripts below are provided on an ‘as is’ basis, they might not be error-free but they are provided in the belief that they might be useful. They can be freely modified for research purpose (usage information invoked with -h):
             <table class="tools">
                 <tr>
                     <td><a href="http://consensx.itk.ppke.hu/static/tools/atomconverter_pdb.pl" download>atomcoverter_pdb.pl</a></td>
