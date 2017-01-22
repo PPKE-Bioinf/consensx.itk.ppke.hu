@@ -3,7 +3,7 @@
 print STDERR"
 ###################################################
 # atomconverter.pl -f<from_fromat> -t<to_format>  #
-#                  [-o] [-n] [-H]                 #
+#                  [-q] [-o] [-n] [-H]            #
 #                  < in_noe_list > out_noe_list   #
 #                                                 #
 # Converts atom names from one format to another. #
@@ -16,6 +16,8 @@ print STDERR"
 # in the PDB file BEFORE attempting format        #
 # parsing.                                        #
 # -H forces H -> NH conversion BEFORE parsing     #
+# -q causes to skip pseudoatoms (default for      #
+#    MOLMOL as input format)                      #
 # By default, the program will convert terminal   #
 # oxygen atoms to PDB format, use option -o to    #
 # convert these atoms to the specified format.    #
@@ -26,7 +28,7 @@ print STDERR"
 
 &Init;
 use Getopt::Std;
-getopts('f:t:onHhv') || die "Valid options are: -f<format>, -t<format>, -h[elp], -v[erbose]\n";
+getopts('f:t:oqnHhv') || die "Valid options are: -f<format>, -t<format>, -h[elp], -v[erbose]\n";
 if ($opt_h){
     print "Conversion table used:\n$conversion_table\n";
     exit;
@@ -45,9 +47,12 @@ if ($opt_f eq $opt_t){
     die "'from' and 'to' formats are the same, nothing to do.\n";
 }
 
+
 # converting to uppercase
 $opt_f=uc($opt_f);
 $opt_t=uc($opt_t);
+
+if ($opt_f eq "MOLMOL"){$opt_q=1}
 
 # reading conversion table
 foreach $cl (split(/\n/,$conversion_table)){
@@ -67,18 +72,16 @@ foreach $cl (split(/\n/,$conversion_table)){
     else{
 	@ac=split(/\t/,$cl);
         if ($ac[$FROM] =~ /[A-Z0-9]/){
-        if (length($ac[$FROM]) == 1){$from_id=" $ac[$FROM]   $ac[1]"}
-        elsif (length($ac[$FROM]) == 2){$from_id=" $ac[$FROM]  $ac[1]"}
-        elsif (length($ac[$FROM]) == 3){$from_id=" $ac[$FROM] $ac[1]"}
-        elsif (length($ac[$FROM]) == 4){$from_id="$ac[$FROM] $ac[1]"}
-
-        if (length($ac[$TO]) == 1){$to_id=" $ac[$TO]   $ac[1]"}
-        elsif (length($ac[$TO]) == 2){$to_id=" $ac[$TO]  $ac[1]"}
-        elsif (length($ac[$TO]) == 3){$to_id=" $ac[$TO] $ac[1]"}
-        elsif (length($ac[$TO]) == 4){$to_id="$ac[$TO] $ac[1]"}
-	$CONVERT{$from_id}=$to_id;
+	    $from_id="$ac[$FROM] $ac[1]";
+	    #print "ILYEN VOLT: \#$from_id\#  ";
+	    $from_id=~s/^ +//;$from_id=~s/ +$//;$from_id=~s/  / /g;
+	    #print "ILYEN LETT: \#$from_id\# \n";
+            $to_id="$ac[$TO]";
+	    if (length($to_id) < 4){$to_id=" ".$to_id}
+	    while (length($to_id) < 4){$to_id=$to_id." "}
+	    $CONVERT{$from_id}=$to_id;
+	}
         #print " $from_id -> $to_id\n"; # DEBUG
-        }
 
     }
 }
@@ -95,37 +98,37 @@ while(<>){
      $_=~s/HIS\+/HIS /;
      $inline=$_;chomp($inline);
      $from_id=substr($inline,12,8);
-     if ($opt_n){
-	 print "BEFORE: \#$from_id\# " if $opt_v;
-	 if ($from_id =~ /^[0-9][A-Z]{2}[0-9]/){
-	     $ofi=$from_id;
-	     $from_id=~s/([0-9])([A-Z0-9]+)/$2$1/;
-	     $_=~s/$ofi/$from_id/;
-	 }
-	 elsif ($from_id =~ /^[0-9]/){
-	     $ofi=$from_id;
-	     $from_id=~s/([0-9])([A-Z0-9]+) / $2$1/;
-	     $_=~s/$ofi/$from_id/;
-	 }
-	 print "AFTER: \#$from_id\# \n" if $opt_v;
-     }
+
      if (($opt_H) && ($from_id =~/ H /)){
 	 $ofi=$from_id;
 	 $from_id=~s/ H / HN/;
-	 $_=~s/$ofi/$from_id/;
+	 #$_=~s/$ofi/$from_id/;
      }
      #$from_id=~s/^ +//;$from_id=~s/ +$//; # failsafe way to remove initial and ending spaces
      # Skip MOLMOL pseudoatoms
-     if (($opt_f =~/MOLMOL/i) && ($from_id =~ /^Q[A-Z]/)){next}
+     if (($opt_q) && ($from_id =~ /Q/)){next}
+     #elsif (($opt_f =~/MOLMOL/i) && ($from_id =~ /^[0-9][A-Z]/)){$mfrom_id=$from_id;$mfrom_id=~s/  /   /;print "$from_id > $mfrom_id\n"}
+
      # convert only if target format specified (leave as it is if not)
      $foundfromid=0;
+
+     #print "ILYEN VOLT: \#$from_id\#  ";
+     $from_id=~s/^ +//;$from_id=~s/ +$//;$from_id=~s/  +/ /g;
+     #print "ILYEN LETT: \#$from_id\#  \n";
+
      if ($CONVERT{$from_id} =~ /[0-9A-Z]/){
        $foundfromid=1;
-       ($at,$rs)=split(/ +/,$from_id);
-       #$_=~s/ $at +$rs / $CONVERT{$from_id} /;
-       $w=$_;
-       $_=~s/ $from_id / $CONVERT{$from_id} /;
+       substr($_,12,4)=$CONVERT{$from_id};
        print ">> CONVERT! $from_id -> $CONVERT{$from_id}\n$w\n$_\n" if $opt_v;
+     }
+     # trying to throw the first number back, maybe that helps
+     elsif($opt_n){
+	 $from_id=~s/([0-9])([A-Z0-9]+)/$2$1/;
+	 if ($CONVERT{$from_id} =~ /[0-9A-Z]/){
+	     $foundfromid=1;
+	     substr($_,12,4)=$CONVERT{$from_id};
+	     print ">> CONVERT! $from_id -> $CONVERT{$from_id}\n$w\n$_\n" if $opt_v;
+	 }
      }
      else{
       $res=$from_id;$res=~s/^.*([A-Z]{3})$/$1/;
@@ -147,7 +150,8 @@ while(<>){
 	   $alttoid=~s/O'' XXX/OXT XXX/;
        }
        $alttoid=~s/[A-Z]{3}$/$res/;
-       $_=~s/ $altfromid / $alttoid /;
+       substr($_,12,4)=$alttoid;
+       #$_=~s/ $altfromid / $alttoid /;
        print ">> CONVERT! $altfromid -> $alttoid\n" if $opt_v;
        #print STDERR "$altfromid $CONVERT{$altfromid} $alttoid\n$_\n";
       }

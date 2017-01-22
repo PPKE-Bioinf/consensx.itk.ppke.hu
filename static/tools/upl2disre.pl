@@ -27,6 +27,8 @@ $dn=0;
 while(<>){
     chomp;
     $_=~s/^ +//;
+    # Some trivial conversions before doing any checks...
+    $_=~s/CYSS/CYS /g;
     # distance restraint line
     if ($_=~/^[0-9]+ +[A-Z]{3} +[A-Z0-9]+ +[0-9]+ +[A-Z]{3} +[A-Z0-9]+ +[0-9\.]+/){
 	($resnum1[$dn],$resname1[$dn],$atomname1[$dn],$resnum2[$dn],$resname2[$dn],$atomname2[$dn],$distance[$dn])=split(/ +/,$_);
