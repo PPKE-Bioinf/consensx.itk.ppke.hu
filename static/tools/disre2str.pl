@@ -31,11 +31,15 @@ save_distance_restraints
       _Gen_dist_constraint.ID
       _Gen_dist_constraint.Member_ID
       _Gen_dist_constraint.Member_logic_code
-      _Gen_dist_constraint.Seq_ID_1
+      _Gen_dist_constraint.PDB_residue_no_1
+      _Gen_dist_constraint.PDB_residue_name_1
+      _Gen_dist_constraint.PDB_atom_name_1
+      _Gen_dist_constraint.PDB_residue_no_2
+      _Gen_dist_constraint.PDB_residue_name_2
+      _Gen_dist_constraint.PDB_atom_name_2
       _Gen_dist_constraint.Comp_ID_1
       _Gen_dist_constraint.Atom_ID_1
       _Gen_dist_constraint.Atom_type_1
-      _Gen_dist_constraint.Seq_ID_2
       _Gen_dist_constraint.Comp_ID_2
       _Gen_dist_constraint.Atom_ID_2
       _Gen_dist_constraint.Atom_type_2
@@ -49,7 +53,7 @@ while(<>){
     $_=~s/\#.*$//;
     $_=~s/^ +//;
     ($dn,$rnum1,$rname1,$atom1,$rnum2,$rname2,$atom2,$dist)=split(/ +/,$_);
-    $DISRE[$dn].=sprintf("  %4d %3s %4s  H  %4d %3s %4s  H %5.2f\n",$rnum1,$rname1,$atom1,$rnum2,$rname2,$atom2,$dist);
+    $DISRE[$dn].=sprintf("  %4d %3s %4s  %4d %3s %4s    %4d %4s H  %4d %4s H   %5.2f\n",$rnum1,$rname1,$atom1,$rnum2,$rname2,$atom2,,$rnum1,$atom1,$rnum2,$atom2,$dist);
     if ($dn == $prevdn){
 	$OR[$dn]="OR";
     }
@@ -65,7 +69,7 @@ for ($dn=0; $dn<=$maxdn; $dn++){
 
     $mid=1;
     foreach $dline (split (/\n/,$DISRE[$dn])){
-	printf ("  %4d %2d $OR[$dn] $dline\n",$dn+1,$mid);
+	printf ("  %4d %2d $OR[$dn] $dline\n",$dn,$mid);
 	$mid++;
     }
 
