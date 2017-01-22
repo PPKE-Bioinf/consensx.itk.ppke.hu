@@ -73,9 +73,10 @@ def run_calculation(request, calc_id):
         NOE_name = DB_entry.NOE_file
         my_NOE = my_path + DB_entry.NOE_file
         saveShifts = csx_func.getNOE(my_NOE)
-        NOE_violations = csx_calc.calcNOEviolations(my_NOE, saveShifts,
-                                                    my_path, DB_entry.r3average)
-        NOE_violations = str(NOE_violations) + " distance restraints found"
+        NOE_n = saveShifts[-1][0] + " distance restraints found"
+        NOE_violations = str(csx_calc.calcNOEviolations(
+            my_NOE, saveShifts, my_path, DB_entry.r3average
+        ))
         PRIDE_data = csx_calc.calcNMR_Pride(pdb_models, my_path)
 
         NOE_PRIDE_data = {
@@ -90,7 +91,7 @@ def run_calculation(request, calc_id):
         data_found = True
     else:
         NOE_name = "[NOT PRESENT]"
-        NOE_violations = ""
+        NOE_n = ""
         NOE_PRIDE_data = None
 
 
@@ -186,7 +187,7 @@ def run_calculation(request, calc_id):
             "my_PDB": DB_entry.PDB_file,
             "n_model": model_count,
             "my_NOE": NOE_name,
-            "n_NOE" : NOE_violations,
+            "n_NOE" : NOE_n,
             "my_STR": STR_name,
             "NOE_PRIDE_data": NOE_PRIDE_data,
             "RDC_data": RDC_data,
