@@ -92,8 +92,8 @@ while (<TF>){
 
        $PAIR[$pairnum]=$atom1."|".$atom2;
 
-
-       if ($index != $previndex){$disrenum++}
+       # Keeping intrenal disre numbering with a reference to the original one
+       if ($index != $previndex){$disrenum++;$INDEX[$disrenum]=$index} 
        $PAIRSFORDR[$disrenum].=":".$pairnum;
 
        # Checking & bookkeeping
@@ -139,7 +139,7 @@ $MODEL=0;
 while (<PDB>){
   chop;
   if ($_ =~ /^MODEL/){$MODEL++}
-  elsif ($_=~/ATOM/) {
+  elsif ($_=~/^ATOM/) {
 
    $resnum=substr($_,22,5);$resnum=~s/ //g;
    $name=substr($_,12,4);$name=~s/ //g;
@@ -155,8 +155,8 @@ while (<PDB>){
        $coordy=substr($_,38,8);$coordy=~s/ //g;
        $coordz=substr($_,46,8);$coordz=~s/ //g;
        $atomv{$MODEL}{$atomexp}=new Vector3D($coordx,$coordy,$coordz);
+       $foundatom{$atomexp}=1;
        #print "  \#MODEL $MODEL atomexp $atomexp\#";$atomv{$MODEL}{$atomexp}->PrintInfo();
-
    }#_if
  }#_if ATOM
 }#_while PDB
@@ -182,13 +182,17 @@ for ($drn=0; $drn <= $disrenum; $drn++){
 	foreach $pair (@pr){
 	($atomid1,$atomid2)=split(/\|/,$PAIR[$pair]);
 	printf OF (" | PAIR $pair $atomid1 $atomid2") if ($pn > 1);
-            if (($M == 1) && ($opt_v)){
-	     print STDERR "  \#MODEL $M atom1 $atomid1\#";$atomv{$M}{$atomid1}->PrintInfo();
-	     print STDERR "  \#MODEL $M atom2 $atomid2\#";$atomv{$M}{$atomid2}->PrintInfo();
+            if ($M == 1){
+	     #print STDERR "  \#MODEL $M atom1 $atomid1\#";$atomv{$M}{$atomid1}->PrintInfo() if $opt_v;
+	     #print STDERR "  \#MODEL $M atom2 $atomid2\#";$atomv{$M}{$atomid2}->PrintInfo() if $opt_v;
             }
-	    $dist=($atomv{$M}{$atomid1}->Diff($atomv{$M}{$atomid2}))->Length();
-	    $ambigavedist+=exp($opt_a*log($dist));
-            printf OF (" %5.3f",$dist) if ($pn > 1); 
+            if ($foundatom{$atomid1}*$foundatom{$atomid2}){
+	     $dist=($atomv{$M}{$atomid1}->Diff($atomv{$M}{$atomid2}))->Length();
+	     $ambigavedist+=exp($opt_a*log($dist));
+             printf OF (" %5.3f",$dist) if ($pn > 1); 
+           }
+           if (!$foundatom{$atomid1}){print STDERR "ATOM $atomid1 not found\n"}
+           if (!$foundatom{$atomid2}){print STDERR "ATOM $atomid2 not found\n"}
 	}
 	$ambigavedist=exp((1/$opt_a)*log($ambigavedist/$pn));
 	$AAVE[$M]=$ambigavedist;
@@ -219,22 +223,24 @@ for ($drn=0; $drn <= $disrenum; $drn++){
 	    $maxvioldr=$drn;
 	}
         # writing violated list
-	printf VF ("#Was $drn in original list | ACTUAL %7.3f \n",$ensembleavedist);
+	printf VF ("#Was $INDEX[$drn] in original list | ACTUAL %7.3f \n",$ensembleavedist);
 	foreach $pair (@pr){
 	  ($atomid1,$atomid2)=split(/\|/,$PAIR[$pair]);
           ($rnum1,$atom1)=split(/\_/,$atomid1);
           ($rnum2,$atom2)=split(/\_/,$atomid2);
-	  printf VF (" %4d   %3d %3s %4s   %3d %3s %4s   %5.2f\n",$violated-1,$rnum1,$RESNAME{$rnum1},$atom1,$rnum2,$RESNAME{$rnum2},$atom2,$DIST[$drn]);
+          # ensuring for output disre list to start with 1 (was violated-1 in the original code)
+	  printf VF (" %4d   %3d %3s %4s   %3d %3s %4s   %5.2f\n",$violated,$rnum1,$RESNAME{$rnum1},$atom1,$rnum2,$RESNAME{$rnum2},$atom2,$DIST[$drn]);
 	}
     }
     # writing unviolated list
     else{
-	printf UF ("#Was $drn in original list | ACTUAL %7.3f \n",$ensembleavedist);
+	printf UF ("#Was $INDEX[$drn] in original list | ACTUAL %7.3f \n",$ensembleavedist);
 	foreach $pair (@pr){
 	  ($atomid1,$atomid2)=split(/\|/,$PAIR[$pair]);
           ($rnum1,$atom1)=split(/\_/,$atomid1);
           ($rnum2,$atom2)=split(/\_/,$atomid2);
-	  printf UF (" %4d   %3d %3s %4s   %3d %3s %4s   %5.2f\n",$unvioln,$rnum1,$RESNAME{$rnum1},$atom1,$rnum2,$RESNAME{$rnum2},$atom2,$DIST[$drn]);
+          # +1 added for output disre list to start with 1
+	  printf UF (" %4d   %3d %3s %4s   %3d %3s %4s   %5.2f\n",$unvioln+1,$rnum1,$RESNAME{$rnum1},$atom1,$rnum2,$RESNAME{$rnum2},$atom2,$DIST[$drn]);
 	}
 	$unvioln++;
     }
@@ -245,11 +251,11 @@ if ($violated > 0){
     $aveviol/=$violated;
 }
 printf OF ("# There are %d violated restraints. Average violation is %5.3f A, maximum violation is %5.3f A",$violated,$aveviol,$maxviol);
-if ($maxviol){print OF " (restraint $maxvioldr)"}
+if ($maxviol){print OF " (restraint $INDEX[$maxvioldr])"}
 print OF "\n";
 
 printf STDERR ("# There are %d violated restraints. Average violation is %5.3f A, maximum violation is %5.3f A",$violated,$aveviol,$maxviol);
-if ($maxviol){print STDERR " (restraint $maxvioldr)"}
+if ($maxviol){print STDERR " (restraint $INDEX[$maxvioldr])"}
 print STDERR "\n";
 
 close(OF);
