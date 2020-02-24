@@ -10,7 +10,7 @@ services:
     links:
       - consensx-db
     volumes:
-      - /usr/src/app/consensx.itk.ppke.hu/media
+      - /Users/glevai/projects/consensx.itk.ppke.hu:/usr/src/app/consensx.itk.ppke.hu
 
   consensx-db:
     image: postgres:11.1

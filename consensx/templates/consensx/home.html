@@ -1,6 +1,7 @@
 {% load staticfiles %}
 
 <!DOCTYPE html>
+<html lang="en">
 <head>
 
 <!-- Meta Tags -->
@@ -11,233 +12,354 @@
 <meta name="description" content="COmpliance of NMR Structural
                                   ENSembles with eXperimental data" />
 
-<!-- Bootstrap -->
-<link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
 <!-- Main Style -->
-<link href="{% static 'css/main.css' %}" rel="stylesheet">
+<link href="{% static 'css/styles.css' %}" rel="stylesheet">
+<link href="{% static 'css/tooltip.css' %}" rel="stylesheet">
 
 <link rel="shortcut icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
 <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
 
-<link href='http://fonts.googleapis.com/css?family=Titillium+Web:400,200,200italic,300,300italic,400italic,600,600italic,700,700italic,900' rel='stylesheet' type='text/css'>
+<!--<link href="https://fonts.googleapis.com/css?family=Poppins:300,400,600|Roboto:400,600" rel="stylesheet">-->
+  <link href="http://fonts.googleapis.com/css?family=Titillium+Web:300,400,600,700" rel="stylesheet" type="text/css">
 
 </head>
-
-
 <body>
 
-    <!-- Fixed navbar -->
-    <nav class="navbar navbar-default navbar-fixed-top">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="#">CoNSEnsX<sup>+</sup></a>
-        </div>
-        <div id="navbar" class="collapse navbar-collapse">
-          <ul class="nav navbar-nav">
-            <li id="nav_info" class="active"><a href="#" style="border-bottom-width: 2px;border-bottom-style: solid;border-bottom-color: #FD6C6C;"><b class="red">Co</b>mpliance of <b class="red">N</b>MR-derived <b class="red">S</b>tructural <b class="red">Ens</b>embles with e<b class="red">x</b>perimental data + selection</a></li>
-          </ul>
-        </div><!--/.nav-collapse -->
-      </div>
-    </nav>
+<div class="loader" id="pageLoader">
+  <div class="loaderBackdrop"></div>
+  <div class="cube">
+    <div class="side"></div>
+    <div class="side"></div>
+    <div class="side"></div>
+    <div class="side"></div>
+    <div class="side"></div>
+    <div class="side"></div>
+  </div>
+  <div class="logo--abbreviation">CoNSEnsX <sup>+</sup></div>
+</div>
 
-    <a href="https://github.com/PPKE-Bioinf/consensx.itk.ppke.hu" class="github-corner" aria-label="View source on Github"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#FD6C6C; color:#f8f8f8; position: absolute; top: 0; border: 0; right: 0; z-index: 2000;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+<div class="topNavigation" id="topNavigation">
+  <div class="container">
+    <div class="logo--abbreviation">CoNSEnsX</div>
+    <div class="logo">
+      <b class="accent">Co</b>mpliance of <b class="accent">N</b>MR-derived <b class="accent">S</b>tructural <b class="accent">Ens</b>embles with e<b class="accent">x</b>perimental data + selection
+    </div>
+    <div class="moodChanger">
+      <button id="moodChanger">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-moon"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        Night Mode OFF
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col col--7">
+      <h1>Setup Data for Calculation</h1>
+      <div class="form">
+
+        <form name="csx_form" id="csx_form" action="" method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="block">
+            <div class="inputBlock--file">
+              <label class="label">Ensemble</label>
+              <input type="file" id="pdb_file" name="pdb_upload" class="input--file input--file-1" data-multiple-caption="{count} files selected" multiple />
+              <label for="pdb_file" class="labelForFileInput">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-plus"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>
+                <span>Upload PDB file</span>
+              </label>
+            </div>
+            <button class="tooltip" data-balloon-length="large" data-balloon="Upload your ensembe in PDB format. Please use the same naming system as in your NMR-STAR file(s)!" data-balloon-pos="right">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-info"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="8"></line></svg>
+            </button>
+          </div>
+
+          <div class="block">
+            <div class="inputBlock--file">
+              <label class="label">NOE restraints</label>
+              <input type="file" id="xplor_file" name="xplor_upload" class="input--file input--file-1" data-multiple-caption="{count} files selected" multiple />
+              <label for="xplor_file" class="labelForFileInput"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-plus"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>
+                <span>Upload NMR-Star file</span></label>
+            </div>
+            <button class="tooltip" data-balloon-length="large" data-balloon="Upload your NMR-STAR formatted file with the NOE distance restraints. Please use the same naming system as in your PDB file." data-balloon-pos="right">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-info"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="8"></line></svg>
+            </button>
+          </div>
+
+          <div class="block">
+            <div class="inputBlock--file">
+              <label class="label">NMR parameters</label>
+              <input type="file" id="bmrb_file" name="bmrb_upload" class="input--file input--file-1" data-multiple-caption="{count} files selected" multiple />
+              <label for="bmrb_file" class="labelForFileInput"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-plus"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>
+                <span>Upload NMR-Star file</span></label>
+            </div>
+            <button class="tooltip" data-balloon-length="large" data-balloon="Upload your NMR-STAR formatted file with the NMR paramaters you wish to analyze. Please use the same naming system as in your PDB file." data-balloon-pos="right">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-info"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="8"></line></svg>
+            </button>
+          </div>
+
+          <div class="block">
+            <div class="inputBlock--file">
+              <label class="label">BME weights</label>
+              <input type="file" id="bme_weights_file" name="bme_weights_upload" class="input--file input--file-1" data-multiple-caption="{count} files selected" multiple />
+              <label for="bme_weights_file" class="labelForFileInput"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-plus"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>
+                <span>Upload BME weights file</span></label>
+            </div>
+            <button class="tooltip" data-balloon-length="large" data-balloon="Apply BME weights from a previous calculation" data-balloon-pos="right">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-info"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="8"></line></svg>
+            </button>
+          </div>
+          <div class="block">
+            <div class="inputBlock--select">
+              <label>Karplus equation parameter set</label>
+              <div class="select">
+                <select name="KARPLUS">
+                  <option selected="selected" value="1">Wang &amp; Bax 1996</option>
+                  <option value="2">Hu &amp; Bax 1997</option>
+                  <option value="3">Habeck, Rieping &amp; Nilges 2005</option>
+                </select>
+              </div>
+            </div>
+            <button class="tooltip" data-balloon-length="large" data-balloon="Select the parameters of the Karplus equation used in scalar coupling calcuation. Consult the usage information for the exact values." data-balloon-pos="right">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-info"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="8"></line></svg>
+            </button>
+          </div>
+
+          <table  border="0">
+            <!--                         <tr class="form_param"><td>&nbsp;</td>
+                                        <td>or PDB ID: &nbsp;<input id="pdb_id" name="pdb_web" placeholder="1D3Z" type="text"></td>
+                                    </tr> -->
+          </table>
+          <div class="block">
+            <div class="inputBlock--checkbox">
+              <label class="container--checkbox">
+                Fit models in PDB on range 1-72 (optional)
+                <input id="fit_box" name="superimpose" value="1" type="checkbox">
+                <span class="checkMark"></span>
+              </label>
+              <input id="fit_range" name="fit_range" placeholder="1-72" type="number" class="input">
+            </div>
+
+            <button class="tooltip" data-balloon-length="large" data-balloon="Superimpose your ensemble. If a range is given, the fitting will be only applied to the given region. All models will be fitted to the first model with the RMSD minimalization method." data-balloon-pos="right">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-info"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="8"></line></svg>
+            </button>
+          </div>
+            <!-- <input name="noeviolanal" value="1" type="checkbox">  Perfom NOE violation analysis<br><br> -->
+
+          <div class="block">
+            <div class="inputBlock--checkbox">
+              <label class="container--checkbox">
+                Use r<sup>-3</sup> averaging between models (NOE)
+                <input name="r3average" value="1" type="checkbox">
+                <span class="checkMark"></span>
+              </label>
+            </div>
+            <button class="tooltip" data-balloon-length="large" data-balloon="Use r-3 averaging on NOE distance violations instead of r-6 (default)" data-balloon-pos="right">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-info"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="8"></line></svg>
+            </button>
+          </div>
+          <div class="block">
+            <div class="inputBlock--checkbox">
+              <label class="container--checkbox">
+                Use SVD for RDC back-calculation
+                <input name="RDCSVD" value="1" type="checkbox" checked>
+                <span class="checkMark"></span>
+              </label>
+            </div>
+            <button class="tooltip" data-balloon-length="large" data-balloon="Use Singe Value Decomposition in RDC calculation. The parameter will be forwarded to Pales." data-balloon-pos="right">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-info"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="8"></line></svg>
+            </button>
+          </div>
+          <div class="block">
+            <div class="inputBlock--select">
+              <label>RDC LC model</label>
+              <div class="select">
+                <select name="RDCLC">
+                  <option selected="selected" value="bic">bicelles</option>
+                  <option value="pf1">Pf1 phages</option>
+                </select>
+              </div>
+            </div>
+            <button class="tooltip" data-balloon-length="large" data-balloon="Select the RDC LC model parameter for RDC alignment estimation. This parameter will be forwarded to Pales. The selection is unnecessary, of SVD is enabled." data-balloon-pos="right">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-info"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="8"></line></svg>
+            </button>
+          </div>
+          <div>
+            <input id="reset_button" type="reset" value="Reset form">
+            <input id="submit_button" type="submit" class="formSubmitButton" value="Start Calculation">
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="col col--5">
+      <div class="description">
+        <h3>Server Specification</h3>
+
+        <p class="infoText">The server is specifically designed for structural ensembles that were generated to reflect
+          the internal dynamics of proteins at a given time scale. Such ensembles are typically generated by restrained
+          molecular dynamics methods or selection-based approaches. CoNSEnsX+ provides an ensemble-averaged analysis of
+          all experimental parameters recognized in the input and offers a simple greedy selection approach to identify
+          the sub-ensemble best reflecting the parameters chosen. </p>
+      </div>
+
+      <div class="accordion">
+        <div class="accordion__header">Usage</div>
+        <div class="accordion__body">
+          <div class="accordion__content">
+            <p>
+            Input a multi-model PDB file, a BMRB format NOE
+            distance restraint file (optional, V2 NMR Restraints
+            at the <a href="http://www.rcsb.org">Protein Data Bank</a>)
+            and a BMRB restraint file to check the accuracy of
+            the protein structural ensemble against experimental
+            data. </p>
+            <p>For a detailed description, see the
+            <a href="{% static 'Descriptionpage.html' %}">description page</a>.
+            For reference on accepted file formatting, please consult the
+            <a href="{% static 'test_data/test_data.zip' %}" download>downloadable test data</a>.
+            You can run a test calculation on the
+            test data anytime with the provided test data, to check if the server is working.
+            </p>
+            {% comment "Remove until implemented" %}
+            <div style="text-align: center;">
+              <form name="csx_test" action="" method="post">
+                {% csrf_token %}
+                <input id="submit_test" name="submit_test" type="submit" value="Run test calculation!">
+              </form>
+            </div>
+            {% endcomment %}
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion">
+        <div class="accordion__header">Citation</div>
+        <div class="accordion__body">
+          <div class="accordion__content">
+            <p>When publishing results obtained with CoNSEnsX, you are kindly asked to cite the relevant references from these:</p>
+            <div class="listItem">
+
+              <div class="listItem__header">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-external-link"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+              </div>
+              <div class="listItem__content">
+                <a href="http://pubs.acs.org/doi/abs/10.1021/acs.jcim.7b00066">The CoNSEnsX<sup>+</sup> web server for the analysis of protein structural ensembles reflecting experimentally determined internal dynamics</a>
+                <span>Dudola et al. (2017), J. Chem. Inf. Model.</span>
+              </div>
+            </div>
+            <div class="listItem">
+              <div class="listItem__header">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-external-link"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+              </div>
+              <div class="listItem__content">
+                <a href="http://www.biomedcentral.com/1472-6807/10/39">CoNSEnsX: an ensemble view of protein structures and NMR-derived experimental data.</a>
+                <span>Ángyán et al. (2010), BMC Struct. Biol. 10:39</span>
+              </div>
+            </div>
+            <div class="listItem">
+              <div class="listItem__header">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-external-link"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+              </div>
+              <div class="listItem__content">
+                <a href="http://bioinformatics.oxfordjournals.org/content/24/2/272.long">Fast protein fold estimation from NMR-derived distance restraints</a>
+                <span>Ángyán et al. (2008), Bioinformatics 24:272. (PRIDE-NMR reference)</span>
+              </div>
+            </div>
+            <div class="listItem">
+              <div class="listItem__content">
+                <a disabled>Rapid and accurate calculation of protein 1H. 13C amd 15N chemical shifts.</a>
+                <p>Neal et al. (2003), J. Biomol. NMR 26:215.</p>
+              </div>
+            </div>
+            <div class="listItem">
+              <div class="listItem__content">
+                <a disabled>Prediction of sterically induced alignment in a dilute liquid crystalline phase: aid to protein strcuture determination by NMR</a>
+                <p>Zweckstetter &amp; Bax (2000), J. Am. Chem. Soc. 122:3791</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="accordion">
+        <div class="accordion__header">Contact</div>
+        <div class="accordion__body">
+          <div class="accordion__content">
+            <div class="mail">
+              <p>
+                If you have questions or suggestions regarding the CoNSEnsX server, please contact <a href="mailto:gaspari.zoltan@itk.ppke.hu?Subject=CoNSEnsX" target="_top">Zoltán Gáspári </a> <small>(gaspari.zoltan@itk.ppke.hu)</small>
+              </p>
+              <img src="{% static 'images/mail.svg' %}" alt="">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="calculationLoader isHidden" id="calculationLoader">
+        <div class="cube">
+          <div class="side"></div>
+          <div class="side"></div>
+          <div class="side"></div>
+          <div class="side"></div>
+          <div class="side"></div>
+          <div class="side"></div>
+        </div>
+        <div class="loader_text">
+          <h3 class="spec">Calculation in progress</h3>
+          <p>You will be redirected automatically</p>
+        </div>
+      </div>
+  </div>
+</div>
+
 
 <!-- Our Shortcodes Section -->
-<div id="shortcodes" class="page" style="padding: 30px 0 0 0;">
-    <div class="container">
+<!--<div id="shortcodes" class="page" style="padding: 30px 0 0 0;">-->
+    <!--<div class="container">-->
 
-        <!-- Start Accordion/Toggle Section -->
-        <div class="row">
+        <!--&lt;!&ndash; Start Accordion/Toggle Section &ndash;&gt;-->
+        <!--<div class="row">-->
 
-            <div class="col-lg-6" style="margin-bottom: 50px;">
-                <h3 class="spec">Start calculation</h3>
 
-                <div class="accordion" id="accordionArea">
-                    <form name="csx_form" id="csx_form" action="" method="post" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <table  border="0">
-                        <tr class="form_param"><td>Ensemble: &nbsp;</td>
-                            <td><input type="file" id="pdb_file" name="pdb_upload" class="inputfile inputfile-1" data-multiple-caption="{count} files selected" multiple />
-                            <label for="pdb_file">
-                              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17"><path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z"/></svg>
-                              <span>Upload PDB file&hellip;</span>
-                            </label></td>
-                            <td><img class="tooltip_icon" src="{% static 'question.svg' %}" data-toggle="tooltip" data-placement="right" title="Upload your ensembe in PDB format. Please use the same naming system as in your NMR-STAR file(s)!"></td>
-                        </tr>
-<!--                         <tr class="form_param"><td>&nbsp;</td>
-                            <td>or PDB ID: &nbsp;<input id="pdb_id" name="pdb_web" placeholder="1D3Z" type="text"></td>
-                        </tr> -->
-                        <tr class="form_param"><td>NOE restraints: &nbsp;</td>
-                            <td><input type="file" id="xplor_file" name="xplor_upload" class="inputfile inputfile-1" data-multiple-caption="{count} files selected" multiple />
-                            <label for="xplor_file"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17"><path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z"/></svg> <span>Upload NMR-Star file&hellip;</span></label></td>
-                            <td><img class="tooltip_icon" src="{% static 'question.svg' %}" data-toggle="tooltip" data-placement="right" title="Upload your NMR-STAR formatted file with the NOE distance restraints. Please use the same naming system as in your PDB file."></td>
-                        </tr>
-                        <tr class="form_param"><td>NMR parameters: &nbsp;</td>
-                            <td><input type="file" id="bmrb_file" name="bmrb_upload" class="inputfile inputfile-1" data-multiple-caption="{count} files selected" multiple />
-                            <label for="bmrb_file"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17"><path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z"/></svg> <span>Upload NMR-Star file&hellip;</span></label></td>
-                            <td><img class="tooltip_icon" src="{% static 'question.svg' %}" data-toggle="tooltip" data-placement="right" title="Upload your NMR-STAR formatted file with the NMR paramaters you wish to analyze. Please use the same naming system as in your PDB file."></td>
-                        </tr>
-                        <tr class="form_param"><td>BME weights: &nbsp;</td>
-                            <td><input type="file" id="bme_weights_file" name="bme_weights_upload" class="inputfile inputfile-1" data-multiple-caption="{count} files selected" multiple />
-                            <label for="bme_weights_file"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17"><path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z"/></svg> <span>Upload BME weights&hellip;</span></label></td>
-                            <td><img class="tooltip_icon" src="{% static 'question.svg' %}" data-toggle="tooltip" data-placement="right" title="Apply BME weights from a previous calculation"></td>
-                        </tr>
-                    </table>
-                    <br>Karplus equation parameter set: <select name="KARPLUS">
-                    <option selected="selected" value="1">Wang &amp; Bax 1996</option>
-                    <option value="2">Hu &amp; Bax 1997</option>
-                    <option value="3">Habeck, Rieping &amp; Nilges 2005</option>
-                  </select><td><img class="tooltip_icon" src="{% static 'question.svg' %}" data-toggle="tooltip" data-placement="right" title="Select the parameters of the Karplus equation used in scalar coupling calcuation. Consult the usage information for the exact values."></td><br><br>
-                    <input id="fit_box" name="superimpose" value="1" type="checkbox">  Fit models in PDB<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;on range:
-                    <input id="fit_range" name="fit_range" placeholder="1-72" type="text">&nbsp;(optional)
-                    <img class="tooltip_icon" src="{% static 'question.svg' %}" data-toggle="tooltip" data-placement="right" title="Superimpose your ensemble. If a range is given, the fitting will be only applied to the given region. All models will be fitted to the first model with the RMSD minimalization method."><br>
-                    <!-- <input name="noeviolanal" value="1" type="checkbox">  Perfom NOE violation analysis<br><br> -->
-                    <input name="r3average" value="1" type="checkbox">  Use r<sup>-3</sup> averaging between models (NOE)<img class="tooltip_icon" src="{% static 'question.svg' %}" data-toggle="tooltip" data-placement="right" title="Use r-3 averaging on NOE distance violations instead of r-6 (default)"><br>
-                    <input name="RDCSVD" value="1" type="checkbox" checked>  Use SVD for RDC back-calculation<img class="tooltip_icon" src="{% static 'question.svg' %}" data-toggle="tooltip" data-placement="right" title="Use Singe Value Decomposition in RDC calculation. The parameter will be forwarded to Pales."><br>
-                    RDC LC model:   <select name="RDCLC">
-                    <option selected="selected" value="bic">bicelles</option>
-                    <option value="pf1">Pf1 phages</option>
-                  </select><img class="tooltip_icon" src="{% static 'question.svg' %}" data-toggle="tooltip" data-placement="right" title="Select the RDC LC model parameter for RDC alignment estimation. This parameter will be forwarded to Pales. The selection is unnecessary, of SVD is enabled."><br><br>
-                    <table id="bottom_table" border="0">
-                        <tr><td><input id="reset_button" type="reset" value="Reset form", style="width: 16em;  height: 4em;"></td>
-                            <td><input id="submit_button" type="submit" value="Ready and fire!", style="width: 16em;  height: 4em;"></td>
-                        </tr>
-                    </table>
-                    </form>
-                </div>
-                <!-- End Accordion -->
-            </div>
+            <!--<div id="info_col" class="col-lg-6">-->
 
-            <div id="info_col" class="col-lg-6">
-                <h3 class="spec">Info</h3>
 
-                <p class="info_text">The server is specifically designed for structural ensembles that were generated to reflect the internal dynamics of proteins at a given time scale. Such ensembles are typically generated by restrained molecular dynamics methods or selection-based approaches. CoNSEnsX+ provides an ensemble-averaged analysis of all experimental parameters recognized in the input and offers a simple greedy selection approach to identify the sub-ensemble best reflecting the parameters chosen. </p>
+                    <!--{% if error %}-->
+                    <!--<div class='errormsg'><b class='red' style='color : #E57373;'>ERROR:</b> {{ error }}</div>-->
+                    <!--{% endif %}-->
 
-                <!-- Start Toggle -->
-                <div class="accordion" id="toggleArea">
+                    <!--<div style="display: inline-block;" class="loader hidden">-->
+                      <!--<div class="box"></div>-->
+                      <!--<div class="box"></div>-->
+                      <!--<div class="box"></div>-->
+                      <!--<div class="box"></div>-->
+                    <!--</div>-->
+                    <!--<div style="display: inline-block;" class="loader_text hidden">-->
+                        <!--<h3 class="spec">Calculation in progress</h3>-->
+                        <!--<p>You will be redirected automatically</p>-->
+                    <!--</div>-->
 
-                    <div class="accordion-group">
-                        <div class="accordion-heading togglize">
-                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#toggleArea" href="#collapseOne">
-                                Usage
-                                <span class="font-icon-plus"></span>
-                                <span class="font-icon-minus"></span>
-                            </a>
-                        </div>
-                        <div id="collapseOne" class="accordion-body collapse">
-                            <div class="accordion-inner">
-                                Input a multi-model PDB file, a BMRB format NOE
-                                distance restraint file (optional, V2 NMR Restraints
-                                at the <a href="http://www.rcsb.org">Protein Data Bank</a>)
-                                and a BMRB restraint file to check the accuracy of
-                                the protein structural ensemble against experimental
-                                data. For a detailed description, see the
-                                <a href="{% static 'Descriptionpage.html' %}">description page</a>.
-                                For reference on accepted file formatting, please consult the
-                                <a href="{% static 'test_data/test_data.zip' %}" download>downloadable test data</a>.
-                                You can run a test calculation on the
-                                test data anytime with the provided test data, to check if the server is working.
-                                {% comment "Remove until implemented" %}
-                                <div style="text-align: center;">
-                                <form name="csx_test" action="" method="post">
-                                {% csrf_token %}
-                                    <input id="submit_test" name="submit_test" type="submit" value="Run test calculation!">
-                                </form>
-                                </div>
-                                {% endcomment %}
-                            </div>
-                        </div>
-                    </div>
+                <!--</div>-->
+                <!--&lt;!&ndash; End Toggle &ndash;&gt;-->
+            <!--</div>-->
 
-                    <div class="accordion-group">
-                        <div class="accordion-heading togglize">
-                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#toggleArea" href="#collapseTwo">
-                            Citing
-                            <span class="font-icon-plus"></span>
-                            <span class="font-icon-minus"></span>
-                        </a>
-                        </div>
-                        <div id="collapseTwo" class="accordion-body collapse">
-                            <div class="accordion-inner">
-                                When publishing results obtained with CoNSEnsX, you are kindly asked to cite the relevant references from these:
-                        <ul>
-                        <li>Dudola et al. (2017):  <a href="http://pubs.acs.org/doi/abs/10.1021/acs.jcim.7b00066">The CoNSEnsX<sup>+</sup> web server for the analysis of protein structural ensembles reflecting experimentally determined internal dynamics</a> J. Chem. Inf. Model.</li>
-                        <li>Ángyán et al. (2010):  <a href="http://www.biomedcentral.com/1472-6807/10/39">CoNSEnsX: an ensemble view of protein structures and NMR-derived experimental data.</a> BMC Struct. Biol. 10:39</li>
-                        <li>Ángyán et al. (2008):  <a href="http://bioinformatics.oxfordjournals.org/content/24/2/272.long">Fast protein fold estimation from NMR-derived distance restraints</a>. Bioinformatics 24:272. (PRIDE-NMR reference)</li>
-                        <li>Neal et al. (2003): Rapid and accurate calculation of protein 1H. 13C amd 15N chemical shifts. J. Biomol. NMR 26:215.</li>
-                        <li>Zweckstetter &amp; Bax (2000): Prediction of
-                        sterically induced alignment in a dilute liquid crystalline phase: aid
-                        to protein strcuture determination by NMR. J. Am. Chem. Soc. 122:3791</li>
-                        </ul>
+        <!--</div>-->
+        <!--&lt;!&ndash; End Accordion/Toggle Section &ndash;&gt;-->
 
-                            </div>
-                        </div>
-                    </div>
+    <!--</div>-->
 
-                    <div class="accordion-group">
-                        <div class="accordion-heading togglize">
-                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#toggleArea" href="#collapseThird">
-                            Contact
-                            <span class="font-icon-plus"></span>
-                            <span class="font-icon-minus"></span>
-                        </a>
-                        </div>
-                        <div id="collapseThird" class="accordion-body collapse">
-                            <div class="accordion-inner">
-                                Questions and suggestions regarding the CoNSEnsX server should
-                                go to <a href="mailto:gaspari.zoltan@itk.ppke.hu?Subject=CoNSEnsX" target="_top">Zoltán Gáspári</a>
-                                (gaspari.zoltan at itk.ppke.hu)
-                            </div>
-                        </div>
-                    </div>
-
-                    {% if error %}
-                    <div class='errormsg'><b class='red' style='color : #E57373;'>ERROR:</b> {{ error }}</div>
-                    {% endif %}
-
-                    <div style="display: inline-block;" class="loader hidden">
-                      <div class="box"></div>
-                      <div class="box"></div>
-                      <div class="box"></div>
-                      <div class="box"></div>
-                    </div>
-                    <div style="display: inline-block;" class="loader_text hidden">
-                        <h3 class="spec">Calculation in progress</h3>
-                        <p>You will be redirected automatically</p>
-                    </div>
-
-                </div>
-                <!-- End Toggle -->
-            </div>
-
-        </div>
-        <!-- End Accordion/Toggle Section -->
-
-    </div>
 </div>
 <!-- End Shortcodes Section -->
 
 
 
 
-
-
 <!-- Js -->
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> <!-- jQuery Core -->
-<script src="{% static 'js/bootstrap.min.js' %}"></script> <!-- Bootstrap -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
 <script src="{% static 'js/script.js' %}"></script>
-<script>
-$(document).ready(function(){
-    $('[data-toggle="tooltip"]').tooltip();
-});
-</script>
+<script src="{% static 'js/home.script.js' %}"></script>
 <!-- End Js -->
 </body>
 </html>

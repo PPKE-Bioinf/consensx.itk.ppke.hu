@@ -1,0 +1,1308 @@
+/* ==========================================================================
+   CSS Reset
+   ========================================================================== */
+/* http://meyerweb.com/eric/tools/css/reset/
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+  display: block;
+}
+
+body {
+  line-height: 1;
+}
+
+ol, ul {
+  list-style: none;
+}
+
+blockquote, q {
+  quotes: none;
+}
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+  content: none;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+html {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  -webkit-box-sizing: inherit;
+  -moz-box-sizing: inherit;
+  box-sizing: inherit;
+}
+
+/* ==========================================================================
+   Custom CSS
+   ========================================================================== */
+
+/* Fallback to the "system" font family in case it can't be loaded */
+@font-face {
+  font-family: system;
+  font-style: normal;
+  font-weight: 300;
+  src: local(".SFNSText-Light"), local(".HelveticaNeueDeskInterface-Light"), local(".LucidaGrandeUI"), local("Ubuntu Light"), local("Segoe UI Light"), local("Roboto-Light"), local("DroidSans"), local("Tahoma");
+}
+
+/* ==========================================================================
+   Variables
+   ========================================================================== */
+
+:root {
+  --baseline: 6px;
+  --bodyColor: #fff;
+  --emphasisedTextColor: #202124;
+  --textColor: #383d44;
+  /*--bodyColorNight: #060606;*/
+  --bodyColorNight: linear-gradient(to right, #434343 0%, black 100%);;
+  --emphasisedTextColorNight: #fff;
+  --textColorNight: #d3d4d4;
+  /*--accentColor: #d83a3a;*/
+  --accentColor: #b30000;
+  --borderColor: #eee;
+  --borderDarker: #dbdbdb;
+  --baseTransiton: 195ms cubic-bezier(0.25, 0.8, 0.25, 1);
+  /*--blue: #1E88E5;*/
+  --blue: #fa0;
+  --successColor: #00d000;
+  --headlineFontFamily: 'Titillium Web', "system", sans-serif;
+  --textFontFamily: 'Titillium Web', "system", sans-serif;
+}
+/*background-image: linear-gradient(-225deg, #22E1FF 0%, #625EB1 48%, #625EB1 100%);*/
+
+/* ==========================================================================
+   General Rules
+   ========================================================================== */
+
+body {
+  font-family: var(--textFontFamily);
+  padding-top: calc(var(--baseline) * 18);
+  background: var(--bodyColor);
+  color: var(--textColor);
+  transition: background var(--baseTransiton), color var(--baseTransiton);
+}
+
+h1 {
+  font-size: 30px;
+}
+
+h1, h2, h3,
+h4, h5, h6 {
+  font-family: var(--headlineFontFamily);
+  color: var(--emphasisedTextColor);
+  font-weight: 600;
+  letter-spacing: -0.5px;
+}
+
+h3 {
+  font-size: 24px;
+  margin-bottom: calc(var(--baseline) * 3);
+}
+
+p {
+  font-size: 16px;
+  line-height: 1.4;
+  margin-bottom: calc(var(--baseline) * 2);
+}
+
+a {
+  font-family: var(--headlineFontFamily);
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--emphasisedTextColor);
+  transition: var(--baseTransiton);
+}
+
+a:hover {
+  color: var(--accentColor);
+}
+
+small {
+  font-size: 75%;
+}
+
+sup {
+  vertical-align: super;
+  font-size: smaller;
+}
+
+button,
+input[type='submit'],
+input[type='reset'] {
+  font-family: var(--textFontFamily);
+  font-weight: 600;
+  border-radius: 8px;
+  border: 1px solid var(--borderDarker);
+  outline: 0;
+  color: var(--accentColor);
+  padding: 12px 18px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: color var(--baseTransiton), border-color var(--baseTransiton);
+}
+
+button[disabled],
+input[type='submit'][disabled],
+input[type='reset'][disabled] {
+  cursor: default;
+}
+
+button:hover,
+input[type='submit']:hover,
+input[type='reset']:hover {
+  border-color: var(--accentColor);
+}
+
+button:active,
+input[type='submit']:active,
+input[type='reset']:active {
+  border-color: transparent;
+  background-image: linear-gradient(rgba(0,0,0,.2),rgba(0,0,0,.2));
+  transition: background var(--baseTransiton);
+}
+
+.tooltip {
+  padding: 0;
+  border: 0;
+}
+
+.container--checkbox sup {
+  position: relative;
+  font-size: 75%;
+  line-height: 0;
+  vertical-align: baseline;
+  top: -5px;
+  margin-right: 4px;
+}
+
+.container {
+  display: block;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 18px;
+}
+
+/* ==========================================================================
+   Grid System
+   ========================================================================== */
+
+.row {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+.col {
+  display: block;
+  flex-basis: 100%;
+  flex-grow: 1;
+  max-width: 100%;
+  padding-left: calc(var(--baseline) * 2);
+  padding-right: calc(var(--baseline) * 2);
+}
+
+.col:first-child {
+  padding-left: 0;
+}
+
+.col:last-child {
+  padding-right: 0;
+}
+
+.col--4 {
+  max-width: 33.333333%;
+}
+
+.col--5 {
+  max-width: 41.666667%;
+}
+
+.col--6 {
+  max-width: 50%;
+}
+
+.col--7 {
+  max-width: 58.333333%;
+}
+
+.col--8 {
+  max-width: 66.666667%;
+}
+
+@media screen and (max-width: 768px) {
+  .row {
+    flex-direction: column;
+  }
+
+  .col {
+    max-width: 100%;
+  }
+}
+
+/* ==========================================================================
+   Top Navigation
+   ========================================================================== */
+
+.topNavigation {
+  display: block;
+  position: fixed;
+  left: 0;
+  right: 0;
+  height: calc(var(--baseline) * 11);
+  top: 0;
+  z-index: 11;
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, .1);
+}
+
+.topNavigation .container {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.topNavigation .logo--abbreviation {
+  margin-right: calc(var(--baseline) * 8);
+  font-size: 24px;
+  font-weight: 600;
+  position: relative;
+  color: var(--accentColor);
+}
+
+.topNavigation .logo--abbreviation::after {
+  content: '+';
+  position: absolute;
+  top: -6px;
+  right: -18px;
+}
+
+.topNavigation .logo {
+  position: relative;
+  font-size: 19px;
+}
+
+.topNavigation .logo::before {
+  content: '';
+  height: 30px;
+  width: 2px;
+  position: absolute;
+  top: -6px;
+  left: -20px;
+  background-color: #3C3F45;
+}
+
+.topNavigation .accent {
+  color: var(--accentColor);
+}
+
+.topNavigation .container {
+  position: relative;
+}
+
+/* ==========================================================================
+   Input Block
+   ========================================================================== */
+
+.inputBlock--file {
+  border: 1px solid var(--borderColor);
+  border-radius: 8px;
+  padding: 12px;
+  position: relative;
+  height: 72px;
+  transition: border-color var(--baseTransiton);
+  display: inline-block;
+  min-width: 90%;
+  background-color: #fff;
+}
+
+.inputBlock--file + .tooltip,
+.inputBlock--select + .tooltip,
+.inputBlock--checkbox + .tooltip {
+  margin-top: 30px;
+  margin-left: 12px;
+  background-color: transparent;
+}
+
+.inputBlock--file.hasContent ,
+.inputBlock--file.hasContent .labelForFileInput {
+  border-color: var(--successColor);
+  color: var(--successColor);
+}
+
+.inputBlock--file .label {
+  margin-bottom: 6px;
+  display: inline-block;
+}
+
+.inputBlock--file:hover {
+  border-color: var(--accentColor);
+}
+
+.inputBlock--file:hover .label,
+.inputBlock--file:active .label,
+.inputBlock--file:focus .label,
+.inputBlock--file:hover .labelForFileInput {
+  color: var(--accentColor);
+}
+
+.inputBlock--select {
+  padding: calc(var(--baseline) * 2);
+  background: #fff;
+  border-radius: 8px;
+  max-width: 90%;
+  display: inline-block;
+}
+
+.inputBlock--select label {
+  margin-bottom: 6px;
+  display: inline-block;
+}
+
+.inputBlock--select + .tooltip {
+  margin-top: 0;
+}
+
+.inputBlock--checkbox {
+  display: inline-flex;
+  align-items: center;
+  min-height: 54px;
+  background-color: #fff;
+  padding: calc(var(--baseline) * 2);
+  border-radius: 8px;
+}
+
+.inputBlock--checkbox .container--checkbox {
+  margin: 0;
+  height: auto;
+  min-width: 300px;
+}
+
+.inputBlock--checkbox + .tooltip {
+  margin-top: 4px;
+}
+
+
+/* ==========================================================================
+   Input Field
+   ========================================================================== */
+
+.input {
+  width: 100%;
+  padding: 0 calc(var(--baseline) * 2) 0;
+  font-size: inherit;
+  border-radius: 8px;
+  border: 1px solid var(--borderColor);
+  outline: 0;
+  color: inherit;
+  transition: border-color var(--baseTransiton);
+  min-height: calc(var(--baseline) * 7);
+  font-family: inherit;
+}
+
+.input:focus {
+  border-color: transparent;
+  box-shadow: 0 0 0 1px rgba(179, 0, 0, 1);
+}
+
+input[type='number'] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+/* ==========================================================================
+   File Input
+   ========================================================================== */
+
+.input--file {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+  outline: 0;
+}
+
+.input--file + label {
+  font-size: 1.25rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+  display: inline-block;
+  overflow: hidden;
+  padding: 0;
+  transition: var(--baseTransiton);
+}
+
+
+.input--file:focus + label,
+.input--file.has-focus + label {
+  outline: 0;
+}
+
+.input--file + label svg {
+  vertical-align: text-bottom;
+  margin-right: 12px;
+}
+
+.input--file-1 + label {
+  width: 100%;
+  min-width: 320px;
+  display: block;
+  align-items: center;
+  border-radius: 8px;
+  color: var(--emphasisedTextColor);
+  font-size: 16px;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding-top: 36px;
+  padding-left: 12px;
+}
+
+button[data-balloon] {
+  border: 0;
+  vertical-align: middle;
+}
+
+
+/* ==========================================================================
+   Table
+   ========================================================================== */
+
+td {
+  padding: 12px 0;
+}
+
+/* ==========================================================================
+   Select Field
+   ========================================================================== */
+
+/**
+ * HTML snippet to copy:
+ *
+   <div class="select">
+     <select name="selectField">
+       <option selected="selected" value="option1">option 1</option>
+       <option value="option2">option2</option>
+     </select>
+   </div>
+ *
+ */
+
+.select {
+  display: flex;
+  align-items: center;
+  margin-right: 12px;
+  border-radius: 8px;
+  position: relative;
+  width: 100%;
+  min-width: 320px;
+}
+
+.select:after {
+  content: url("../images/chevron-down.svg");
+  position: absolute;
+  pointer-events: none;
+  top: 8px;
+  right: 6px;
+}
+
+select {
+  font-size: 14px;
+  border: 1px solid var(--borderColor);
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  padding: 0 30px 0 12px;
+  height: 36px;
+  cursor: pointer;
+  transition: box-shadow var(--baseTransiton);
+  outline: 0;
+  width: 100%;
+  background-color: #fff;
+}
+
+select:focus,
+select:active {
+  box-shadow: 0 0 0px 1px rgba(179, 0, 0, 1);
+}
+
+.select:focus {
+  border-color: var(--textColor);
+  outline: 0;
+}
+
+/* ==========================================================================
+   Checkbox
+   ========================================================================== */
+
+/**
+ * Inline level element!
+ *
+ * HTML snippet to copy:
+ *
+   <label class="container--checkbox">
+     Name of the checkbox
+     <input type="checkbox">
+     <span class="checkMark"></span>
+   </label>
+ *
+ */
+
+.container--checkbox {
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 16px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.container--checkbox input[type='checkbox'] {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkMark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 18px;
+  width: 18px;
+  border-radius: 4px;
+  transition: var(--baseTransiton);
+  border: 2px solid var(--borderDarker);
+  background-color: #fff;
+}
+
+.container--checkbox:hover input ~ .checkMark {
+  border-color: var(--accentColor);
+}
+
+.container--checkbox input:checked ~ .checkMark {
+  background-color: var(--accentColor);
+  border-color: var(--accentColor);
+}
+
+.checkMark::after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.container--checkbox input:checked ~ .checkMark::after {
+  display: block;
+}
+
+.container--checkbox .checkMark::after {
+  left: 4px;
+  top: 0;
+  width: 6px;
+  height: 12px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+/* ==========================================================================
+   Radio Button
+   ========================================================================== */
+
+/**
+ * Inline level element!
+ *
+ * HTML snippet to copy:
+ *
+   <label class="container--checkbox">
+     Name of the checkbox
+     <input type="radio">
+     <span class="dotMark"></span>
+   </label>
+ *
+ */
+
+.container--radioButton {
+  position: relative;
+  cursor: pointer;
+  font-size: 16px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  display: inline-flex;
+  align-items: center;
+  padding: 12px 18px 12px 42px;
+  border-radius: 8px;
+  margin: 0 12px 18px 0;
+  color: inherit;
+}
+
+.container--radioButton input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.dotMark {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  height: 18px;
+  width: 18px;
+  background-color: #eee;
+  border-radius: 50%;
+}
+
+.container--radioButton:hover input ~ .dotMark {
+  background-color: #ccc;
+}
+
+.container--radioButton input[type="radio"]:checked ~ .dotMark {
+  background-color: var(--accentColor);
+}
+
+input[type="radio"] ~ .back {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  border: 1px solid var(--borderDarker);
+  border-radius: 8px;
+  transition: color var(--baseTransiton), border-color var(--baseTransiton);
+}
+
+input[type="radio"]:checked ~ .back {
+  border-color: var(--accentColor);
+}
+
+.dotMark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.container--radioButton input:checked ~ .dotMark:after {
+  display: block;
+}
+
+.container--radioButton .dotMark:after {
+  top: 7px;
+  left: 7px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: white;
+  transition: var(--baseTransiton);
+}
+
+/* ==========================================================================
+   Accordion
+   ========================================================================== */
+
+.accordion {
+  background-color: #f8f9fa;
+  box-shadow: none;
+  margin-bottom: 6px;
+}
+
+.accordion.isOpen {
+  background-color: #fff;
+  box-shadow: 0 2px 5px 0 rgba(32,33,36,0.07), 0 19px 38px 0 rgba(32,33,36,0.06);
+}
+
+.accordion__header {
+  padding: calc(var(--baseline) * 5) calc(var(--baseline) * 7) calc(var(--baseline) * 5) calc(var(--baseline) * 5);
+  position: relative;
+  cursor: pointer;
+  font-family: var(--headlineFontFamily);
+  transition: transform var(--baseTransiton);
+  display: flex;
+  align-items: center;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.accordion__header::before,
+.accordion__header::after {
+  background: var(--accentColor);
+  content: '';
+  height: 2px;
+  position: absolute;
+  right: 28px;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  transform: translateY(-50%);
+  transition: opacity var(--baseTransiton), -webkit-transform var(--baseTransiton);
+  transition: opacity var(--baseTransiton), transform var(--baseTransiton);
+  transition: opacity var(--baseTransiton), transform var(--baseTransiton), -webkit-transform var(--baseTransiton);
+  width: 8px;
+}
+
+.accordion.isOpen .accordion__header::before {
+  opacity: 0;
+  -webkit-transform: translateY(-50%) rotate(-90deg);
+  transform: translateY(-50%) rotate(-90deg);
+}
+
+.accordion .accordion__header::after {
+  -webkit-transform: translateY(-50%) rotate(90deg);
+  transform: translateY(-50%) rotate(90deg);
+}
+
+.accordion.isOpen .accordion__header::after {
+  -webkit-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+.accordion.isOpen .accordion__header {
+  color: var(--accentColor);
+  font-weight: 600;
+}
+
+.accordion__body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height var(--baseTransiton), padding var(--baseTransiton);
+}
+
+.accordion__content {
+  padding: 0 calc(var(--baseline) * 5) calc(var(--baseline) * 5);
+}
+
+/*.accordion__content.isOpen {*/
+  /*padding: 0 28px 28px;*/
+/*}*/
+
+/* ==========================================================================
+   Cube Loader
+   ========================================================================== */
+
+/**
+ * Big thanks for Scott Henderson for it!
+ * https://codepen.io/scootman/pen/NMZRNa
+ */
+
+
+.loader {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  display: flex;
+  z-index: 12;
+  pointer-events: none;
+}
+
+.loaderBackdrop {
+  background: rgba(255, 255, 255, 1);
+  height: 100vh;
+  width: 100vw;
+  position: absolute;
+}
+
+.loader .logo--abbreviation {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 80px;
+  font-size: 24px;
+  opacity: .8;
+  font-family: var(--headlineFontFamily);
+  font-weight: 600;
+  color: var(--emphasisedTextColor);
+}
+
+.loader .logo--abbreviation sup {
+  margin-top: -12px;
+  font-size: 18px;
+  opacity: .7;
+  font-family: var(--headlineFontFamily);
+  font-weight: 600;
+  color: var(--emphasisedTextColor);
+}
+
+.cube {
+  margin: auto;
+  font-size: 24px;
+  height: 1em;
+  width: 1em;
+  position: relative;
+  transform: rotateX(30deg) rotateY(45deg);
+  transform-style: preserve-3d;
+  animation: cube-spin 1.5s infinite ease-in-out alternate;
+  z-index: 13;
+}
+
+.side {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  transform-style: preserve-3d;
+}
+.side::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: currentcolor;
+  transform: translatez(0.5em);
+  animation: cube-explode 1.5s infinite ease-in-out;
+  opacity: .5;
+}
+
+.side:nth-child(1) {
+  transform: rotatey(90deg);
+}
+
+.side:nth-child(2) {
+  transform: rotatey(180deg);
+}
+
+.side:nth-child(3) {
+  transform: rotatey(270deg);
+}
+
+.side:nth-child(4) {
+  transform: rotatey(360deg);
+}
+
+.side:nth-child(5) {
+  transform: rotatex(90deg);
+}
+
+.side:nth-child(6) {
+  transform: rotatex(270deg);
+}
+
+@keyframes cube-spin {
+  0% {
+    transform: rotatex(30deg) rotatey(45deg);
+  }
+  100% {
+    transform: rotatex(30deg) rotatey(405deg);
+  }
+}
+@keyframes cube-explode {
+  0% {
+    transform: translatez(0.5em);
+  }
+  50% {
+    transform: translatez(0.75em);
+  }
+  100% {
+    transform: translatez(0.5em);
+  }
+}
+
+.calculationLoader {
+  margin: 50px 0;
+  display: flex;
+  padding: 24px;
+}
+
+.calculationLoader.isHidden {
+  display: none;
+}
+
+
+
+.description {
+  margin-bottom: calc(var(--baseline) * 7);
+}
+
+.infoText {
+  border-left: 4px solid var(--accentColor);
+  padding-left: 12px;
+}
+
+@keyframes slideInUp {
+  from {
+    transform: translate3d(0, 1%, 0) scale(0.9);
+    opacity: 0;
+    visibility: visible;
+  }
+
+  to {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutUp {
+  from {
+    transform: translate3d(0, 0, 0) scale(0.9);
+    opacity: 1;
+    visibility: visible;
+  }
+
+  to {
+    transform: translate3d(0, 1%, 0) scale(0.9);
+    opacity: 0;
+  }
+}
+
+.slideInUp {
+  animation-name: slideInUp;
+}
+
+.dialog {
+  animation: slideOutUp 195ms forwards;
+}
+
+.dialog-isVisible {
+  animation: slideInUp 195ms forwards;
+  border-radius: 8px!important;
+  box-shadow: 0 12px 20px rgba(0, 0, 0, .4);
+}
+
+.dialog__header {
+  text-align: left!important;
+  width: 100%;
+  color: var(--emphasisedTextColor)!important;
+  font-size: 24px!important;
+}
+
+.swal2-container.swal2-shown {
+  background-color: rgba(0,0,0,.7)!important;
+}
+
+.dialog__content {
+  text-align: left;
+  font-size: 16px;
+}
+
+.dialog__actions {
+  justify-content: flex-start!important;
+  margin: 12px 0 0!important;
+}
+
+.button--dialogConfirm {
+  border-radius: 8px;
+  border: 1px solid var(--borderDarker)!important;
+  outline: 0;
+  color: var(--accentColor)!important;
+  font-weight: 600!important;
+}
+
+.swal2-styled:focus {
+  box-shadow: none!important;
+}
+
+.block {
+  margin: calc(var(--baseline) * 2) 0;
+}
+
+.block:first-of-type {
+  margin: 0 0 calc(var(--baseline) * 2);
+}
+
+.form {
+  background: #f8f9fa;
+  padding: 18px;
+  border-radius: 8px;
+  margin-top: 12px;
+}
+
+.listItem {
+  border-top: 1px solid #dbdbdb;
+  padding: 12px 0;
+  display: flex;
+  align-items: center;
+  flex-direction: row-reverse;
+}
+
+.listItem__header {
+  margin-left: calc(var(--baseline) * 2);
+}
+
+.listItem__content span {
+  margin: 6px 0 0;
+  font-size: 90%;
+  display: block;
+}
+
+.listItem__content p {
+  margin: 6px 0 0;
+  font-size: 90%;
+}
+
+.listItem__content a,
+.mail a {
+  text-decoration: none;
+  color: var(--emphasisedTextColor);
+  font-weight: 600;
+  font-family: var(--headlineFontFamily);
+}
+
+.listItem:hover .listItem__content a,
+.listItem:hover .listItem__content span,
+.listItem:hover .listItem__header svg,
+.mail a:hover {
+  color: var(--accentColor);
+  transition: var(--baseTransiton);
+}
+
+.listItem:hover .listItem__content a[disabled] {
+  color: inherit;
+}
+
+.listItem:hover {
+  cursor: pointer;
+}
+
+.mail {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+}
+
+.mail p {
+  margin: 0 0 0 12px;
+}
+
+.formSubmitButton {
+  margin-left: calc(var(--baseline) * 4);
+}
+
+/* ==========================================================================
+   Calculation Page Styles
+   ========================================================================== */
+
+.resultsLink {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 12px;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, .1);
+}
+
+.resultsLink a {
+  display: flex;
+  align-items: center;
+  margin-left: 6px;
+}
+
+.resultsLink svg {
+  width: 18px;
+  height: 18px;
+  margin-left: 6px;
+}
+
+.filesTable {
+  border: 1px solid var(--borderDarker);
+  border-radius: 8px;
+  display: flex;
+  margin-bottom: calc(var(--baseline) * 4);
+}
+
+.filesTable table {
+  min-width: 50%;
+}
+
+.filesTable td {
+  padding: 18px 24px 18px 12px;
+}
+
+.filesTable tr {
+  border-bottom: 1px solid var(--borderDarker);
+  border-right: 1px solid var(--borderDarker);
+}
+
+.filesTable tr:last-of-type {
+  border-bottom: 0;
+}
+
+.downloadDataButtons {
+  display: flex;
+  padding: 12px;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+}
+
+.filesTable + .accordion .accordion__header {
+  justify-content: center;
+}
+
+.filesTable + .accordion .accordion__header svg {
+  margin-right: calc(var(--baseline) * 2);
+}
+
+.filesTable + .accordion .accordion__header::before,
+.filesTable + .accordion .accordion__header::after {
+  display: none;
+}
+
+.filesTable + .accordion.isOpen .accordion__header svg {
+  fill: var(--accentColor);
+}
+
+/* ==========================================================================
+   Night Mode
+   ========================================================================== */
+
+body.nightMode,
+body.nightMode .topNavigation {
+  background: var(--bodyColorNight);
+  color: var(--textColorNight);
+}
+
+body.nightMode .accordion {
+  background-color: transparent;
+  border: 1px solid var(--textColorNight);
+}
+
+body.nightMode h1,
+body.nightMode h2,
+body.nightMode h3,
+body.nightMode h4,
+body.nightMode h5,
+body.nightMode h6,
+body.nightMode a {
+  color: var(--emphasisedTextColorNight);
+}
+
+body.nightMode a:hover {
+  color: var(--accentColor);
+}
+
+body.nightMode .form {
+  background-color: transparent;
+  border: 1px solid;
+  border-radius: 2px;
+}
+
+body.nightMode .inputBlock--select,
+body.nightMode .inputBlock--checkbox,
+body.nightMode .inputBlock--file,
+body.nightMode select,
+body.nightMode input,
+body.nightMode button,
+body.nightMode .checkMark {
+  background-color: transparent;
+  border-radius: 2px;
+}
+
+body.nightMode select,
+body.nightMode button,
+body.nightMode input[type='submit'],
+body.nightMode input[type='reset'] {
+  color: var(--textColorNight);
+  border-radius: 2px;
+}
+
+body.nightMode .select {
+  border-radius: 2px;
+}
+
+body.nightMode button:hover,
+body.nightMode input[type='submit']:hover,
+body.nightMode input[type='reset']:hover {
+  color: var(--accentColor);
+}
+
+body.nightMode .input--file + label svg,
+body.nightMode .input--file + label span {
+  color: var(--textColorNight);
+}
+
+body.nightMode .inputBlock--file:hover .input--file + label svg,
+body.nightMode .inputBlock--file:hover .input--file + label span {
+  color: var(--accentColor);
+}
+
+body.nightMode .inputBlock--file.hasContent,
+body.nightMode .inputBlock--file.hasContent label svg,
+body.nightMode .inputBlock--file.hasContent label span {
+  color: var(--successColor);
+}
+
+body.nightMode [data-balloon][data-balloon-length='large']:after {
+  background: var(--bodyColorNight);
+  color: var(--textColorNight);
+}
+
+.moodChanger {
+  position: absolute;
+  right: 0;
+}
+
+#moodChanger {
+  border: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: transparent;
+  padding: 0;
+  color: inherit;
+  transition: none;
+}
+
+#moodChanger:hover {
+  color: var(--accentColor);
+  transition: color var(--baseTransiton);
+}
