@@ -1,7 +1,6 @@
 {% load staticfiles %}
 
 <!DOCTYPE html>
-<html lang="en">
 <head>
 
 <!-- Meta Tags -->
@@ -328,6 +327,12 @@
                     <!--{% if error %}-->
                     <!--<div class='errormsg'><b class='red' style='color : #E57373;'>ERROR:</b> {{ error }}</div>-->
                     <!--{% endif %}-->
+
+                    {% if gist %}
+                        {% autoescape off %}
+                        {{ gist }}
+                        {% endautoescape %}
+                    {% endif %}
 
                     <!--<div style="display: inline-block;" class="loader hidden">-->
                       <!--<div class="box"></div>-->

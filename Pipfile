@@ -14,11 +14,11 @@ matplotlib = "*"
 prody = "*"
 progress = "*"
 flake8 = "*"
+pynmrstar = "*"
 
 [dev-packages]
 flake8 = "*"
 pylint = "*"
-black = "*"
 
 [requires]
-python_version = "3.6"
+python_version = "3.7"
