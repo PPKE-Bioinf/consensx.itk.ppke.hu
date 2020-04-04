@@ -277,9 +277,7 @@ class Selection:
         if os.path.isfile(self.my_path + "/selected.pdb"):
             os.remove(self.my_path + "/selected.pdb")
 
-        in_selection, iter_data, iter_all = self.selection_on()
-
-        print("ITER ALL", iter_all)
+        in_selection, iter_data = self.selection_on()
 
         for key, val in iter_data.items():
             print("CALCED ", key, '{0:.3f}'.format(val))
@@ -367,7 +365,7 @@ class Selection:
         first_run = True
         first_try = True
         above_best = 0
-        iter_data = []
+        iter_scores = {}
         divide_by = 0.0
         num_models = len(pdb_models)
 
@@ -376,13 +374,10 @@ class Selection:
         else:
             prev_best = 1000
 
-        iter_count = 1
-
         t1_start = perf_counter()
 
         while True:
             model_scores = {}
-            iter_scores = {}
 
             # iterate on all PDB models
             for num in range(num_models):
@@ -390,8 +385,10 @@ class Selection:
                 if num in in_selection:
                     continue
 
-                divide_by = 0.0  # variable for storing weight sum
+                divide_by = 0.0                 # variable for storing weight sum
                 pdb_sel = [num] + in_selection  # creating test ensemble
+                pdb_sel_key = tuple(sorted(pdb_sel))
+                iter_scores[pdb_sel_key] = {}
 
                 for sel_data in self.user_sel:
                     if sel_data[0] == "RDC":
@@ -422,7 +419,7 @@ class Selection:
                         my_key = (
                                 sel_data[0] + '_' + str(sel_data[1]) + '_' + my_type
                         )
-                        iter_scores[my_key] = calced
+                        iter_scores[pdb_sel_key][my_key] = calced
 
                     elif sel_data[0] == "S2":
                         S2_type = sel_data[1]
@@ -450,7 +447,7 @@ class Selection:
 
                         divide_by += S2_weight
 
-                        iter_scores[sel_data[0] + '_' + str(sel_data[1])] = calced
+                        iter_scores[pdb_sel_key][sel_data[0] + '_' + str(sel_data[1])] = calced
 
                     elif sel_data[0] == "JCoup":
                         JCoup_type = sel_data[1]
@@ -475,7 +472,7 @@ class Selection:
 
                         divide_by += JCoup_weight
 
-                        iter_scores[sel_data[0] + '_' + str(sel_data[1])] = calced
+                        iter_scores[pdb_sel_key][sel_data[0] + '_' + str(sel_data[1])] = calced
 
                     elif sel_data[0] == "ChemShift":
                         ChemShift_type = sel_data[1]
@@ -509,9 +506,8 @@ class Selection:
 
                         divide_by += ChemShift_weight
 
-                        iter_scores["CS_" + sel_data[1]] = calced
+                        iter_scores[pdb_sel_key]["CS_" + sel_data[1]] = calced
 
-            iter_data.append(iter_scores)
             best_num = -1
 
             if self.measure == "correlation":
@@ -535,7 +531,7 @@ class Selection:
                 else:
                     best_val = 1000
 
-            print("ITERATION     #" + str(iter_count))
+            print("######    ITERATION     ######")
             print("prev best:    " + str(prev_best))
             print("current best: " + str(best_val))
 
@@ -555,7 +551,7 @@ class Selection:
                         print("POP", in_selection[-1])
                         del in_selection[-1]
 
-                        print("CURRENT SEL:", in_selection)
+                    print("CURRENT SEL:", in_selection)
 
                     in_selection.sort()
                     if above_best == 0:
@@ -565,7 +561,7 @@ class Selection:
                         )
                         t1_stop = perf_counter()
                         print("[selection] Selection in seconds:", t1_stop - t1_start)
-                        return in_selection, iter_data[-above_best - 1], iter_data
+                        return in_selection, iter_scores[tuple(sorted(in_selection))]
                     else:
                         print(
                             "EXIT -> selection reached max desired size \
@@ -573,7 +569,7 @@ class Selection:
                         )
                         t1_stop = perf_counter()
                         print("[selection] Selection in seconds:", t1_stop - t1_start)
-                        return in_selection, iter_data[-above_best - 1], iter_data
+                        return in_selection, iter_scores[tuple(sorted(in_selection))]
 
             # if new selection results a higher score
             if (
@@ -598,7 +594,7 @@ class Selection:
                     print("EXIT -> selection reached max desired size")
                     t1_stop = perf_counter()
                     print("[selection] Selection in seconds:", t1_stop - t1_start)
-                    return in_selection, iter_data[-1], iter_data
+                    return in_selection, iter_scores[tuple(sorted(in_selection))]
 
             # if new selection results a lower score
             else:
@@ -626,7 +622,7 @@ class Selection:
                         del in_selection[-1]
                         t1_stop = perf_counter()
                         print("[selection] Selection in seconds:", t1_stop - t1_start)
-                        return in_selection, iter_data[-above_best - 1], iter_data
+                        return in_selection, iter_scores[tuple(sorted(in_selection))]
 
                     above_best += 1
                     print("\x1b[31mwe are in overdrive with \x1b[0m" +
@@ -659,7 +655,7 @@ class Selection:
                             t1_stop = perf_counter()
                             print("[selection] Selection in seconds:", t1_stop - t1_start)
                             return (
-                                in_selection, iter_data[-above_best - 1], iter_data
+                                in_selection, iter_scores[tuple(sorted(in_selection))]
                             )
 
                         if (self.measure in ["q-value", "rmsd"] and
@@ -675,7 +671,7 @@ class Selection:
                             t1_stop = perf_counter()
                             print("[selection] Selection in seconds:", t1_stop - t1_start)
                             return (
-                                in_selection, iter_data[-above_best - 1], iter_data
+                                in_selection, iter_scores[tuple(sorted(in_selection))]
                             )
 
                     continue
@@ -697,7 +693,4 @@ class Selection:
                 print("EXIT -> selection got a worse score, no override")
                 t1_stop = perf_counter()
                 print("[selection] Selection in seconds:", t1_stop - t1_start)
-                return in_selection, iter_data[-1], iter_data
-
-            iter_count += 1
-
+                return in_selection, iter_scores[tuple(sorted(in_selection))]
