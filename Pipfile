@@ -13,6 +13,7 @@ scipy = "*"
 matplotlib = "*"
 prody = "*"
 pynmrstar = "*"
+six = "*"
 
 [dev-packages]
 flake8 = "*"
