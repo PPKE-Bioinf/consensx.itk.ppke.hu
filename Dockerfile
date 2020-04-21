@@ -1,4 +1,4 @@
-FROM ubuntu:19.04 AS builder
+FROM ubuntu:20.04 AS builder
 LABEL maintainer="dudola.daniel@itk.ppke.hu"
 
 ENV LANG=C.UTF-8

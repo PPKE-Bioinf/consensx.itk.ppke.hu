@@ -12,8 +12,6 @@ biopython = "*"
 scipy = "*"
 matplotlib = "*"
 prody = "*"
-progress = "*"
-flake8 = "*"
 pynmrstar = "*"
 
 [dev-packages]
@@ -21,4 +19,4 @@ flake8 = "*"
 pylint = "*"
 
 [requires]
-python_version = "3.7"
+python_version = "3.8"
