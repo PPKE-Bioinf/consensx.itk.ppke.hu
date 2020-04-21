@@ -26,7 +26,7 @@ RUN PIP_USER=1 PYTHONUSERBASE=$PYROOT pipenv install --system --deploy
 #    '--\ `-.__..-'    /.    (_), |  )
 #        `._        ___\_____.'_| |__/
 #           `~----"`   `-.........'
-FROM ubuntu:19.04
+FROM ubuntu:20.04
 
 ENV PGPASSWORD=password
 ENV LANG=C.UTF-8
