@@ -228,6 +228,8 @@ class Selection:
                     my_type = "0_CA_C"
                 elif my_type == "0HACA":
                     my_type = "0_HA_CA"
+                elif my_type == "0HN":
+                    my_type = "0_H_N"
                 elif my_type == "0NH":
                     my_type = "0_N_H"
                 elif my_type == "1NC":
@@ -280,7 +282,7 @@ class Selection:
         in_selection, iter_data = self.selection_on()
 
         for key, val in iter_data.items():
-            print("CALCED ", key, '{0:.3f}'.format(val))
+            print("CALCED ", key, val)
 
         self.dumped_data.load_pdb_data(self.my_path)
         sel_ensemble = self.dumped_data.pdb_model_data.atomgroup.copy()
