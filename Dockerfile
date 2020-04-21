@@ -37,7 +37,7 @@ COPY --from=builder /progs_consensx.tar.gz .
 RUN dpkg --add-architecture i386 \
     && apt-get update -q \
     && apt-get install -y -q postgresql-client libc6:i386 libncurses5:i386 \
-                             libstdc++6:i386 libx11-6:i386 python3 python3-setuptools \
+                             libstdc++6:i386 libx11-6:i386 python3 python3-setuptools python3-six \
     && mkdir -p /usr/src/app \
     && tar -C /usr/src/app -zxf progs_consensx.tar.gz \
     && rm -rf progs_consensx.tar.gz \
