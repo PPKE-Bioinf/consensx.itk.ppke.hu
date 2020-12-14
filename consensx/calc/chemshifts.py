@@ -190,6 +190,29 @@ def call_shiftx_on(my_path, pdb_files, bme_weights=None):
     )
 
 
+chemshift_corrections = {
+    "ALA": {"H": 8.158, "HA": 4.224, "C": 178.418, "CA": 52.599, "CB": 19.102, "N": 123.906},
+    "ARG": {"H": 8.232, "HA": 4.239, "C": 176.821, "CA": 56.088, "CB": 30.691, "N": 121.288},
+    "ASP": {"H": 8.217, "HA": 4.537, "C": 176.987, "CA": 54.331, "CB": 41.089, "N": 120.207},
+    "ASN": {"H": 8.366, "HA": 4.632, "C": 175.825, "CA": 53.231, "CB": 38.790, "N": 118.668},
+    "CYS": {"H": 8.410, "HA": 4.447, "C": 174.927, "CA": 58.327, "CB": 28.085, "N": 119.068},
+    "GLU": {"H": 8.304, "HA": 4.222, "C": 177.125, "CA": 56.650, "CB": 30.225, "N": 120.769},
+    "GLN": {"H": 8.258, "HA": 4.254, "C": 176.510, "CA": 55.840, "CB": 29.509, "N": 120.224},
+    "GLY": {"H": 8.307, "HA": 3.980, "C": 174.630, "CA": 45.236, "CB": None,   "N": 108.783},
+    "HIS": {"H": 8.310, "HA": 4.585, "C": 175.349, "CA": 55.964, "CB": 29.719, "N": 118.930},
+    "ILE": {"H": 7.963, "HA": 4.076, "C": 176.897, "CA": 61.247, "CB": 38.563, "N": 120.512},
+    "LEU": {"H": 8.088, "HA": 4.260, "C": 178.037, "CA": 55.260, "CB": 42.212, "N": 121.877},
+    "LYS": {"H": 8.221, "HA": 4.237, "C": 177.224, "CA": 56.412, "CB": 32.921, "N": 121.353},
+    "MET": {"H": 8.209, "HA": 4.425, "C": 176.953, "CA": 55.591, "CB": 32.690, "N": 120.002},
+    "PHE": {"H": 8.107, "HA": 4.573, "C": 176.368, "CA": 57.934, "CB": 39.660, "N": 120.138},
+    "PRO": {"H": None,  "HA": 4.339, "C": 177.542, "CA": 63.180, "CB": 32.072, "N": 136.612},
+    "SER": {"H": 8.215, "HA": 4.392, "C": 175.236, "CA": 58.352, "CB": 63.766, "N": 115.935},
+    "THR": {"H": 8.047, "HA": 4.252, "C": 175.122, "CA": 61.926, "CB": 69.794, "N": 114.024},
+    "TRP": {"H": 7.725, "HA": 4.567, "C": 174.549, "CA": 57.500, "CB": 29.380, "N": 120.733},
+    "TYR": {"H": 8.026, "HA": 4.504, "C": 176.284, "CA": 57.761, "CB": 38.750, "N": 120.228},
+    "VAL": {"H": 8.037, "HA": 4.009, "C": 176.772, "CA": 62.347, "CB": 32.674, "N": 120.403},
+}
+
 def chemshifts(
     csv_buffer,
     calced_data_storage,
@@ -257,14 +280,27 @@ def chemshifts(
 
             avg_model_corr = sum(model_corrs) / len(model_corrs)
 
-            exp_dict = {}
+            calc_dict = {}
 
             for record in cs_list[CS_type]:
-                exp_dict[record.resnum] = cs_calced[CS_type][record.resnum]
+                calc_dict[record.resnum] = cs_calced[CS_type][record.resnum]
 
-            my_correl = correlation(exp_dict, cs_list[CS_type])
-            my_q_value = q_value(exp_dict, cs_list[CS_type])
-            my_rmsd = rmsd(exp_dict, cs_list[CS_type])
+            # exp_dict = {10: 123.1231231, 11: 43:123123, ....}
+            # cs_list[CS_type] = [{resnum resname atomname value}]
+
+            corrected_calc_dict = {}
+
+            for record in cs_list[CS_type]:
+                corrected_calc_dict[record.resnum] = cs_calced[CS_type][record.resnum] - chemshift_corrections[record.res_name][record.atom_name]
+                record.value = record.value - chemshift_corrections[record.res_name][record.atom_name]
+
+            # my_correl = correlation(calc_dict, cs_list[CS_type])
+            # my_q_value = q_value(calc_dict, cs_list[CS_type])
+            # my_rmsd = rmsd(calc_dict, cs_list[CS_type])
+
+            my_correl = correlation(corrected_calc_dict, cs_list[CS_type])
+            my_q_value = q_value(corrected_calc_dict, cs_list[CS_type])
+            my_rmsd = rmsd(corrected_calc_dict, cs_list[CS_type])
 
             corr_key = "CS_" + CS_type + "_corr"
             qval_key = "CS_" + CS_type + "_qval"
@@ -281,7 +317,7 @@ def chemshifts(
             csv_buffer.add_data(
                 {
                     "name": "ChemShifts (" + CS_type + ")",
-                    "calced": exp_dict,
+                    "calced": calc_dict,
                     "experimental": cs_list[CS_type],
                 }
             )
@@ -293,11 +329,17 @@ def chemshifts(
             print()
 
             graph_name = str(n + 1) + "_CS_" + CS_type + ".svg"
-            graph.values_graph(my_path, exp_dict, cs_list[CS_type], graph_name)
+            # graph.values_graph(my_path, calc_dict, cs_list[CS_type], graph_name)
+            graph.values_graph(my_path, corrected_calc_dict, cs_list[CS_type],
+                               graph_name)
 
             corr_graph_name = str(n + 1) + "_CS_corr_" + CS_type + ".svg"
+            # graph.correl_graph(
+            #     my_path, calc_dict, cs_list[CS_type], corr_graph_name
+            # )
+
             graph.correl_graph(
-                my_path, exp_dict, cs_list[CS_type], corr_graph_name
+                my_path, corrected_calc_dict, cs_list[CS_type], corr_graph_name
             )
 
             mod_corr_graph_name = "CS_mod_corr_" + CS_type + ".svg"
