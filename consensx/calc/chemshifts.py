@@ -269,14 +269,14 @@ def chemshifts(
             corrected_calc_dict = {}
 
             for record in cs_list[CS_type]:
-                corrected_calc_dict[record.resnum] = cs_calced[CS_type][
-                                                         record.resnum] - \
-                                                     chemshift_corrections[
-                                                         record.res_name][
-                                                         record.atom_name]
-                record.value = record.value - \
-                               chemshift_corrections[record.res_name][
-                                   record.atom_name]
+                corrected_calc_dict[record.resnum] = (
+                    cs_calced[CS_type][record.resnum] -
+                    chemshift_corrections[record.res_name][record.atom_name]
+                )
+                record.value = (
+                    record.value -
+                    chemshift_corrections[record.res_name][record.atom_name]
+                )
 
             # REMOVE
             calc_dict = corrected_calc_dict
@@ -295,23 +295,9 @@ def chemshifts(
 
             avg_model_corr = sum(model_corrs) / len(model_corrs)
 
-            # calc_dict = {}
-            #
-            # for record in cs_list[CS_type]:
-            #     calc_dict[record.resnum] = cs_calced[CS_type][record.resnum]
-
-            # exp_dict = {10: 123.1231231, 11: 43:123123, ....}
-            # cs_list[CS_type] = [{resnum resname atomname value}]
-
-
-
-            # my_correl = correlation(calc_dict, cs_list[CS_type])
-            # my_q_value = q_value(calc_dict, cs_list[CS_type])
-            # my_rmsd = rmsd(calc_dict, cs_list[CS_type])
-
-            my_correl = correlation(corrected_calc_dict, cs_list[CS_type])
-            my_q_value = q_value(corrected_calc_dict, cs_list[CS_type])
-            my_rmsd = rmsd(corrected_calc_dict, cs_list[CS_type])
+            my_correl = correlation(calc_dict, cs_list[CS_type])
+            my_q_value = q_value(calc_dict, cs_list[CS_type])
+            my_rmsd = rmsd(calc_dict, cs_list[CS_type])
 
             corr_key = "CS_" + CS_type + "_corr"
             qval_key = "CS_" + CS_type + "_qval"
@@ -340,17 +326,11 @@ def chemshifts(
             print()
 
             graph_name = str(n + 1) + "_CS_" + CS_type + ".svg"
-            # graph.values_graph(my_path, calc_dict, cs_list[CS_type], graph_name)
-            graph.values_graph(my_path, corrected_calc_dict, cs_list[CS_type],
-                               graph_name)
+            graph.values_graph(my_path, calc_dict, cs_list[CS_type], graph_name)
 
             corr_graph_name = str(n + 1) + "_CS_corr_" + CS_type + ".svg"
-            # graph.correl_graph(
-            #     my_path, calc_dict, cs_list[CS_type], corr_graph_name
-            # )
-
             graph.correl_graph(
-                my_path, corrected_calc_dict, cs_list[CS_type], corr_graph_name
+                my_path, calc_dict, cs_list[CS_type], corr_graph_name
             )
 
             mod_corr_graph_name = "CS_mod_corr_" + CS_type + ".svg"
