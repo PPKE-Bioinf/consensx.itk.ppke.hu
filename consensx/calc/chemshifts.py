@@ -266,13 +266,28 @@ def chemshifts(
                 calc_dat_file.write("\n")
 
         for CS_type in sorted(list(cs_list.keys())):
+            corrected_calc_dict = {}
+
+            for record in cs_list[CS_type]:
+                corrected_calc_dict[record.resnum] = cs_calced[CS_type][
+                                                         record.resnum] - \
+                                                     chemshift_corrections[
+                                                         record.res_name][
+                                                         record.atom_name]
+                record.value = record.value - \
+                               chemshift_corrections[record.res_name][
+                                   record.atom_name]
+
+            # REMOVE
+            calc_dict = corrected_calc_dict
+
             model_corrs = []
 
             for model in model_data:
                 inner_exp = {}
 
                 for record in cs_list[CS_type]:
-                    inner_exp[record.resnum] = model[CS_type][record.resnum]
+                    inner_exp[record.resnum] = model[CS_type][record.resnum] - chemshift_corrections[record.res_name][record.atom_name]
 
                 model_corrs.append(
                     correlation(inner_exp, cs_list[CS_type])
@@ -280,19 +295,15 @@ def chemshifts(
 
             avg_model_corr = sum(model_corrs) / len(model_corrs)
 
-            calc_dict = {}
-
-            for record in cs_list[CS_type]:
-                calc_dict[record.resnum] = cs_calced[CS_type][record.resnum]
+            # calc_dict = {}
+            #
+            # for record in cs_list[CS_type]:
+            #     calc_dict[record.resnum] = cs_calced[CS_type][record.resnum]
 
             # exp_dict = {10: 123.1231231, 11: 43:123123, ....}
             # cs_list[CS_type] = [{resnum resname atomname value}]
 
-            corrected_calc_dict = {}
 
-            for record in cs_list[CS_type]:
-                corrected_calc_dict[record.resnum] = cs_calced[CS_type][record.resnum] - chemshift_corrections[record.res_name][record.atom_name]
-                record.value = record.value - chemshift_corrections[record.res_name][record.atom_name]
 
             # my_correl = correlation(calc_dict, cs_list[CS_type])
             # my_q_value = q_value(calc_dict, cs_list[CS_type])
