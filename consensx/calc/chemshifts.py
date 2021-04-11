@@ -330,9 +330,6 @@ def chemshifts(
                 )
 
                 if prev_record:
-                    print(f"prev_record.res_name: {prev_record.res_name}")
-                    print(f"prev_record.atom_name: {prev_record.atom_name}")
-                    print(f"record.resnum: {record.resnum}")
                     corrected_calc_dict[record.resnum] -= chemshift_corrections_prev[prev_record.res_name][prev_record.atom_name]
 
                 if next_record:
