@@ -189,6 +189,51 @@ def call_shiftx_on(my_path, pdb_files, bme_weights=None):
         model_data_list,
     )
 
+chemshift_corrections_prev = {
+    "ALA": {"H": 0.088,  "HA": -0.046, "C": 0.068,  "CA": 0.161,  "CB": -0.135, "N": -0.639},
+    "ARG": {"H": 0.251,  "HA": -0.004, "C": -0.246, "CA": 0.029,  "CB": -0.038, "N": 1.909},
+    "ASP": {"H": 0.081,  "HA": -0.024, "C": 0.059,  "CA": 0.290,  "CB": -0.182, "N": 0.679},
+    "ASN": {"H": 0.130,  "HA": -0.004, "C": -0.052, "CA": 0.293,  "CB": -0.205, "N": 0.699},
+    "CYS": {"H": 0.293,  "HA": 0.025,  "C": -0.417, "CA": -0.006, "CB": 0.008,  "N": 3.100},
+    "GLU": {"H": 0.174,  "HA": -0.048, "C": -0.032, "CA": 0.171,  "CB": -0.119, "N": 1.226},
+    "GLN": {"H": 0.225,  "HA": -0.009, "C": -0.153, "CA": 0.125,  "CB": -0.064, "N": 1.700},
+    "GLY": {"H": 0.000,  "HA": 0.000,  "C": 0.000,  "CA": 0.000,  "CB": 0.000,  "N": 0.000},
+    "HIS": {"H": 0.141,  "HA": -0.019, "C": -0.243, "CA": 0.069,  "CB": -0.093, "N": 1.761},
+    "ILE": {"H": 0.250,  "HA": 0.010,  "C": -0.045, "CA": -0.087, "CB": -0.111, "N": 4.205},
+    "LEU": {"H": 0.105,  "HA": -0.042, "C": -0.115, "CA": 0.083,  "CB": -0.143, "N": 0.835},
+    "LYS": {"H": 0.174,  "HA": -0.031, "C": -0.117, "CA": 0.195,  "CB": -0.102, "N": 1.311},
+    "MET": {"H": 0.205,  "HA": -0.018, "C": -0.118, "CA": 0.028,  "CB": -0.139, "N": 1.407},
+    "PHE": {"H": 0.079,  "HA": -0.040, "C": -0.672, "CA": -0.163, "CB": 0.059,  "N": 2.238},
+    "PRO": {"H": 0.292,  "HA": -0.032, "C": -0.040, "CA": 0.021,  "CB": -0.151, "N": 0.569},
+    "SER": {"H": 0.230,  "HA": 0.006,  "C": -0.128, "CA": 0.155,  "CB": -0.153, "N": 2.297},
+    "THR": {"H": 0.211,  "HA": -0.005, "C": -0.130, "CA": 0.143,  "CB": -0.072, "N": 2.680},
+    "TRP": {"H": -0.555, "HA": -0.168, "C": -0.465, "CA": 0.014,  "CB": -0.046, "N": 0.795},
+    "TYR": {"H": -0.052, "HA": -0.035, "C": -0.633, "CA": -0.245, "CB": 0.017,  "N": 2.729},
+    "VAL": {"H": 0.259,  "HA": -0.007, "C": -0.198, "CA": 0.075,  "CB": -0.147, "N": 4.507},
+}
+
+chemshift_corrections_next = {
+    "ALA": {"H": -0.056, "HA": -0.042, "C": -0.816, "CA": -0.187, "CB": 0.018,  "N": -0.004},
+    "ARG": {"H": -0.039, "HA": -0.017, "C": -0.625, "CA": -0.258, "CB": 0.046,  "N": -0.065},
+    "ASP": {"H": -0.003, "HA": -0.009, "C": -0.853, "CA": -0.095, "CB": 0.079,  "N": -0.373},
+    "ASN": {"H": -0.023, "HA": -0.033, "C": -0.849, "CA": -0.067, "CB": -0.013, "N": -0.219},
+    "CYS": {"H": 0.375,  "HA": -0.008, "C": -0.610, "CA": 0.047,  "CB": -0.170, "N": 0.785},
+    "GLU": {"H": -0.014, "HA": -0.005, "C": -0.503, "CA": -0.071, "CB": 0.065,  "N": -0.100},
+    "GLN": {"H": -0.016, "HA": -0.039, "C": -0.551, "CA": -0.098, "CB": 0.004,  "N": -0.087},
+    "GLY": {"H": 0.000,  "HA": 0.000,  "C": 0.000,  "CA": 0.000,  "CB": 0.000,  "N": 0.000},
+    "HIS": {"H": -0.136, "HA": -0.059, "C": -0.677, "CA": -0.248, "CB": 0.041,  "N": -0.225},
+    "ILE": {"H": -0.071, "HA": 0.000,  "C": -0.559, "CA": -0.129, "CB": 0.093,  "N": -0.167},
+    "LEU": {"H": -0.086, "HA": -0.021, "C": -0.612, "CA": -0.184, "CB": -0.053, "N": -0.397},
+    "LYS": {"H": -0.053, "HA": -0.011, "C": -0.520, "CA": -0.142, "CB": 0.029,  "N": 0.068},
+    "MET": {"H": -0.066, "HA": -0.018, "C": -0.271, "CA": -0.061, "CB": -0.205, "N": -0.145},
+    "PHE": {"H": -0.133, "HA": -0.052, "C": -0.891, "CA": -0.247, "CB": 0.023,  "N": -0.484},
+    "PRO": {"H": -0.028, "HA": 0.276,  "C": -2.874, "CA": -2.423, "CB": -0.426, "N": 1.072},
+    "SER": {"H": -0.002, "HA": 0.030,  "C": -0.483, "CA": -0.151, "CB": 0.087,  "N": -0.053},
+    "THR": {"H": 0.042,  "HA": 0.065,  "C": -0.327, "CA": -0.122, "CB": 0.086,  "N": 0.076},
+    "TRP": {"H": 0.032,  "HA": -0.082, "C": -0.694, "CA": -0.201, "CB": 0.069,  "N": -0.273},
+    "TYR": {"H": -0.093, "HA": -0.044, "C": -0.848, "CA": -0.148, "CB": 0.019,  "N": -0.387},
+    "VAL": {"H": -0.052, "HA": 0.021,  "C": -0.662, "CA": -0.214, "CB": 0.044,  "N": -0.047},
+}
 
 chemshift_corrections = {
     "ALA": {"H": 8.158, "HA": 4.224, "C": 178.418, "CA": 52.599, "CB": 19.102, "N": 123.906},
@@ -198,20 +243,21 @@ chemshift_corrections = {
     "CYS": {"H": 8.410, "HA": 4.447, "C": 174.927, "CA": 58.327, "CB": 28.085, "N": 119.068},
     "GLU": {"H": 8.304, "HA": 4.222, "C": 177.125, "CA": 56.650, "CB": 30.225, "N": 120.769},
     "GLN": {"H": 8.258, "HA": 4.254, "C": 176.510, "CA": 55.840, "CB": 29.509, "N": 120.224},
-    "GLY": {"H": 8.307, "HA": 3.980, "C": 174.630, "CA": 45.236, "CB": None,   "N": 108.783},
+    "GLY": {"H": 8.307, "HA": 3.980, "C": 174.630, "CA": 45.236, "CB": 0.00,   "N": 108.783},
     "HIS": {"H": 8.310, "HA": 4.585, "C": 175.349, "CA": 55.964, "CB": 29.719, "N": 118.930},
     "ILE": {"H": 7.963, "HA": 4.076, "C": 176.897, "CA": 61.247, "CB": 38.563, "N": 120.512},
     "LEU": {"H": 8.088, "HA": 4.260, "C": 178.037, "CA": 55.260, "CB": 42.212, "N": 121.877},
     "LYS": {"H": 8.221, "HA": 4.237, "C": 177.224, "CA": 56.412, "CB": 32.921, "N": 121.353},
     "MET": {"H": 8.209, "HA": 4.425, "C": 176.953, "CA": 55.591, "CB": 32.690, "N": 120.002},
     "PHE": {"H": 8.107, "HA": 4.573, "C": 176.368, "CA": 57.934, "CB": 39.660, "N": 120.138},
-    "PRO": {"H": None,  "HA": 4.339, "C": 177.542, "CA": 63.180, "CB": 32.072, "N": 136.612},
+    "PRO": {"H": 0.00,  "HA": 4.339, "C": 177.542, "CA": 63.180, "CB": 32.072, "N": 136.612},
     "SER": {"H": 8.215, "HA": 4.392, "C": 175.236, "CA": 58.352, "CB": 63.766, "N": 115.935},
     "THR": {"H": 8.047, "HA": 4.252, "C": 175.122, "CA": 61.926, "CB": 69.794, "N": 114.024},
     "TRP": {"H": 7.725, "HA": 4.567, "C": 174.549, "CA": 57.500, "CB": 29.380, "N": 120.733},
     "TYR": {"H": 8.026, "HA": 4.504, "C": 176.284, "CA": 57.761, "CB": 38.750, "N": 120.228},
     "VAL": {"H": 8.037, "HA": 4.009, "C": 176.772, "CA": 62.347, "CB": 32.674, "N": 120.403},
 }
+
 
 def chemshifts(
     csv_buffer,
@@ -268,15 +314,40 @@ def chemshifts(
         for CS_type in sorted(list(cs_list.keys())):
             corrected_calc_dict = {}
 
-            for record in cs_list[CS_type]:
+            for i, record in enumerate(cs_list[CS_type]):
+                prev_record = None
+                if i != 0:
+                    prev_record = cs_list[CS_type][i-1]
+
+                try:
+                    next_record = cs_list[CS_type][i+1]
+                except IndexError:
+                    next_record = None
+
                 corrected_calc_dict[record.resnum] = (
                     cs_calced[CS_type][record.resnum] -
                     chemshift_corrections[record.res_name][record.atom_name]
                 )
+
+                if prev_record:
+                    print(f"prev_record.res_name: {prev_record.res_name}")
+                    print(f"prev_record.atom_name: {prev_record.atom_name}")
+                    print(f"record.resnum: {record.resnum}")
+                    corrected_calc_dict[record.resnum] -= chemshift_corrections_prev[prev_record.res_name][prev_record.atom_name]
+
+                if next_record:
+                    corrected_calc_dict[record.resnum] -= chemshift_corrections_next[next_record.res_name][next_record.atom_name]
+
                 record.value = (
                     record.value -
                     chemshift_corrections[record.res_name][record.atom_name]
                 )
+
+                if prev_record:
+                    record.value -= chemshift_corrections_prev[prev_record.res_name][prev_record.atom_name]
+
+                if next_record:
+                    record.value -= chemshift_corrections_next[next_record.res_name][next_record.atom_name]
 
             # REMOVE
             calc_dict = corrected_calc_dict
@@ -288,6 +359,12 @@ def chemshifts(
 
                 for record in cs_list[CS_type]:
                     inner_exp[record.resnum] = model[CS_type][record.resnum] - chemshift_corrections[record.res_name][record.atom_name]
+
+                if prev_record:
+                    inner_exp[record.resnum] -= chemshift_corrections_prev[prev_record.res_name][prev_record.atom_name]
+
+                if next_record:
+                    inner_exp[record.resnum] -= chemshift_corrections_next[next_record.res_name][next_record.atom_name]
 
                 model_corrs.append(
                     correlation(inner_exp, cs_list[CS_type])
