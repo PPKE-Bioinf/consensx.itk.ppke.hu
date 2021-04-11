@@ -329,21 +329,17 @@ def chemshifts(
                     chemshift_corrections[record.res_name][record.atom_name]
                 )
 
-                if prev_record:
-                    corrected_calc_dict[record.resnum] -= chemshift_corrections_prev[prev_record.res_name][prev_record.atom_name]
-
-                if next_record:
-                    corrected_calc_dict[record.resnum] -= chemshift_corrections_next[next_record.res_name][next_record.atom_name]
-
                 record.value = (
-                    record.value -
-                    chemshift_corrections[record.res_name][record.atom_name]
+                        record.value -
+                        chemshift_corrections[record.res_name][record.atom_name]
                 )
 
                 if prev_record:
+                    corrected_calc_dict[record.resnum] -= chemshift_corrections_prev[prev_record.res_name][prev_record.atom_name]
                     record.value -= chemshift_corrections_prev[prev_record.res_name][prev_record.atom_name]
 
                 if next_record:
+                    corrected_calc_dict[record.resnum] -= chemshift_corrections_next[next_record.res_name][next_record.atom_name]
                     record.value -= chemshift_corrections_next[next_record.res_name][next_record.atom_name]
 
             # REMOVE
@@ -354,14 +350,23 @@ def chemshifts(
             for model in model_data:
                 inner_exp = {}
 
-                for record in cs_list[CS_type]:
+                for i, record in enumerate(cs_list[CS_type]):
+                    prev_record = None
+                    if i != 0:
+                        prev_record = cs_list[CS_type][i - 1]
+
+                    try:
+                        next_record = cs_list[CS_type][i + 1]
+                    except IndexError:
+                        next_record = None
+
                     inner_exp[record.resnum] = model[CS_type][record.resnum] - chemshift_corrections[record.res_name][record.atom_name]
 
-                if prev_record:
-                    inner_exp[record.resnum] -= chemshift_corrections_prev[prev_record.res_name][prev_record.atom_name]
+                    if prev_record:
+                        inner_exp[record.resnum] -= chemshift_corrections_prev[prev_record.res_name][prev_record.atom_name]
 
-                if next_record:
-                    inner_exp[record.resnum] -= chemshift_corrections_next[next_record.res_name][next_record.atom_name]
+                    if next_record:
+                        inner_exp[record.resnum] -= chemshift_corrections_next[next_record.res_name][next_record.atom_name]
 
                 model_corrs.append(
                     correlation(inner_exp, cs_list[CS_type])
