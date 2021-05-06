@@ -253,8 +253,6 @@ def run_calculation(request, calc_id):
 
     # -----------------------  Chemical shift calc  --------------------- #
     chem_shift_lists = star_nmr_data.parse_chemshift()
-    chem_shift_lists_path = my_path + "/ChemShift_lists.pickle"
-    pickle.dump(chem_shift_lists, open(chem_shift_lists_path, "wb"))
     chemshift_data = None
 
     if chem_shift_lists:
@@ -266,6 +264,7 @@ def run_calculation(request, calc_id):
             my_path,
             bme_weights,
         )
+
         data_found = True
 
     csv_buffer.write_csv()
