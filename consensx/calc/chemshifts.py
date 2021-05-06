@@ -9,6 +9,7 @@ import consensx.graph as graph
 
 from consensx import thirdparty
 from .measure import correlation, q_value, rmsd
+from consensx.parse import ChemShiftRecord
 from consensx.misc.natural_sort import natural_sort
 
 
@@ -272,9 +273,6 @@ def chemshifts(
     cs_data = []
     cs_calced, model_data = call_shiftx_on(my_path, pdb_models, bme_weights)
 
-    cs_model_data_path = my_path + "/ChemShift_model_data.pickle"
-    pickle.dump(model_data, open(cs_model_data_path, "wb"))
-
     for n, cs_list in enumerate(chem_shift_lists):
         bme_exp_filename = "chemshift_" + str(n) + "_exp.dat"
         bme_calc_filename = "chemshift_" + str(n) + "_calc.dat"
@@ -311,130 +309,168 @@ def chemshifts(
 
                 calc_dat_file.write("\n")
 
-        for CS_type in sorted(list(cs_list.keys())):
-            corrected_calc_dict = {}
+        for corrected in [False, True]:
+            for CS_type in sorted(list(cs_list.keys())):
+                calc_dict = {}
 
-            for i, record in enumerate(cs_list[CS_type]):
-                prev_record = None
-                if i != 0:
-                    prev_record = cs_list[CS_type][i-1]
-
-                try:
-                    next_record = cs_list[CS_type][i+1]
-                except IndexError:
-                    next_record = None
-
-                corrected_calc_dict[record.resnum] = (
-                    cs_calced[CS_type][record.resnum] -
-                    chemshift_corrections[record.res_name][record.atom_name]
-                )
-
-                record.value = (
-                        record.value -
-                        chemshift_corrections[record.res_name][record.atom_name]
-                )
-
-                if prev_record:
-                    corrected_calc_dict[record.resnum] -= chemshift_corrections_prev[prev_record.res_name][prev_record.atom_name]
-                    record.value -= chemshift_corrections_prev[prev_record.res_name][prev_record.atom_name]
-
-                if next_record:
-                    corrected_calc_dict[record.resnum] -= chemshift_corrections_next[next_record.res_name][next_record.atom_name]
-                    record.value -= chemshift_corrections_next[next_record.res_name][next_record.atom_name]
-
-            # REMOVE
-            calc_dict = corrected_calc_dict
-
-            model_corrs = []
-
-            for model in model_data:
-                inner_exp = {}
+                if corrected:
+                    cs_list[CS_type + "_corrected"] = []
 
                 for i, record in enumerate(cs_list[CS_type]):
-                    prev_record = None
-                    if i != 0:
-                        prev_record = cs_list[CS_type][i - 1]
+                    if corrected:
+                        prev_record = None
+                        if i != 0:
+                            prev_record = cs_list[CS_type][i - 1]
 
-                    try:
-                        next_record = cs_list[CS_type][i + 1]
-                    except IndexError:
-                        next_record = None
+                        try:
+                            next_record = cs_list[CS_type][i + 1]
+                        except IndexError:
+                            next_record = None
 
-                    inner_exp[record.resnum] = model[CS_type][record.resnum] - chemshift_corrections[record.res_name][record.atom_name]
+                        calc_dict[record.resnum] = (
+                            cs_calced[CS_type][record.resnum] -
+                            chemshift_corrections[record.res_name][record.atom_name]
+                        )
 
-                    if prev_record:
-                        inner_exp[record.resnum] -= chemshift_corrections_prev[prev_record.res_name][prev_record.atom_name]
+                        corrected_record = ChemShiftRecord(
+                            record.resnum, record.res_name, record.atom_name, record.value
+                        )
 
-                    if next_record:
-                        inner_exp[record.resnum] -= chemshift_corrections_next[next_record.res_name][next_record.atom_name]
+                        corrected_record.value = (
+                                record.value -
+                                chemshift_corrections[record.res_name][record.atom_name]
+                        )
 
-                model_corrs.append(
-                    correlation(inner_exp, cs_list[CS_type])
+                        if prev_record:
+                            calc_dict[record.resnum] -= chemshift_corrections_prev[prev_record.res_name][prev_record.atom_name]
+                            corrected_record.value -= chemshift_corrections_prev[prev_record.res_name][prev_record.atom_name]
+
+                        if next_record:
+                            calc_dict[record.resnum] -= chemshift_corrections_next[next_record.res_name][next_record.atom_name]
+                            corrected_record.value -= chemshift_corrections_next[next_record.res_name][next_record.atom_name]
+
+                        cs_list[CS_type + "_corrected"].append(corrected_record)
+                    else:
+                        calc_dict[record.resnum] = cs_calced[CS_type][record.resnum]
+
+                # if corrected:
+                #     CS_type = CS_type + "_corrected"
+
+                model_corrs = []
+
+                for model_num, model in enumerate(model_data):
+                    inner_exp = {}
+
+                    for i, record in enumerate(cs_list[CS_type]):
+                        if corrected:
+                            prev_record = None
+                            if i != 0:
+                                prev_record = cs_list[CS_type][i - 1]
+
+                            try:
+                                next_record = cs_list[CS_type][i + 1]
+                            except IndexError:
+                                next_record = None
+
+                            inner_exp[record.resnum] = model[CS_type][record.resnum] - chemshift_corrections[record.res_name][record.atom_name]
+
+                            if prev_record:
+                                inner_exp[record.resnum] -= chemshift_corrections_prev[prev_record.res_name][prev_record.atom_name]
+
+                            if next_record:
+                                inner_exp[record.resnum] -= chemshift_corrections_next[next_record.res_name][next_record.atom_name]
+
+                            # TODO _corrected types have less values as normal types
+                            model_data[model_num][CS_type + "_corrected"] = inner_exp
+                        else:
+                            inner_exp[record.resnum] = model[CS_type][record.resnum]
+
+                    if corrected:
+                        model_corrs.append(
+                            correlation(inner_exp, cs_list[CS_type + "_corrected"])
+                        )
+                    else:
+                        model_corrs.append(
+                            correlation(inner_exp, cs_list[CS_type])
+                        )
+
+                avg_model_corr = sum(model_corrs) / len(model_corrs)
+
+                # REMOVE ME
+                if corrected:
+                    CS_type = CS_type + "_corrected"
+
+                my_correl = correlation(calc_dict, cs_list[CS_type])
+                my_q_value = q_value(calc_dict, cs_list[CS_type])
+                my_rmsd = rmsd(calc_dict, cs_list[CS_type])
+
+                corr_key = "CS_" + CS_type + "_corr"
+                qval_key = "CS_" + CS_type + "_qval"
+                rmsd_key = "CS_" + CS_type + "_rmsd"
+
+                calced_data_storage.update(
+                    {
+                        corr_key: "{0}".format("{0:.3f}".format(my_correl)),
+                        qval_key: "{0}".format("{0:.3f}".format(my_q_value)),
+                        rmsd_key: "{0}".format("{0:.3f}".format(my_rmsd)),
+                    }
                 )
 
-            avg_model_corr = sum(model_corrs) / len(model_corrs)
+                csv_buffer.add_data(
+                    {
+                        "name": "ChemShifts (" + CS_type + ")",
+                        "calced": calc_dict,
+                        "experimental": cs_list[CS_type],
+                    }
+                )
 
-            my_correl = correlation(calc_dict, cs_list[CS_type])
-            my_q_value = q_value(calc_dict, cs_list[CS_type])
-            my_rmsd = rmsd(calc_dict, cs_list[CS_type])
+                print("CHEM SHIFT", CS_type)
+                print("Correl: ", my_correl)
+                print("Q-val:  ", my_q_value)
+                print("RMSD:   ", my_rmsd)
+                print()
 
-            corr_key = "CS_" + CS_type + "_corr"
-            qval_key = "CS_" + CS_type + "_qval"
-            rmsd_key = "CS_" + CS_type + "_rmsd"
+                graph_name = str(n + 1) + "_CS_" + CS_type + ".svg"
+                graph.values_graph(my_path, calc_dict, cs_list[CS_type], graph_name)
 
-            calced_data_storage.update(
-                {
-                    corr_key: "{0}".format("{0:.3f}".format(my_correl)),
-                    qval_key: "{0}".format("{0:.3f}".format(my_q_value)),
-                    rmsd_key: "{0}".format("{0:.3f}".format(my_rmsd)),
-                }
-            )
+                corr_graph_name = str(n + 1) + "_CS_corr_" + CS_type + ".svg"
+                graph.correl_graph(
+                    my_path, calc_dict, cs_list[CS_type], corr_graph_name
+                )
 
-            csv_buffer.add_data(
-                {
-                    "name": "ChemShifts (" + CS_type + ")",
-                    "calced": calc_dict,
-                    "experimental": cs_list[CS_type],
-                }
-            )
+                mod_corr_graph_name = "CS_mod_corr_" + CS_type + ".svg"
+                graph.mod_correl_graph(
+                    my_path,
+                    my_correl,
+                    avg_model_corr,
+                    model_corrs,
+                    mod_corr_graph_name,
+                )
 
-            print("CHEM SHIFT", CS_type)
-            print("Correl: ", my_correl)
-            print("Q-val:  ", my_q_value)
-            print("RMSD:   ", my_rmsd)
-            print()
+                my_id = my_path.split("/")[-2] + "/"
+                CS_type_name = CS_type
 
-            graph_name = str(n + 1) + "_CS_" + CS_type + ".svg"
-            graph.values_graph(my_path, calc_dict, cs_list[CS_type], graph_name)
+                if corrected:
+                    CS_type_name = CS_type + " (corrected)"
 
-            corr_graph_name = str(n + 1) + "_CS_corr_" + CS_type + ".svg"
-            graph.correl_graph(
-                my_path, calc_dict, cs_list[CS_type], corr_graph_name
-            )
+                cs_data.append(
+                    {
+                        "CS_type": CS_type_name,
+                        "CS_model_n": len(cs_list[CS_type]),
+                        "correlation": "{0:.3f}".format(my_correl),
+                        "q_value": "{0:.3f}".format(my_q_value),
+                        "rmsd": "{0:.3f}".format(my_rmsd),
+                        "corr_graph_name": my_id + corr_graph_name,
+                        "graph_name": my_id + graph_name,
+                        "mod_corr_graph_name": my_id + mod_corr_graph_name,
+                        "input_id": "CS_" + CS_type,
+                    }
+                )
 
-            mod_corr_graph_name = "CS_mod_corr_" + CS_type + ".svg"
-            graph.mod_correl_graph(
-                my_path,
-                my_correl,
-                avg_model_corr,
-                model_corrs,
-                mod_corr_graph_name,
-            )
+        # TODO move this to a place where the corrected values exist
+        cs_model_data_path = my_path + "/ChemShift_model_data.pickle"
+        pickle.dump(model_data, open(cs_model_data_path, "wb"))
 
-            my_id = my_path.split("/")[-2] + "/"
-
-            cs_data.append(
-                {
-                    "CS_type": CS_type,
-                    "CS_model_n": len(cs_list[CS_type]),
-                    "correlation": "{0:.3f}".format(my_correl),
-                    "q_value": "{0:.3f}".format(my_q_value),
-                    "rmsd": "{0:.3f}".format(my_rmsd),
-                    "corr_graph_name": my_id + corr_graph_name,
-                    "graph_name": my_id + graph_name,
-                    "mod_corr_graph_name": my_id + mod_corr_graph_name,
-                    "input_id": "CS_" + CS_type,
-                }
-            )
-
+    chem_shift_lists_path = my_path + "/ChemShift_lists.pickle"
+    pickle.dump(chem_shift_lists, open(chem_shift_lists_path, "wb"))
     return cs_data
