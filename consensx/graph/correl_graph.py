@@ -53,5 +53,5 @@ def correl_graph(my_path, calced, experimental, graph_name):
     plt.xlabel('experimental')
     plt.ylabel('calculated')
     plt.tight_layout(pad=1.08)
-    plt.savefig(my_path + "/" + graph_name, format="svg")
+    plt.savefig(my_path + "/" + graph_name, format="svg", transparent=True)
     plt.close()
