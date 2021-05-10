@@ -86,7 +86,9 @@ $(document).ready(function() {
             my_range = $( this ).attr('id').split('_');
             my_type  = my_range[0];
 
-            if (my_type == "Jcoup") {
+            console.log(my_id, my_range, my_type)
+
+            if (my_type == "JCoup") {
                 $( this ).val("10");
                 $('output[for="' + my_id + '"]').prop('value', "10");
             }
@@ -100,7 +102,7 @@ $(document).ready(function() {
             my_range = $( this ).attr('id').split('_');
             my_type  = my_range[0];
 
-            if (my_type == "CS") {
+            if (my_type == "CS" && my_range[my_range.length -1] == "secondary") {
                 $( this ).val("10");
                 $('output[for="' + my_id + '"]').prop('value', "10");
             }

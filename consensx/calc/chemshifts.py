@@ -309,12 +309,12 @@ def chemshifts(
 
                 calc_dat_file.write("\n")
 
-        for corrected in [False, True]:
-            for CS_type in sorted(list(cs_list.keys())):
+        for CS_type in sorted(list(cs_list.keys())):
+            for corrected in [True, False]:
                 calc_dict = {}
 
                 if corrected:
-                    cs_list[CS_type + "_corrected"] = []
+                    cs_list[CS_type + "_secondary"] = []
 
                 for i, record in enumerate(cs_list[CS_type]):
                     if corrected:
@@ -349,12 +349,9 @@ def chemshifts(
                             calc_dict[record.resnum] -= chemshift_corrections_next[next_record.res_name][next_record.atom_name]
                             corrected_record.value -= chemshift_corrections_next[next_record.res_name][next_record.atom_name]
 
-                        cs_list[CS_type + "_corrected"].append(corrected_record)
+                        cs_list[CS_type + "_secondary"].append(corrected_record)
                     else:
                         calc_dict[record.resnum] = cs_calced[CS_type][record.resnum]
-
-                # if corrected:
-                #     CS_type = CS_type + "_corrected"
 
                 model_corrs = []
 
@@ -380,14 +377,14 @@ def chemshifts(
                             if next_record:
                                 inner_exp[record.resnum] -= chemshift_corrections_next[next_record.res_name][next_record.atom_name]
 
-                            # TODO _corrected types have less values as normal types
-                            model_data[model_num][CS_type + "_corrected"] = inner_exp
+                            # TODO _secondary types have less values as normal types
+                            model_data[model_num][CS_type + "_secondary"] = inner_exp
                         else:
                             inner_exp[record.resnum] = model[CS_type][record.resnum]
 
                     if corrected:
                         model_corrs.append(
-                            correlation(inner_exp, cs_list[CS_type + "_corrected"])
+                            correlation(inner_exp, cs_list[CS_type + "_secondary"])
                         )
                     else:
                         model_corrs.append(
@@ -396,17 +393,18 @@ def chemshifts(
 
                 avg_model_corr = sum(model_corrs) / len(model_corrs)
 
-                # REMOVE ME
+                CS_type_name = CS_type
+
                 if corrected:
-                    CS_type = CS_type + "_corrected"
+                    CS_type_name = CS_type + "_secondary"
 
-                my_correl = correlation(calc_dict, cs_list[CS_type])
-                my_q_value = q_value(calc_dict, cs_list[CS_type])
-                my_rmsd = rmsd(calc_dict, cs_list[CS_type])
+                my_correl = correlation(calc_dict, cs_list[CS_type_name])
+                my_q_value = q_value(calc_dict, cs_list[CS_type_name])
+                my_rmsd = rmsd(calc_dict, cs_list[CS_type_name])
 
-                corr_key = "CS_" + CS_type + "_corr"
-                qval_key = "CS_" + CS_type + "_qval"
-                rmsd_key = "CS_" + CS_type + "_rmsd"
+                corr_key = "CS_" + CS_type_name + "_corr"
+                qval_key = "CS_" + CS_type_name + "_qval"
+                rmsd_key = "CS_" + CS_type_name + "_rmsd"
 
                 calced_data_storage.update(
                     {
@@ -418,27 +416,27 @@ def chemshifts(
 
                 csv_buffer.add_data(
                     {
-                        "name": "ChemShifts (" + CS_type + ")",
+                        "name": "ChemShifts (" + CS_type_name + ")",
                         "calced": calc_dict,
-                        "experimental": cs_list[CS_type],
+                        "experimental": cs_list[CS_type_name],
                     }
                 )
 
-                print("CHEM SHIFT", CS_type)
+                print("CHEM SHIFT", CS_type_name)
                 print("Correl: ", my_correl)
                 print("Q-val:  ", my_q_value)
                 print("RMSD:   ", my_rmsd)
                 print()
 
-                graph_name = str(n + 1) + "_CS_" + CS_type + ".svg"
-                graph.values_graph(my_path, calc_dict, cs_list[CS_type], graph_name)
+                graph_name = str(n + 1) + "_CS_" + CS_type_name + ".svg"
+                graph.values_graph(my_path, calc_dict, cs_list[CS_type_name], graph_name)
 
-                corr_graph_name = str(n + 1) + "_CS_corr_" + CS_type + ".svg"
+                corr_graph_name = str(n + 1) + "_CS_corr_" + CS_type_name + ".svg"
                 graph.correl_graph(
-                    my_path, calc_dict, cs_list[CS_type], corr_graph_name
+                    my_path, calc_dict, cs_list[CS_type_name], corr_graph_name
                 )
 
-                mod_corr_graph_name = "CS_mod_corr_" + CS_type + ".svg"
+                mod_corr_graph_name = "CS_mod_corr_" + CS_type_name + ".svg"
                 graph.mod_correl_graph(
                     my_path,
                     my_correl,
@@ -448,22 +446,18 @@ def chemshifts(
                 )
 
                 my_id = my_path.split("/")[-2] + "/"
-                CS_type_name = CS_type
-
-                if corrected:
-                    CS_type_name = CS_type + " (corrected)"
 
                 cs_data.append(
                     {
                         "CS_type": CS_type_name,
-                        "CS_model_n": len(cs_list[CS_type]),
+                        "CS_model_n": len(cs_list[CS_type_name]),
                         "correlation": "{0:.3f}".format(my_correl),
                         "q_value": "{0:.3f}".format(my_q_value),
                         "rmsd": "{0:.3f}".format(my_rmsd),
                         "corr_graph_name": my_id + corr_graph_name,
                         "graph_name": my_id + graph_name,
                         "mod_corr_graph_name": my_id + mod_corr_graph_name,
-                        "input_id": "CS_" + CS_type,
+                        "input_id": "CS_" + CS_type_name,
                     }
                 )
 
