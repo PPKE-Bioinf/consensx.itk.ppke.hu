@@ -116,8 +116,8 @@
           <td>
           <div class="btn-group group1" data-toggle="buttons">
 
-            <label class="btn btn-primary mes">
-              <input type="radio" name="measures" class="options" value="correlation" > correlation
+            <label class="btn btn-primary mes active">
+              <input type="radio" name="measures" class="options" value="correlation" checked> correlation
             </label>
 
             <label class="btn btn-primary mes">
@@ -378,6 +378,19 @@
       <h4 class="table-source">Chemicals shifts</h4>
     {% for CS in chemshift_data %}
 
+        {% if "_secondary" not in CS.CS_type %}
+            <div class="accordion" id="toggleArea_{{ CS.CS_type }}">
+              <div class="accordion-group-chemshift">
+                <div class="accordion-heading togglize cs-result-heading">
+                    <a class="cs-result-toggle accordion-toggle" data-toggle="collapse" data-parent="#toggleArea_{{ CS.CS_type }}" href="http://0.0.0.0:8080/#collapse_{{ CS.CS_type }}">
+                        Original values
+                        <span class="font-icon-plus"></span>
+                        <span class="font-icon-minus"></span>
+                    </a>
+                </div>
+                <div id="collapse_{{ CS.CS_type }}" class="accordion-body collapse">
+                    <div class="accordion-inner-chemshift">
+        {% endif %}
     <table class="result_table">
       <tbody>
         <tr>
@@ -403,8 +416,18 @@
           <td class="involve-table"><input type="range" class="inputrange" id="{{ CS.input_id }}" value="0" min="0" max="10"></td>
         </tr>
       </table>
+        {% if "_secondary" not in CS.CS_type %}
+        <p class="ChemShiftNote"><strong>note:</strong> selecting any original chemical shift sets will disable selection on secondary chemical shift sets</p>
+        {% endif %}
     </form>
     </div>
+
+        {% if "_secondary" not in CS.CS_type %}
+                </div>
+            </div>
+          </div>
+        </div>
+        {% endif %}
     {% endfor %}
     </div>
     {% endif %}
