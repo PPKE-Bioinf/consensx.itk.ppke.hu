@@ -132,8 +132,8 @@ label {
 }
 
 .involve-result {
+    min-width: 421px;
     background-color: #30b0c2;
-    border: 1px  #30b0c2;
     border-radius: 4px;
     margin-left: 408px;
     margin-right: 408px;

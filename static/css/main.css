@@ -363,7 +363,6 @@ input[type="submit"]:focus{
 ================================================== */
 
 html, body {
-    height: 2000px;
     background: rgba(246, 246, 246, 1);
 }
 
@@ -501,7 +500,7 @@ h4,
 h5,
 h6{
 	margin:0 0 20px 0;
-	color: #000000;
+	color: #7b7b7b;
 	font-weight:300;
 	font-family: 'Titillium Web', sans-serif;
 	line-height:1.5em;
@@ -732,4 +731,13 @@ a.cs-result-toggle.accordion-toggle {
 	background: #E5E5E5;
   	padding: 16px 20px;
 	border: none;
+}
+
+.cs_toggle_icon {
+    transform: rotate(0);
+    transition: 225ms ease-out;
+}
+
+.cs_toggle_icon.is-open {
+    transform: rotate(180deg);
 }
