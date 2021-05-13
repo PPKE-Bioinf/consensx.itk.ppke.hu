@@ -41,13 +41,13 @@ def values_graph(my_path, calced, my_experimental, graph_name):
     # experimental values with 'None' values masked
     plt.plot(
         xs[exp_mask], exp_line[exp_mask],
-        linewidth=2.0, color='red', marker='o', label='exp', alpha=.7
+        linewidth=2.0, color='#FD6C6C', marker='o', label='exp', alpha=.7
     )
 
     # calculated values with 'None' values masked
     plt.plot(
         xs[calc_mask], calc_line[calc_mask],
-        linewidth=2.0, color='blue', marker='o', label='calc', alpha=.7
+        linewidth=2.0, color='#027A8B', marker='o', label='calc', alpha=.7
     )
 
     plt.legend(loc='lower left')

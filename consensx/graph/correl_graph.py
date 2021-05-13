@@ -47,8 +47,8 @@ def correl_graph(my_path, calced, experimental, graph_name):
         diag.append(i)
 
     plt.figure(figsize=(6, 5), dpi=80)
-    plt.plot(diag, diag, linewidth=2.0, color='red', alpha=.7)
-    plt.plot(exp_line, calc_line, 'bo')
+    plt.plot(diag, diag, linewidth=2.0, color='#FD6C6C', alpha=.7)
+    plt.plot(exp_line, calc_line, color='#027A8B', marker='o', linestyle='')
     plt.axis([miny, maxy, miny, maxy])
     plt.xlabel('experimental')
     plt.ylabel('calculated')

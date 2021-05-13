@@ -16,7 +16,7 @@ def mod_correl_graph(my_path, correl, avg_corr, model_corrs, corr_graph_name):
         list(range(0, len(model_corrs))),
         [correl] * len(model_corrs),
         linewidth=2.0,
-        color="green",
+        color="#5dcc2a",
         label="Ensemble corr. ({:.4f})".format(correl),
         alpha=0.7,
     )
@@ -25,7 +25,7 @@ def mod_correl_graph(my_path, correl, avg_corr, model_corrs, corr_graph_name):
         list(range(0, len(model_corrs))),
         [avg_corr] * len(model_corrs),
         linewidth=2.0,
-        color="red",
+        color="#FD6C6C",
         label="Avg. corr. per model ({:.4f})".format(avg_corr),
         alpha=0.7,
     )
@@ -34,7 +34,7 @@ def mod_correl_graph(my_path, correl, avg_corr, model_corrs, corr_graph_name):
         list(range(0, len(model_corrs))),
         sorted(model_corrs),
         linewidth=2.0,
-        color="blue",
+        color="#027A8B",
         label="Corr. per model",
         alpha=0.7,
     )
