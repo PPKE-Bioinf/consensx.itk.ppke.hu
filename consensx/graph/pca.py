@@ -17,10 +17,10 @@ def create_pca_comparison(my_path, original, in_selection):
 
     sel_ensemble1.iterpose()
 
-    color_list = ["blue" for _ in range(len(sel_ensemble1))]
+    color_list = ["#FD6C6C" for _ in range(len(sel_ensemble1))]
 
     for i in [int(x)-1 for x in in_selection]:
-        color_list[i] = "red"
+        color_list[i] = "#027A8B"
 
     pca = prody.PCA("PCA1")
     pca.buildCovariance(sel_ensemble1)
@@ -36,8 +36,8 @@ def create_pca_comparison(my_path, original, in_selection):
         fig_hash = "".join(random.choice(chars) for _ in range(6))
         fig_name = "pca_mode_" + str(i+1) + str(i+2) + "_" + fig_hash + ".svg"
         pca_image_names.append(fig_name)
-        red_patch = mpatches.Patch(color='red', label="Selection")
-        blue_patch = mpatches.Patch(color='blue', label="Original")
+        red_patch = mpatches.Patch(color='#027A8B', label="Selection")
+        blue_patch = mpatches.Patch(color='#FD6C6C', label="Original")
         plt.legend(handles=[blue_patch, red_patch])
         plt.tight_layout(pad=1.08)
         plt.savefig(my_path + "/" + fig_name, format="svg")
