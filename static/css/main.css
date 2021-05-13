@@ -248,7 +248,7 @@ box-shadow: 0px 10px 10px 3px rgba(0,0,0,0.3);
 
 .files_table td {
   padding: 5px;
-  border: 1px solid black;
+  border: 1px solid #979797;
   width: 280px;
   background-color: #FAFAFA;
 }
@@ -363,8 +363,8 @@ input[type="submit"]:focus{
 ================================================== */
 
 html, body {
-	height: 2000px%;
-  background: rgba(246, 246, 246, 1);
+    height: 2000px;
+    background: rgba(246, 246, 246, 1);
 }
 
 html, hmtl a{
@@ -631,9 +631,9 @@ h3.spec {
 }
 
 .cs-result-heading .cs-result-toggle {
-	background: #FD6C6C;
-	color: #FFFFFF;
-    max-width: 171px;
+	background: #EEE;
+	color: #575757;
+    max-width: 200px;
 }
 
 a.cs-result-toggle.accordion-toggle {
@@ -652,8 +652,8 @@ a.cs-result-toggle.accordion-toggle {
 
 .cs-result-heading:hover .cs-result-toggle,
 .cs-result-heading:hover .cs-result-toggle.inactive {
-	background: #FD6C6C;
-	color: #FFFFFF;
+	background: #EEE;
+	color: #575757;
 }
 
 .accordion-heading .accordion-toggle.active {
@@ -662,12 +662,13 @@ a.cs-result-toggle.accordion-toggle {
 }
 
 .cs-result-heading .cs-result-toggle.active {
-	background: #FD6C6C;
-	color:#FFFFFF;
+	background: #EEE;
+	color:#575757;
 }
 
 .accordion-inner-chemshift {
-    background: #f3ebeb;
+    background: #EEE;
+    border-bottom: 1px solid #FD6C6C;
 }
 
 .accordion-inner-chemshift table {

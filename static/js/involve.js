@@ -301,4 +301,17 @@ $(document).ready(function() {
         return false;
 
     });
+
+    $('.cs-result-toggle').click(function() {
+        console.log("cs-result-toggle CLICKED");
+        $(this).closest('.cs-result-heading').find('.cs_toggle_icon').animate({  transform: 90 }, {
+            step: function(now,fx) {
+                $(this).css({
+                    '-webkit-transform':'rotate('+now+'deg)',
+                    '-moz-transform':'rotate('+now+'deg)',
+                    'transform':'rotate('+now+'deg)'
+                });
+            }
+        });
+    });
 });
