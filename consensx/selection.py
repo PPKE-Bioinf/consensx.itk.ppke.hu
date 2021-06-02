@@ -248,6 +248,8 @@ class Selection:
                     my_type = "0_HA_C"
                 elif my_type == "0HAN":
                     my_type = "0_HA_N"
+                elif my_type == "1HC":
+                    my_type = "1_H_C"
 
                 my_weight = float(value)
                 self.user_sel.append(["RDC", my_list, my_type, my_weight])
