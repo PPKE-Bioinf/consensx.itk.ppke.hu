@@ -71,9 +71,10 @@ class StarNMR:
 
         tag_list = ["Seq_ID_1", "Atom_ID_1", "Seq_ID_2", "Atom_ID_2", "Val"]
         rdc_lists = []
-        rdc_records = []
 
         for rdc_loop in self.parsed.get_loops_by_category("RDC"):
+            rdc_records = []
+
             for row_data in rdc_loop.get_tag(tag_list):
                 # ['95', 'H', '95', 'N', '-0.823']
                 rdc_records.append(RdcRecord(*row_data))
