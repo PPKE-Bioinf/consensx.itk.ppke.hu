@@ -233,7 +233,7 @@ textarea:focus, input:focus, input:active {
 .result_table {
   margin-right: auto;
   margin-left : auto;
-  margin-bottom: 20px;
+  margin-top: 20px;
 }
 
 .files_table {
@@ -630,6 +630,16 @@ h3.spec {
 	transition: all 0.1s linear 0s;
 }
 
+.cs-result-heading .cs-result-toggle {
+	background: #FD6C6C;
+	color: #FFFFFF;
+    max-width: 171px;
+}
+
+a.cs-result-toggle.accordion-toggle {
+    padding: 5px 15px 5px 15px;
+}
+
 .accordion-toggle {
   	cursor: pointer;
 }
@@ -640,9 +650,28 @@ h3.spec {
 	color:#FFFFFF;
 }
 
+.cs-result-heading:hover .cs-result-toggle,
+.cs-result-heading:hover .cs-result-toggle.inactive {
+	background: #FD6C6C;
+	color: #FFFFFF;
+}
+
 .accordion-heading .accordion-toggle.active {
 	background: #30b0c2;
 	color:#FFFFFF;
+}
+
+.cs-result-heading .cs-result-toggle.active {
+	background: #FD6C6C;
+	color:#FFFFFF;
+}
+
+.accordion-inner-chemshift {
+    background: #f3ebeb;
+}
+
+.accordion-inner-chemshift table {
+    margin-top: 0px;
 }
 
 .accordion-heading .accordion-toggle.inactive {

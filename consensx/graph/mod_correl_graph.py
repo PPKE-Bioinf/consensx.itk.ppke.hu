@@ -45,5 +45,5 @@ def mod_correl_graph(my_path, correl, avg_corr, model_corrs, corr_graph_name):
     plt.ylabel("correlation")
     plt.grid(axis="y")
     plt.tight_layout(pad=1.08)
-    plt.savefig(my_path + "/" + corr_graph_name, format="svg")
+    plt.savefig(my_path + "/" + corr_graph_name, format="svg", transparent=True)
     plt.close()

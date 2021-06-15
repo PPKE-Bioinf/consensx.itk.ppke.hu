@@ -86,7 +86,9 @@ $(document).ready(function() {
             my_range = $( this ).attr('id').split('_');
             my_type  = my_range[0];
 
-            if (my_type == "Jcoup") {
+            console.log(my_id, my_range, my_type)
+
+            if (my_type == "JCoup") {
                 $( this ).val("10");
                 $('output[for="' + my_id + '"]').prop('value', "10");
             }
@@ -100,7 +102,7 @@ $(document).ready(function() {
             my_range = $( this ).attr('id').split('_');
             my_type  = my_range[0];
 
-            if (my_type == "CS") {
+            if (my_type == "CS" && my_range[my_range.length -1] == "secondary") {
                 $( this ).val("10");
                 $('output[for="' + my_id + '"]').prop('value', "10");
             }
@@ -130,6 +132,44 @@ $(document).ready(function() {
                     }
                 })
             }
+        }
+
+        range = $(this).attr('id').split('_');
+        sel_type = range[0];
+        sel_num = range[1];
+        sel_val = $(this).val();
+        secondary_set = false;
+
+        if (sel_type == "CS" && range[range.length - 1] == "secondary"){
+            $(".inputrange").each(function() {
+                my_id = $( this ).attr('id');
+                my_range = $(this).attr('id').split('_');
+                my_sel_type = range[0];
+                my_sel_num = range[1];
+                my_sel_val = $(this).val();
+                my_secondary_set = false;
+
+                if (my_sel_type == "CS" && my_range[my_range.length - 1] != "secondary"){
+                    $( this ).val(0);
+                    $('output[for="' + my_id + '"]').prop('value', 0);
+                }
+            })
+        }
+
+        if (sel_type == "CS" && range[range.length - 1] != "secondary"){
+            $(".inputrange").each(function() {
+                my_id = $( this ).attr('id');
+                my_range = $(this).attr('id').split('_');
+                my_sel_type = range[0];
+                my_sel_num = range[1];
+                my_sel_val = $(this).val();
+                my_secondary_set = false;
+
+                if (my_sel_type == "CS" && my_range[my_range.length - 1] == "secondary"){
+                    $( this ).val(0);
+                    $('output[for="' + my_id + '"]').prop('value', 0);
+                }
+            })
         }
     });
 

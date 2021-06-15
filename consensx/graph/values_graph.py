@@ -55,5 +55,5 @@ def values_graph(my_path, calced, my_experimental, graph_name):
     plt.ylabel('value')
     plt.grid(axis="y")
     plt.tight_layout(pad=1.08)
-    plt.savefig(my_path + "/" + graph_name, format="svg")
+    plt.savefig(my_path + "/" + graph_name, format="svg", transparent=True)
     plt.close()

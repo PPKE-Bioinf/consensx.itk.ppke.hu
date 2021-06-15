@@ -266,7 +266,7 @@ class Selection:
 
             # read chemical shifts selections
             elif key.split('_')[0] == "CS":
-                my_type = key.split('_')[1]
+                my_type = '_'.join(key.split('_')[1:])
                 my_weight = float(value)
                 self.user_sel.append(["ChemShift", my_type, my_weight])
 
