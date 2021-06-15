@@ -261,17 +261,18 @@ chemshift_corrections = {
 
 
 def chemshifts(
-    csv_buffer,
-    calced_data_storage,
-    chem_shift_lists,
-    pdb_models,
-    my_path,
-    bme_weights,
+        csv_buffer,
+        calced_data_storage,
+        chem_shift_lists,
+        pdb_models,
+        my_path,
+        bme_weights,
+        model_data,
 ):
     """Back calculate chemical shifts from given chemical shift list and PDB
        models"""
     cs_data = []
-    cs_calced, model_data = call_shiftx_on(my_path, pdb_models, bme_weights)
+    cs_calced, cs_model_data = call_shiftx_on(my_path, pdb_models, bme_weights)
 
     for n, cs_list in enumerate(chem_shift_lists):
         bme_exp_filename = "chemshift_" + str(n) + "_exp.dat"
@@ -295,7 +296,7 @@ def chemshifts(
                     continue
 
         with open(my_path + bme_calc_filename, "w") as calc_dat_file:
-            for index, model in enumerate(model_data):
+            for index, model in enumerate(cs_model_data):
                 calc_dat_file.write(str(index) + " ")
 
                 for atom_type in chemshift_types:
@@ -318,18 +319,17 @@ def chemshifts(
 
                 for i, record in enumerate(cs_list[CS_type]):
                     if corrected:
-                        prev_record = None
-                        if i != 0:
-                            prev_record = cs_list[CS_type][i - 1]
+                        prev_record_res = model_data.get_resname_from_index(
+                            record.resnum - 1
+                        )
 
-                        try:
-                            next_record = cs_list[CS_type][i + 1]
-                        except IndexError:
-                            next_record = None
+                        next_record_res = model_data.get_resname_from_index(
+                            record.resnum + 1
+                        )
 
                         calc_dict[record.resnum] = (
                             cs_calced[CS_type][record.resnum] -
-                            chemshift_corrections[record.res_name][record.atom_name]
+                            chemshift_corrections[record.res_name][CS_type]
                         )
 
                         corrected_record = ChemShiftRecord(
@@ -338,16 +338,16 @@ def chemshifts(
 
                         corrected_record.value = (
                                 record.value -
-                                chemshift_corrections[record.res_name][record.atom_name]
+                                chemshift_corrections[record.res_name][CS_type]
                         )
 
-                        if prev_record:
-                            calc_dict[record.resnum] -= chemshift_corrections_prev[prev_record.res_name][prev_record.atom_name]
-                            corrected_record.value -= chemshift_corrections_prev[prev_record.res_name][prev_record.atom_name]
+                        if prev_record_res:
+                            calc_dict[record.resnum] -= chemshift_corrections_prev[prev_record_res][CS_type]
+                            corrected_record.value -= chemshift_corrections_prev[prev_record_res][CS_type]
 
-                        if next_record:
-                            calc_dict[record.resnum] -= chemshift_corrections_next[next_record.res_name][next_record.atom_name]
-                            corrected_record.value -= chemshift_corrections_next[next_record.res_name][next_record.atom_name]
+                        if next_record_res:
+                            calc_dict[record.resnum] -= chemshift_corrections_next[next_record_res][CS_type]
+                            corrected_record.value -= chemshift_corrections_next[next_record_res][CS_type]
 
                         cs_list[CS_type + "_secondary"].append(corrected_record)
                     else:
@@ -355,30 +355,29 @@ def chemshifts(
 
                 model_corrs = []
 
-                for model_num, model in enumerate(model_data):
+                for model_num, model in enumerate(cs_model_data):
                     inner_exp = {}
 
                     for i, record in enumerate(cs_list[CS_type]):
                         if corrected:
-                            prev_record = None
-                            if i != 0:
-                                prev_record = cs_list[CS_type][i - 1]
+                            prev_record_res = model_data.get_resname_from_index(
+                                record.resnum - 1
+                            )
 
-                            try:
-                                next_record = cs_list[CS_type][i + 1]
-                            except IndexError:
-                                next_record = None
+                            next_record_res = model_data.get_resname_from_index(
+                                record.resnum + 1
+                            )
 
-                            inner_exp[record.resnum] = model[CS_type][record.resnum] - chemshift_corrections[record.res_name][record.atom_name]
+                            inner_exp[record.resnum] = model[CS_type][record.resnum] - chemshift_corrections[record.res_name][CS_type]
 
-                            if prev_record:
-                                inner_exp[record.resnum] -= chemshift_corrections_prev[prev_record.res_name][prev_record.atom_name]
+                            if prev_record_res:
+                                inner_exp[record.resnum] -= chemshift_corrections_prev[prev_record_res][CS_type]
 
-                            if next_record:
-                                inner_exp[record.resnum] -= chemshift_corrections_next[next_record.res_name][next_record.atom_name]
+                            if next_record_res:
+                                inner_exp[record.resnum] -= chemshift_corrections_next[next_record_res][CS_type]
 
                             # TODO _secondary types have less values as normal types
-                            model_data[model_num][CS_type + "_secondary"] = inner_exp
+                            cs_model_data[model_num][CS_type + "_secondary"] = inner_exp
                         else:
                             inner_exp[record.resnum] = model[CS_type][record.resnum]
 
@@ -463,7 +462,7 @@ def chemshifts(
 
         # TODO move this to a place where the corrected values exist
         cs_model_data_path = my_path + "/ChemShift_model_data.pickle"
-        pickle.dump(model_data, open(cs_model_data_path, "wb"))
+        pickle.dump(cs_model_data, open(cs_model_data_path, "wb"))
 
     chem_shift_lists_path = my_path + "/ChemShift_lists.pickle"
     pickle.dump(chem_shift_lists, open(chem_shift_lists_path, "wb"))
