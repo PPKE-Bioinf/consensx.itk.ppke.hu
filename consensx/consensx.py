@@ -265,6 +265,7 @@ def run_calculation(request, calc_id):
             pdb_models,
             my_path,
             bme_weights,
+            model_data,
         )
         data_found = True
 

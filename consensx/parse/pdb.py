@@ -32,3 +32,14 @@ class Pdb():
 
         PDB_model_path = my_path + "/PDB_model.pickle"
         pickle.dump(self, open(PDB_model_path, 'wb'))
+
+        self.resname_lookup = dict(
+            zip(self.atomgroup.getResnums(), self.atomgroup.getResnames())
+        )
+
+
+    def get_resname_from_index(self, index):
+        try:
+            return self.resname_lookup[index]
+        except KeyError:
+            return None
