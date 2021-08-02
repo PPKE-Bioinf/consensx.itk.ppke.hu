@@ -556,6 +556,9 @@ while(<>){
         # stereospecific labels will be adjusted at stage 2 anyway
         # and in this way we do not rely on a dictionary but handle everything (hopefully)
         # NOT YET COMPLETE
+	if ($resname =~/ALA/){
+	    $_=~s/ ([123])HB / HB$1 /;
+	}
 	if ($resname =~/ARG|ASP|ASN|CYS|GLU|GLN|HIS|LEU|LYS|MET|PHE|PRO|SER|TRP|TYR/){
 	    $_=~s/ [13]HB / HB3 /;
 	    $_=~s/ HB1 / HB3 /;
@@ -585,6 +588,7 @@ while(<>){
 	}
 	if ($resname =~/THR/){
 	    $_=~s/ ([123])HG2 / HG2$1 /;
+	    $_=~s/ 1HG / HG1 /;
 	}
 	if ($resname =~/VAL/){
 	    $_=~s/ ([123])HG1 / HG1$1 /;
@@ -603,6 +607,7 @@ while(<>){
 	    $_=~s/ ([123])HD1 / HD1$1 /;
 	    $_=~s/ HD1([123]) / HD1$1 /;
 	    $_=~s/  ([123])HD / HD1$1 /;
+	    $_=~s/ ([123])HD  / HD1$1 /;
 	    $_=~s/  HD([123]) / HD1$1 /;
 	}
 	if ($resname =~/GLY/){
@@ -617,6 +622,24 @@ while(<>){
 	    $_=~s/ 1HH2 / HH21 /;
 	    $_=~s/ 2HH2 / HH22 /;
 	}
+	if ($resname =~/MET/){
+	    $_=~s/ ([123])HE / HE$1 /;
+	}
+	
+        # Renaming aromatic ring protons here - note that
+        # this is is arbitrary in the input!
+        if ($resname =~/PHE|TYR/){
+	    $_=~s/ 2HD / HD2 /;
+	    $_=~s/ 1HD / HD1 /;
+	    $_=~s/ 2HE / HE2 /;
+	    $_=~s/ 1HE / HE1 /;
+        }
+        if ($resname =~/TRP/){
+	    $_=~s/ HD  / HD1 /;
+	    $_=~s/ HH  / HH2 /;
+	    $_=~s/ ([13])HE / HE$1 /;
+	    $_=~s/ ([23])HZ / HZ$1 /;
+        }
   
         # Amide HN to H - only for amino acids!
 	$_=~s/ HN / H  / unless ($_=~/^HETATM/);
@@ -792,29 +815,3 @@ sub checkgeminal{
 
     return $test;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
