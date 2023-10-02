@@ -1,0 +1,1 @@
+docker run --name consensx-db -p 5432:5432 -e POSTGRES_USER=consensxuser -e POSTGRES_PASSWORD=password -e POSTGRES_DB=consensx -d postgres:16.0-alpine
