@@ -18,6 +18,9 @@ class CSX_upload(models.Model):
     bme_weights_file = models.CharField(
         max_length=40, default=None, blank=True, null=True
     )
+    saxs_data_file = models.CharField(
+        max_length=40, default=None, blank=True, null=True
+    )
     karplus = models.IntegerField(default=1)
     superimpose = models.BooleanField(default=False)
     timestamp = models.DateTimeField(auto_now_add=True)

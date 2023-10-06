@@ -69,6 +69,13 @@ def home(request):
         except KeyError:
             bme_weights_name = None
 
+        try:                                    # get BME weights if any
+            saxs_data_file = request.FILES['bme_weights_upload']
+            saxs_data_name = saxs_data_file.name
+            handle_uploaded_file(saxs_data_file, my_path, saxs_data_name)
+        except KeyError:
+            saxs_data_name = None
+
         try:                                    # check if fitting is enabled
             fit_enable = bool(request.POST['superimpose'])
         except KeyError:
@@ -95,6 +102,7 @@ def home(request):
             NOE_file=noe_file_name,
             STR_file=restraint_file_name,
             bme_weights_file=bme_weights_name,
+            saxs_data_file=saxs_data_name,
             karplus=request.POST['KARPLUS'],
             superimpose=fit_enable,
             fit_range=fit_range,
