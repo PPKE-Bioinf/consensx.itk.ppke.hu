@@ -200,6 +200,28 @@
 
     </div>
 
+    {% if SAXS_DATA %}
+    <div class="results">
+      <h4 class="table-source">SAXS results</h4>
+      <table class="result_table">
+
+          <td><table class="SAXS_table">
+          <tr><td><strong>SAXS</strong></td></tr>
+          <tr><td>Chi2:</td><td>{{ SAXS_DATA.SAXS_chi2 }}</td></tr>
+          </table></td>
+          <td width="10"></td>
+          <td>
+            <a class="fancybox" title="SAXS" href="{{ MEDIA_URL }}{{ SAXS_DATA.SAXS_graph }}">
+              <img width="750" src="{{ MEDIA_URL }}{{ SAXS_DATA.SAXS_graph }}">
+            </a>
+          </td>
+
+          <td width="30"></td>
+
+      </table>
+    </div>
+    {% endif %}
+
     {% if NOE_PRIDE_data %}
     <div class="results">
       <h4 class="table-source">NOE violations and PRIDE-NMR</h4>

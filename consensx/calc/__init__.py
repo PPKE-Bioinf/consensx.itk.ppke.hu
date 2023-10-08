@@ -5,6 +5,7 @@ from .jcoupling import jcoupling
 from .chemshifts import chemshifts
 from .noe_violations import noe_violations
 from .nmr_pride import nmr_pride
+from .saxs import saxs
 from .vec_3d import Vec3D
 from .nh_angles import nh_angles
 from .peptide_bonds import peptide_bonds
@@ -20,6 +21,7 @@ __all__ = [
     "chemshifts",
     "noe_violations",
     "nmr_pride",
+    "saxs",
     "Vec3D",
     "nh_angles",
     "peptide_bonds",

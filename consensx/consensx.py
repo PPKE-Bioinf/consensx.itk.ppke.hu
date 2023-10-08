@@ -91,6 +91,7 @@ def run_calculation(request, calc_id):
     noe_name = "[NOT PRESENT]"
     noe_n = ""
     noe_pride_data = None
+    bme_zf_download = False
     saxs_data = None
 
     str_name = "[NOT PRESENT]"
@@ -108,6 +109,17 @@ def run_calculation(request, calc_id):
         f = open(my_path + db_entry.bme_weights_file).read().split()
         f = [float(i) for i in f]
         bme_weights = f
+
+        bme_zf = zipfile.ZipFile(my_path + "bme_inputs.zip", mode="w")
+
+        for file in os.listdir(my_path):
+            if file.endswith("_exp.dat") or file.endswith("_calc.dat"):
+                bme_zf.write(my_path + file, file)
+
+        if bme_zf:
+            bme_zf.close()
+
+        bme_zf_download = True
 
     # ---------------------  Read  and parse NOE file   --------------------- #
     if db_entry.NOE_file:
@@ -136,25 +148,20 @@ def run_calculation(request, calc_id):
 
     # --------------------  Read  and parse SAXS file   --------------------- #
     if db_entry.saxs_data_file:
-        
+        my_saxs_dat = my_path + db_entry.saxs_data_file
+        saxs_chi2 = calc.saxs(my_path, my_pdb, my_saxs_dat)
+
+        print(f"CHI2 = {saxs_chi2}")
         
         saxs_data = {
-
+            "SAXS_chi2": saxs_chi2,
+            "SAXS_graph": my_id + "/fit_graph.svg",
         }
 
         data_found = True
 
     # ---------------------  Read  and parse STR file   --------------------- #
     if not db_entry.STR_file:
-        bme_zf = zipfile.ZipFile(my_path + "bme_inputs.zip", mode="w")
-
-        for file in os.listdir(my_path):
-            if file.endswith("_exp.dat") or file.endswith("_calc.dat"):
-                bme_zf.write(my_path + file, file)
-
-        if bme_zf:
-            bme_zf.close()
-
         rendered_page = render(
             request,
             "consensx/calculation.html",
@@ -165,6 +172,7 @@ def run_calculation(request, calc_id):
                 "my_NOE": noe_name,
                 "n_NOE": noe_n,
                 "my_STR": str_name,
+                "SAXS_DATA": saxs_data,
                 "NOE_PRIDE_data": noe_pride_data,
                 "RDC_data": rdc_calced_data,
                 "S2_data": s2_data,
@@ -172,7 +180,7 @@ def run_calculation(request, calc_id):
                 "Jcoup_data": jcoup_data,
                 "chemshift_data": chemshift_data,
                 "SVD_calc": db_entry.svd_enable,
-                "bme_zf": True,
+                "bme_zf_download": bme_zf_download,
             },
         )
 
@@ -311,6 +319,7 @@ def run_calculation(request, calc_id):
                 "my_NOE": noe_name,
                 "n_NOE": noe_n,
                 "my_STR": str_name,
+                "SAXS_DATA": saxs_data,
                 "NOE_PRIDE_data": noe_pride_data,
                 "RDC_data": rdc_calced_data,
                 "S2_data": s2_data,
@@ -318,7 +327,7 @@ def run_calculation(request, calc_id):
                 "Jcoup_data": jcoup_data,
                 "chemshift_data": chemshift_data,
                 "SVD_calc": db_entry.svd_enable,
-                "bme_zf": bool(bme_zf),
+                "bme_zf_download": bme_zf_download,
             },
         )
 
