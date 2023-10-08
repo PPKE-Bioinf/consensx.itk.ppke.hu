@@ -2,7 +2,7 @@ version: '3'
 
 services:
   consensx-server:
-    image: ppkebioinf/consensx
+    image: ppkebioinf/consensx:new
     ports:
       - 8080:8000
     depends_on:

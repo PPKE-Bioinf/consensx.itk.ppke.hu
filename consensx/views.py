@@ -62,7 +62,7 @@ def home(request):
         except KeyError:
             noe_file_name = None
 
-        try:                                    # get BME weights if any
+        try:                                    # get SAXS data if any
             bme_weights_file = request.FILES['bme_weights_upload']
             bme_weights_name = bme_weights_file.name
             handle_uploaded_file(bme_weights_file, my_path, bme_weights_name)

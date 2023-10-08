@@ -91,6 +91,7 @@ def run_calculation(request, calc_id):
     noe_name = "[NOT PRESENT]"
     noe_n = ""
     noe_pride_data = None
+    saxs_data = None
 
     str_name = "[NOT PRESENT]"
     rdc_calced_data = None
@@ -129,6 +130,16 @@ def run_calculation(request, calc_id):
             "average_score": "{0:.3f}".format(pride_data[2]),
             "deviation": "{0:.3f}".format(pride_data[3]),
             "PRIDE_hist": my_id + "/PRIDE-NMR_score.svg",
+        }
+
+        data_found = True
+
+    # --------------------  Read  and parse SAXS file   --------------------- #
+    if db_entry.saxs_data_file:
+        
+        
+        saxs_data = {
+
         }
 
         data_found = True
