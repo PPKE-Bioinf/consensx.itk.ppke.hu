@@ -7,22 +7,25 @@ class CSX_upload(models.Model):
         max_length=6, default=None, blank=True, null=True
     )
     PDB_file = models.CharField(
-        max_length=40, default=None, blank=True, null=True
+        max_length=100, default=None, blank=True, null=True
     )
     NOE_file = models.CharField(
-        max_length=40, default=None, blank=True, null=True
+        max_length=100, default=None, blank=True, null=True
     )
     STR_file = models.CharField(
-        max_length=40, default=None, blank=True, null=True
+        max_length=100, default=None, blank=True, null=True
     )
     bme_weights_file = models.CharField(
-        max_length=40, default=None, blank=True, null=True
+        max_length=100, default=None, blank=True, null=True
+    )
+    saxs_data_file = models.CharField(
+        max_length=100, default=None, blank=True, null=True
     )
     karplus = models.IntegerField(default=1)
     superimpose = models.BooleanField(default=False)
     timestamp = models.DateTimeField(auto_now_add=True)
     fit_range = models.CharField(
-        max_length=10, default=None, blank=True, null=True
+        max_length=100, default=None, blank=True, null=True
     )
     r3average = models.BooleanField(default=False)
     svd_enable = models.BooleanField(default=False)

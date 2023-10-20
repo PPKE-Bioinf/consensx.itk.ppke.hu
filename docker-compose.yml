@@ -2,7 +2,7 @@ version: '3'
 
 services:
   consensx-server:
-    image: ppkebioinf/consensx
+    image: ppkebioinf/consensx:new
     ports:
       - 8080:8000
     depends_on:
@@ -13,7 +13,7 @@ services:
       - media:/usr/src/app/consensx.itk.ppke.hu/media
 
   consensx-db:
-    image: postgres:11.1
+    image: postgres:16.0-alpine
     environment:
     - POSTGRES_PASSWORD=password
     - POSTGRES_USER=consensxuser
