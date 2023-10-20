@@ -85,6 +85,11 @@
         <td><i>{{ my_STR }}</i></td>
         <td></td>
       </tr>
+      <tr>
+        <td class="head-td">SAX dat file:</td>
+        <td><i>{{ saxs_filename }}</i></td>
+        <td></td>
+      </tr>
     </table>
 
     <div class="container">
@@ -219,6 +224,19 @@
           <td width="30"></td>
 
       </table>
+
+      <div class="involve involve-result">
+        <form oninput="x.value=parseInt(saxs.value)">
+          <table class="selection-table">
+            <tr>
+              <td class="involve-table"><label>Include with weight:</label></td>
+              <td class="involve-table" style="width: 48px;"><output name="x" for="saxs">0</output></td>
+              <td class="involve-table"><input type="range" class="inputrange" id="saxs" value="0" min="0" max="10"></td>
+            </tr>
+          </table>
+          <!-- <p class="QVALnote hidden"><strong>Q-value as comp. measure:</strong> only RDCs are enabled!</p> -->
+        </form>
+      </div>
     </div>
     {% endif %}
 

@@ -93,6 +93,7 @@ def run_calculation(request, calc_id):
     noe_pride_data = None
     bme_zf_download = False
     saxs_data = None
+    saxs_filename = "[NOT PRESENT]"
 
     str_name = "[NOT PRESENT]"
     rdc_calced_data = None
@@ -148,8 +149,9 @@ def run_calculation(request, calc_id):
 
     # --------------------  Read  and parse SAXS file   --------------------- #
     if db_entry.saxs_data_file:
+        saxs_filename = db_entry.saxs_data_file
         my_saxs_dat = my_path + db_entry.saxs_data_file
-        saxs_chi2 = calc.saxs(my_path, my_pdb, my_saxs_dat)
+        saxs_chi2 = calc.saxs(calced_data_storage, my_path, my_pdb, my_saxs_dat)
 
         print(f"CHI2 = {saxs_chi2}")
         
@@ -162,6 +164,11 @@ def run_calculation(request, calc_id):
 
     # ---------------------  Read  and parse STR file   --------------------- #
     if not db_entry.STR_file:
+        if data_found:
+            print(calced_data_storage)
+            calced_values = my_path + "/calced_values.p"
+            pickle.dump(calced_data_storage, open(calced_values, "wb"))
+
         rendered_page = render(
             request,
             "consensx/calculation.html",
@@ -173,6 +180,7 @@ def run_calculation(request, calc_id):
                 "n_NOE": noe_n,
                 "my_STR": str_name,
                 "SAXS_DATA": saxs_data,
+                "saxs_filename": saxs_filename,
                 "NOE_PRIDE_data": noe_pride_data,
                 "RDC_data": rdc_calced_data,
                 "S2_data": s2_data,
@@ -232,7 +240,7 @@ def run_calculation(request, calc_id):
     for s2_dict in s2_lists:
         if s2_dict and any(elem in sidechain_atoms for elem in s2_dict):
 
-            s2_sc_data = calc.s2_sidechain(
+            s2_sc_datsaxs_filenamea = calc.s2_sidechain(
                 csv_buffer, s2_dict, my_path, model_data,
                 fit=db_entry.superimpose
             )
@@ -320,6 +328,7 @@ def run_calculation(request, calc_id):
                 "n_NOE": noe_n,
                 "my_STR": str_name,
                 "SAXS_DATA": saxs_data,
+                "saxs_filename": saxs_filename,
                 "NOE_PRIDE_data": noe_pride_data,
                 "RDC_data": rdc_calced_data,
                 "S2_data": s2_data,

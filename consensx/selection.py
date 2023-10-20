@@ -272,6 +272,13 @@ class Selection:
                 my_weight = float(value)
                 self.user_sel.append(["ChemShift", my_type, my_weight])
 
+            # read chemical shifts selections
+            elif key == "saxs":
+                # my_type = '_'.join(key.split('_')[1:])
+                my_weight = float(value)
+                # self.user_sel.append(["ChemShift", my_type, my_weight])
+                self.user_sel.append(["saxs_chi2", my_weight])
+
     def run_selection(self):
         pdb_output_name = self.my_path + "/raw.pdb"
 
