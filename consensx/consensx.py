@@ -240,7 +240,7 @@ def run_calculation(request, calc_id):
     for s2_dict in s2_lists:
         if s2_dict and any(elem in sidechain_atoms for elem in s2_dict):
 
-            s2_sc_datsaxs_filenamea = calc.s2_sidechain(
+            s2_sc_data = calc.s2_sidechain(
                 csv_buffer, s2_dict, my_path, model_data,
                 fit=db_entry.superimpose
             )

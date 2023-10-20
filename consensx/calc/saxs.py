@@ -1,5 +1,3 @@
-import os
-import sys
 import subprocess
 
 from consensx import thirdparty
