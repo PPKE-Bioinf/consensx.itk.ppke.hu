@@ -145,8 +145,13 @@ def selection(request, my_id):
     values_dict = {}
 
     for key, value in sel_values.items():
+        if key == "saxs_chi2":
+            original_value = original_values[key]
+        else:
+            original_value = original_values[key + "_" + measure]
+
         values_dict[key] = {
-            "original": original_values[key + "_" + measure],
+            "original": original_value,
             "selection": "{0:.3g}".format(value)
         }
 

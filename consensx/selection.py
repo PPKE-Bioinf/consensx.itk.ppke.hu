@@ -95,53 +95,66 @@ class DumpedData:
         self.ChemShift_model_data = ChemshiftModelData(model_data)
         self.ChemShift_is_loaded = True
 
-
-def averageChi2_on(self, models, my_data):
+# TODO my_data not needed?
+def averageChi2_on(self, models):
     """Returns a dictonary with the average SAXS Chi2 value:
        averageRDC[residue] = value"""
 
     fitfiles = []
 
-    for model_num, model in enumerate(my_data):
-        if model_num in models:
-            fitfiles.append(f"{self.my_path}/model_{model_num + 1}.fit")
+    for model in models:
+        fitfiles.append(f"{self.my_path}/model_{model + 1}.fit")
 
     Chi2 = 0
-    filenum = 0
+    file_num = 0
 
-    Q = []
-    I = []
-    D = []
-    F = []
+    Q = {}
+    I = {}
+    D = {}
+    F = {}
 
-    for ff in fitfiles:
+    for ff_path in fitfiles:
         Chi2_i = 0
-        ff = ff.rstrip('\n')
-        with open(ff, "r") as FF:
-            line = 0
-            for row in FF:
-                row = row.strip()
-                if not row.startswith('#'):
-                    q, Iexp, dIexp, Ifit = map(float, row.split())
-                    if filenum == 0:
-                        Q.append(q)
-                        I.append(Iexp)
-                        D.append(dIexp)
-                    F.append([Ifit] * filenum)
-                    Chi2_i += ((Iexp - Ifit) ** 2) / (dIexp ** 2)
-                    line += 1
-            maxline = line
-        Chi2_i *= (1 / maxline)
-        print(f"FILE {ff} Chi2 {Chi2_i}")
-        filenum += 1
+        with open(ff_path, "r") as fitfile:
+            line_num = 0
 
-    for l in range(maxline):
-        f_avg = sum([F[l][fn] for fn in range(filenum)]) / filenum
-        print(f"{Q[l]:12.10f}      {I[l]:12.10f}      {D[l]:12.10f}     {f_avg:12.10f}")
-        Chi2 += (I[l] - f_avg) ** 2 / (D[l] ** 2)
+            for row in fitfile:
+                if row.startswith('#'):
+                    continue
 
-    # Checked with the fit output and this matches better than using maxline-1
-    Chi2 *= (1 / maxline)
+                q, Iexp, dIexp, Ifit = map(float, row.split())
+
+                if file_num == 0:
+                    Q[line_num] = q
+                    I[line_num] = Iexp
+                    D[line_num] = dIexp
+
+                try:
+                    F[line_num][file_num] = Ifit
+                except KeyError:
+                    F[line_num] = {file_num: Ifit}
+
+                Chi2_i += ((Iexp - Ifit) ** 2) / (dIexp ** 2)
+                line_num += 1
+
+            maxline_num = line_num
+
+        Chi2_i *= (1 / maxline_num)
+        # print(f"FILE {ff_path} Chi2 {Chi2_i}")
+        file_num += 1
+
+
+    for line_num in range(maxline_num):
+        f_avg = 0
+
+        for fn in range(file_num):
+            f_avg += F[line_num][fn]
+
+        f_avg /= file_num
+
+        Chi2 += ((I[line_num] - f_avg) ** 2) / (D[line_num] ** 2)
+
+    Chi2 *= 1 / maxline_num
     print(f"Chi2: {Chi2}")
 
     return Chi2
@@ -482,9 +495,19 @@ class Selection:
 
                 for sel_data in self.user_sel:
                     if sel_data[0] == "saxs_chi2":
-                        iter_scores[pdb_sel_key]["saxs_chi2"] = averageChi2_on(self, pdb_sel, my_data)
+                        calced = averageChi2_on(self, pdb_sel)
 
-                    if sel_data[0] == "RDC":
+                        iter_scores[pdb_sel_key]["saxs_chi2"] = calced
+
+                        saxs_weight = sel_data[1]
+                        divide_by += saxs_weight
+
+                        if num in model_scores.keys():
+                            model_scores[num] += calced * saxs_weight
+                        else:
+                            model_scores[num] = calced * saxs_weight
+
+                    elif sel_data[0] == "RDC":
                         RDC_num = sel_data[1]
                         RDC_type = sel_data[2]
                         RDC_weight = sel_data[3]
