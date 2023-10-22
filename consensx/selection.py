@@ -95,7 +95,7 @@ class DumpedData:
         self.ChemShift_model_data = ChemshiftModelData(model_data)
         self.ChemShift_is_loaded = True
 
-# TODO my_data not needed?
+
 def averageChi2_on(self, models):
     """Returns a dictonary with the average SAXS Chi2 value:
        averageRDC[residue] = value"""
@@ -140,7 +140,7 @@ def averageChi2_on(self, models):
             maxline_num = line_num
 
         Chi2_i *= (1 / maxline_num)
-        # print(f"FILE {ff_path} Chi2 {Chi2_i}")
+        print(f"FILE {ff_path} Chi2 {Chi2_i}")
         file_num += 1
 
 
@@ -155,7 +155,7 @@ def averageChi2_on(self, models):
         Chi2 += ((I[line_num] - f_avg) ** 2) / (D[line_num] ** 2)
 
     Chi2 *= 1 / maxline_num
-    print(f"Chi2: {Chi2}")
+    # print(f"Chi2: {Chi2}")
 
     return Chi2
 
