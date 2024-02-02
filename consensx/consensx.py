@@ -151,7 +151,7 @@ def run_calculation(request, calc_id):
     if db_entry.saxs_data_file:
         saxs_filename = db_entry.saxs_data_file
         my_saxs_dat = my_path + db_entry.saxs_data_file
-        saxs_chi2 = calc.saxs(calced_data_storage, my_path, my_pdb, my_saxs_dat)
+        saxs_chi2 = calc.saxs(calced_data_storage, my_path, my_saxs_dat)
 
         print(f"CHI2 = {saxs_chi2}")
         

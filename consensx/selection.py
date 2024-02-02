@@ -96,14 +96,14 @@ class DumpedData:
         self.ChemShift_is_loaded = True
 
 
-def averageChi2_on(self, models):
+def averageChi2_on(my_path, models, write_fit_file=False):
     """Returns a dictonary with the average SAXS Chi2 value:
        averageRDC[residue] = value"""
 
     fitfiles = []
 
     for model in models:
-        fitfiles.append(f"{self.my_path}/model_{model + 1}.fit")
+        fitfiles.append(f"{my_path}/model_{model + 1}.fit")
 
     Chi2 = 0
     file_num = 0
@@ -140,9 +140,11 @@ def averageChi2_on(self, models):
             maxline_num = line_num
 
         Chi2_i *= (1 / maxline_num)
-        print(f"FILE {ff_path} Chi2 {Chi2_i}")
+        # print(f"FILE {ff_path} Chi2 {Chi2_i}")
         file_num += 1
 
+    if write_fit_file:
+        my_fit_file = open(my_path + "my_fit.fit", 'w')
 
     for line_num in range(maxline_num):
         f_avg = 0
@@ -152,7 +154,12 @@ def averageChi2_on(self, models):
 
         f_avg /= file_num
 
+        if write_fit_file:
+            my_fit_file.write(f"{Q[line_num]:12.10f}      {I[line_num]:12.10f}      {D[line_num]:12.10f}     {f_avg:12.10f}\n")
         Chi2 += ((I[line_num] - f_avg) ** 2) / (D[line_num] ** 2)
+
+    if write_fit_file:
+        my_fit_file.close()
 
     Chi2 *= 1 / maxline_num
     # print(f"Chi2: {Chi2}")
@@ -439,28 +446,6 @@ class Selection:
                 self.ChemShifts = self.dumped_data.ChemShift_lists
                 self.ChemShift_model_data = self.dumped_data.ChemShift_model_data
 
-            if "saxs_chi2" in sel:
-                saxs_data_file_path = f"{self.my_path}/{self.saxs_data_file}"
-
-                for model_num, _ in enumerate(pdb_models):
-                    fit_file_path = f"{self.my_path}/model_{model_num + 1}.fit"
-                    pdb_file_path = f"{self.my_path}/model_{model_num + 1}.pdb"
-
-                    try:
-                        subprocess.call(
-                            [
-                                thirdparty.ThirdParty.pepsiSAXS,
-                                pdb_file_path,
-                                saxs_data_file_path,
-                                "-o",
-                                fit_file_path
-                            ],
-                            stdout=subprocess.DEVNULL,
-                            stderr=subprocess.STDOUT
-                        )
-                    except PermissionError:
-                        pass
-
         in_selection = []
 
         print("STARTING WITH MODEL(S):", in_selection)
@@ -495,7 +480,7 @@ class Selection:
 
                 for sel_data in self.user_sel:
                     if sel_data[0] == "saxs_chi2":
-                        calced = averageChi2_on(self, pdb_sel)
+                        calced = averageChi2_on(self.my_path, pdb_sel)
 
                         iter_scores[pdb_sel_key]["saxs_chi2"] = calced
 
