@@ -481,6 +481,10 @@ class Selection:
                 for sel_data in self.user_sel:
                     if sel_data[0] == "saxs_chi2":
                         calced = averageChi2_on(self.my_path, pdb_sel)
+                        iter_scores[pdb_sel_key]["saxs_chi2_real"] = calced
+
+                        if self.measure == "correlation":
+                            calced = 10 - calced
 
                         iter_scores[pdb_sel_key]["saxs_chi2"] = calced
 

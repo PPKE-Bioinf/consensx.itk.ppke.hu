@@ -145,14 +145,21 @@ def selection(request, my_id):
     values_dict = {}
 
     for key, value in sel_values.items():
-        if key == "saxs_chi2":
+        # saxs_chi2 values might be inverted to be suitable for correlation
+        # based selection, the real saxs_chi2_real values are stored with the
+        # "saxs_chi2_real" key
+        if key == "saxs_chi2_real":
+            continue
+        elif key == "saxs_chi2":
             original_value = original_values[key]
+            selection_value = "{0:.3g}".format(sel_values["saxs_chi2_real"])
         else:
             original_value = original_values[key + "_" + measure]
+            selection_value = "{0:.3g}".format(value)
 
         values_dict[key] = {
             "original": original_value,
-            "selection": "{0:.3g}".format(value)
+            "selection": selection_value
         }
 
     print("values_dict")
