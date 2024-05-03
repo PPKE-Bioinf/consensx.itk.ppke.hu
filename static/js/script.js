@@ -24,19 +24,20 @@ $(document).ready(function() {
 
     // form validation
     $('#csx_form').submit(function() {
-        // var hasPDB  = ($('#pdb_file').val() != "" ) || ($('#pdb_id').val() != "" );
         hasPDB  = false;
         hasMBMR = false;
         hasNOE  = false;
+        hasSAXS = false;
 
         if ($('#pdb_file').val()) { hasPDB = true; }
         if ($('#bmrb_file').val()) { hasMBMR = true; }
         if ($('#xplor_file').val()) { hasNOE = true; }
+        if ($('#saxs_dat_file').val()) { hasSAXS = true; }
 
         console.log(hasPDB, hasMBMR, hasNOE);
 
         // check if necessary inputs are selected
-        if (hasPDB == false || (hasMBMR == false && hasNOE == false)) {
+        if (hasPDB == false || (hasMBMR == false && hasNOE == false && hasSAXS == false)) {
             alert("You have to upload a PDB file and at least one parameter file to start calculation");
             return false;
         }

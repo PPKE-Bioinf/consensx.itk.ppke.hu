@@ -13,7 +13,7 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url
+from django.urls import include, re_path
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
@@ -21,8 +21,8 @@ from django.conf.urls.static import static
 import consensx.views
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
-    url(r'^$', consensx.views.home),
-    url(r'selection/(?P<my_id>[a-zA-Z0-9]{6}$)', consensx.views.selection),
-    url(r'^(?P<my_id>[a-zA-Z0-9]{6}$)', consensx.views.db),
+    re_path(r'^admin/', admin.site.urls),
+    re_path(r'^$', consensx.views.home),
+    re_path(r'selection/(?P<my_id>[a-zA-Z0-9]{6}$)', consensx.views.selection),
+    re_path(r'^(?P<my_id>[a-zA-Z0-9]{6}$)', consensx.views.db),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
