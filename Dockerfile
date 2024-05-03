@@ -1,3 +1,5 @@
+FROM ppkebioinf/consensx-deps AS csx-deps
+
 FROM ubuntu:20.04 AS builder
 LABEL maintainer="dudola.daniel@itk.ppke.hu"
 
@@ -5,7 +7,6 @@ ENV LANG=C.UTF-8
 
 RUN apt-get update -q \
     && apt-get install -y -q wget python3 python3-pip wget \
-    && wget users.itk.ppke.hu/~dudda/progs_consensx.tar.gz \
     && pip3 install pipenv
 
 ENV PYROOT /pyroot
@@ -31,7 +32,7 @@ FROM ubuntu:20.04
 ENV PGPASSWORD=password
 ENV LANG=C.UTF-8
 
-COPY --from=builder /progs_consensx.tar.gz .
+COPY --from=csx-deps /usr/src/app/progs_consensx /usr/src/app/progs_consensx
 
 # add i386 archutecture (pales dependency) and install software used by CoNSEnsX
 RUN dpkg --add-architecture i386 \
@@ -39,8 +40,6 @@ RUN dpkg --add-architecture i386 \
     && apt-get install -y -q postgresql-client libc6:i386 libncurses5:i386 \
                              libstdc++6:i386 libx11-6:i386 python3 python3-setuptools python3-six \
     && mkdir -p /usr/src/app \
-    && tar -C /usr/src/app -zxf progs_consensx.tar.gz \
-    && rm -rf progs_consensx.tar.gz \
     && apt-get autoremove -y \
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/*

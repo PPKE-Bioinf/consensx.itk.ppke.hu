@@ -72,7 +72,7 @@
 
 
     <h3 class="desc-page">Test data set</h3>
-    <p>The <a href="test_data/test_data.zip" target="download">test data set</a> provided for the server is based on an ensemble calculated for the N-terminal SH3 domain of the DRK protein (PDB entry 2A36, <a href="http://pubs.acs.org/doi/abs/10.1021/bi0512795" target="_new">Bezsonova et. al 2005</a>) using standard molecular dynamics simulations.  The test ensemble is a subsection of the ‘reference ensemble’ described in the CoNSEnsX+ paper (specifically, it contains 12 in addition to the ‘constricted ensemble’ to allow testing of the selection feature).  The NMR parameter set provided contains backbone S<sup>2</sup> order parameters, chemical shifts and with five RDC sets calculated from the ensemble. More details can be found in the CoNSEnsX+ paper.
+    <p>The <a href="test_data/test_data.zip" target="download">test data set</a> provided for the server is based on an ensemble calculated for the N-terminal SH3 domain of the DRK protein (PDB entry 2A36, <a href="https://pubs.acs.org/doi/abs/10.1021/bi0512795" target="_new">Bezsonova et. al 2005</a>) using standard molecular dynamics simulations.  The test ensemble is a subsection of the ‘reference ensemble’ described in the CoNSEnsX+ paper (specifically, it contains 12 in addition to the ‘constricted ensemble’ to allow testing of the selection feature).  The NMR parameter set provided contains backbone S<sup>2</sup> order parameters, chemical shifts and with five RDC sets calculated from the ensemble. More details can be found in the CoNSEnsX+ paper.
     </p>
 
     <h3 class="desc-page">Limitations</h3>
@@ -80,7 +80,7 @@
 
     <h3 class="desc-page">Versions &amp; availability</h3>
     <p>The current CoNSEnsX version is a complete redesign of the original one. The source code is free and available at <a href="https://github.com/derPuntigamer/CoNSEnsX" target="_new">GitHub</a><br>.
-    The first version of the server is still available at <a href="http://consensx.chem.elte.hu" target="_new">conensx.chem.elte.hu</a> and was described in: <a href="http://bmcstructbiol.biomedcentral.com/articles/10.1186/1472-6807-10-39" target="_new">Ángyán et al. BMC Strut. Biol. 2010, 10:39</a>.
+    The first version of the server is still available at <a href="http://consensx.chem.elte.hu" target="_new">conensx.chem.elte.hu</a> and was described in: <a href="https://bmcstructbiol.biomedcentral.com/articles/10.1186/1472-6807-10-39" target="_new">Ángyán et al. BMC Strut. Biol. 2010, 10:39</a>.
     </p>
 
     </div>
@@ -92,7 +92,7 @@
 
     <ul>
         <li>
-            Check that the atom naming convention is the same for all three files. To get a glimpse of possible mismatches, you can have a look at <a href="http://www.bmrb.wisc.edu/ref_info/atom_nom.tbl">http://www.bmrb.wisc.edu/ref_info/atom_nom.tbl</a> or invoke ‘atomconverter_pdb-pl -h’ that lists the same table with several additional formats added.
+            Check that the atom naming convention is the same for all three files. To get a glimpse of possible mismatches, you can have a look at <a href="https://www.bmrb.wisc.edu/ref_info/atom_nom.tbl">https://www.bmrb.wisc.edu/ref_info/atom_nom.tbl</a> or invoke ‘atomconverter_pdb-pl -h’ that lists the same table with several additional formats added.
         </li>
         <li>
             Perform the necessary conversions. We recommend to convert the PDB ensemble file (‘atomconverter_pdb.pl’) as this is the most likely to deviate from the nomenclature used by NMR processing software and is also the most robust to convert (its strict format makes recognition of atom names straightforward, making easy to spot unsuccessful conversions).
@@ -103,38 +103,38 @@
         <li>All scripts below are provided on an ‘as is’ basis, they might not be error-free but they are provided in the belief that they might be useful. Note that the scripts are not officially supported by BMRB. They can be freely modified for research purpose (usage information invoked with -h):
             <table class="tools">
                 <tr>
-                    <td><a href="http://consensx.itk.ppke.hu/static/tools/protonate_ensemble.pl" download>protonate_ensemble.pl</a></td>
+                    <td><a href="https://consensx.itk.ppke.hu/static/tools/protonate_ensemble.pl" download>protonate_ensemble.pl</a></td>
                     <td>Adds/replaces hydrogens to a PDB ensemble by invoking GROMACS's pdb2gmx on each model</td>
                 </tr>
                 <tr>
-                    <td><a href="http://consensx.itk.ppke.hu/static/tools/pdbfile2bmrbnomenclature.pl" download>pdbfile2bmrbnomenclature.pl</a></td>
+                    <td><a href="https://consensx.itk.ppke.hu/static/tools/pdbfile2bmrbnomenclature.pl" download>pdbfile2bmrbnomenclature.pl</a></td>
                     <td>Renames hydrogens in a PDB file according to the BMRB nomenclature.</td>
                 </tr>
-                    <td><a href="http://consensx.itk.ppke.hu/static/tools/atomconverter_pdb.pl" download>atomcoverter_pdb.pl</a></td>
+                    <td><a href="https://consensx.itk.ppke.hu/static/tools/atomconverter_pdb.pl" download>atomcoverter_pdb.pl</a></td>
                     <td>Converts atom names in a PDB file</td>
                 </tr>
                 <tr>
-                    <td><a href="http://consensx.itk.ppke.hu/static/tools/atomconverter_str.pl" download>atomconverter_str.pl</a></td>
+                    <td><a href="https://consensx.itk.ppke.hu/static/tools/atomconverter_str.pl" download>atomconverter_str.pl</a></td>
                     <td>Converts atom names in an NMR-Star file</td>
                 </tr>
                 <tr>
-                    <td><a href="http://consensx.itk.ppke.hu/static/tools/str2distre.pl" download>str2distre.pl</a></td>
+                    <td><a href="https://consensx.itk.ppke.hu/static/tools/str2distre.pl" download>str2distre.pl</a></td>
                     <td>Converts a NMR-Star format list to disre format</td>
                 </tr>
                 <tr>
-                    <td><a href="http://consensx.itk.ppke.hu/static/tools/tbl2disre.pl" download>tbl2disre.pl</a></td>
+                    <td><a href="https://consensx.itk.ppke.hu/static/tools/tbl2disre.pl" download>tbl2disre.pl</a></td>
                     <td>Converts an X-PLOR/CNS format distance restraint list to disre format</td>
                 </tr>
                 <tr>
-                    <td><a href="http://consensx.itk.ppke.hu/static/tools/upl2disre.pl" download>upl2disre.pl</a></td>
+                    <td><a href="https://consensx.itk.ppke.hu/static/tools/upl2disre.pl" download>upl2disre.pl</a></td>
                     <td>Converts a DIANA format distance restraint list to disre format</td>
                 </tr>
                 <tr>
-                    <td><a href="http://consensx.itk.ppke.hu/static/tools/disre2str.pl" download>disre2str.pl</a></td>
+                    <td><a href="https://consensx.itk.ppke.hu/static/tools/disre2str.pl" download>disre2str.pl</a></td>
                     <td>Converts a disre file to a simple NMR-Star format list</td>
                 </tr>
                 <tr>
-                    <td><a href="http://consensx.itk.ppke.hu/static/tools/disre_chk.pl" download>disre_chk.pl</a></td>
+                    <td><a href="https://consensx.itk.ppke.hu/static/tools/disre_chk.pl" download>disre_chk.pl</a></td>
                     <td>Checks distances in a pdb ensemble</td>
                 </tr>
             </table>
