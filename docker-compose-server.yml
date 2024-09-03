@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  consensx-server:
+    image: ppkebioinf/consensx
+    privileged: true
+    environment:
+    - DISABLE_SELECTION=True
+    ports:
+      - 8080:8000
+    depends_on:
+      - consensx-db
+    links:
+      - consensx-db
+    volumes:
+      - media:/usr/src/app/consensx.itk.ppke.hu/media
+
+  consensx-db:
+    image: postgres:16.0-alpine
+    environment:
+    - POSTGRES_PASSWORD=password
+    - POSTGRES_USER=consensxuser
+    - POSTGRES_DB=consensx
+    volumes:
+      - postgresql:/var/lib/postgresql/datad
+
+volumes:
+  media:
+    driver: local
+  postgresql:
+    driver: local
