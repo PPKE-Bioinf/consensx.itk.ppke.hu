@@ -29,6 +29,8 @@ from consensx import thirdparty
 from django.shortcuts import render
 from .models import CSX_upload, CSX_calculation
 
+DISABLE_SELECTION = bool(os.environ.get("DISABLE_SELECTION", False))
+print(f"DISABLE_SELECTION is {DISABLE_SELECTION}")
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -189,6 +191,7 @@ def run_calculation(request, calc_id):
                 "chemshift_data": chemshift_data,
                 "SVD_calc": db_entry.svd_enable,
                 "bme_zf_download": bme_zf_download,
+                "DISABLE_SELECTION": DISABLE_SELECTION,
             },
         )
 
@@ -337,6 +340,7 @@ def run_calculation(request, calc_id):
                 "chemshift_data": chemshift_data,
                 "SVD_calc": db_entry.svd_enable,
                 "bme_zf_download": bme_zf_download,
+                "DISABLE_SELECTION": DISABLE_SELECTION,
             },
         )
 
