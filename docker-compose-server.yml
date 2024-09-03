@@ -4,6 +4,7 @@ services:
   consensx-server:
     image: ppkebioinf/consensx
     privileged: true
+    restart: unless-stopped
     environment:
     - DISABLE_SELECTION=True
     ports:
@@ -17,6 +18,7 @@ services:
 
   consensx-db:
     image: postgres:16.0-alpine
+    restart: unless-stopped
     environment:
     - POSTGRES_PASSWORD=password
     - POSTGRES_USER=consensxuser
