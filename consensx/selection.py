@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import os
+import subprocess
 import pickle
 import prody
 from time import perf_counter
@@ -10,6 +11,7 @@ import consensx.graph as graph
 import consensx.calc as calc
 from consensx.misc.natural_sort import natural_sort
 from .models import CSX_upload
+from consensx import thirdparty
 
 
 def get_pdb_models(path):
@@ -92,6 +94,77 @@ class DumpedData:
         model_data = pickle.load(open(cs_model_data_path, 'rb'))
         self.ChemShift_model_data = ChemshiftModelData(model_data)
         self.ChemShift_is_loaded = True
+
+
+def averageChi2_on(my_path, models, write_fit_file=False):
+    """Returns a dictonary with the average SAXS Chi2 value:
+       averageRDC[residue] = value"""
+
+    fitfiles = []
+
+    for model in models:
+        fitfiles.append(f"{my_path}/model_{model + 1}.fit")
+
+    Chi2 = 0
+    file_num = 0
+
+    Q = {}
+    I = {}
+    D = {}
+    F = {}
+
+    for ff_path in fitfiles:
+        Chi2_i = 0
+        with open(ff_path, "r") as fitfile:
+            line_num = 0
+
+            for row in fitfile:
+                if row.startswith('#'):
+                    continue
+
+                q, Iexp, dIexp, Ifit = map(float, row.split())
+
+                if file_num == 0:
+                    Q[line_num] = q
+                    I[line_num] = Iexp
+                    D[line_num] = dIexp
+
+                try:
+                    F[line_num][file_num] = Ifit
+                except KeyError:
+                    F[line_num] = {file_num: Ifit}
+
+                Chi2_i += ((Iexp - Ifit) ** 2) / (dIexp ** 2)
+                line_num += 1
+
+            maxline_num = line_num
+
+        Chi2_i *= (1 / maxline_num)
+        # print(f"FILE {ff_path} Chi2 {Chi2_i}")
+        file_num += 1
+
+    if write_fit_file:
+        my_fit_file = open(my_path + "my_fit.fit", 'w')
+
+    for line_num in range(maxline_num):
+        f_avg = 0
+
+        for fn in range(file_num):
+            f_avg += F[line_num][fn]
+
+        f_avg /= file_num
+
+        if write_fit_file:
+            my_fit_file.write(f"{Q[line_num]:12.10f}      {I[line_num]:12.10f}      {D[line_num]:12.10f}     {f_avg:12.10f}\n")
+        Chi2 += ((I[line_num] - f_avg) ** 2) / (D[line_num] ** 2)
+
+    if write_fit_file:
+        my_fit_file.close()
+
+    Chi2 *= 1 / maxline_num
+    # print(f"Chi2: {Chi2}")
+
+    return Chi2
 
 
 def averageRDCs_on(models, my_data):
@@ -203,6 +276,8 @@ class Selection:
         self.dumped_data = DumpedData()
         self.user_sel = []
 
+        self.saxs_data_file = None
+
         for key, value in user_selection_json.items():
             # set MEASURE for selection
             if key == "MEASURE":
@@ -272,7 +347,19 @@ class Selection:
                 my_weight = float(value)
                 self.user_sel.append(["ChemShift", my_type, my_weight])
 
+            # read chemical shifts selections
+            elif key == "saxs":
+                # my_type = '_'.join(key.split('_')[1:])
+                my_weight = float(value)
+                # self.user_sel.append(["ChemShift", my_type, my_weight])
+                self.user_sel.append(["saxs_chi2", my_weight])
+
     def run_selection(self):
+        calc_id = self.my_path.split('/')[-1]
+        print('calcID', calc_id)
+        db_entry = CSX_upload.objects.get(id_code=calc_id)
+
+        self.saxs_data_file = db_entry.saxs_data_file
         pdb_output_name = self.my_path + "/raw.pdb"
 
         if os.path.isfile(pdb_output_name):
@@ -317,9 +404,6 @@ class Selection:
 
                 output_pdb.write(model_line + "\n")
 
-        calc_id = self.my_path.split('/')[-1]
-        print('calcID', calc_id)
-        db_entry = CSX_upload.objects.get(id_code=calc_id)
         print(db_entry.PDB_file)
         print("db_entry", db_entry)
 
@@ -395,7 +479,24 @@ class Selection:
                 iter_scores[pdb_sel_key] = {}
 
                 for sel_data in self.user_sel:
-                    if sel_data[0] == "RDC":
+                    if sel_data[0] == "saxs_chi2":
+                        calced = averageChi2_on(self.my_path, pdb_sel)
+                        iter_scores[pdb_sel_key]["saxs_chi2_real"] = calced
+
+                        if self.measure == "correlation":
+                            calced = 10 - calced
+
+                        iter_scores[pdb_sel_key]["saxs_chi2"] = calced
+
+                        saxs_weight = sel_data[1]
+                        divide_by += saxs_weight
+
+                        if num in model_scores.keys():
+                            model_scores[num] += calced * saxs_weight
+                        else:
+                            model_scores[num] = calced * saxs_weight
+
+                    elif sel_data[0] == "RDC":
                         RDC_num = sel_data[1]
                         RDC_type = sel_data[2]
                         RDC_weight = sel_data[3]

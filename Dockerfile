@@ -1,12 +1,12 @@
 FROM ppkebioinf/consensx-deps AS csx-deps
 
-FROM ubuntu:20.04 AS builder
+FROM ubuntu:22.04 AS builder
 LABEL maintainer="dudola.daniel@itk.ppke.hu"
 
 ENV LANG=C.UTF-8
 
 RUN apt-get update -q \
-    && apt-get install -y -q wget python3 python3-pip wget \
+    && apt-get install -y -q wget python3 python3-pip \
     && pip3 install pipenv
 
 ENV PYROOT /pyroot
@@ -27,12 +27,10 @@ RUN PIP_USER=1 PYTHONUSERBASE=$PYROOT pipenv install --system --deploy
 #    '--\ `-.__..-'    /.    (_), |  )
 #        `._        ___\_____.'_| |__/
 #           `~----"`   `-.........'
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 
 ENV PGPASSWORD=password
 ENV LANG=C.UTF-8
-
-COPY --from=csx-deps /usr/src/app/progs_consensx /usr/src/app/progs_consensx
 
 # add i386 archutecture (pales dependency) and install software used by CoNSEnsX
 RUN dpkg --add-architecture i386 \
@@ -43,6 +41,8 @@ RUN dpkg --add-architecture i386 \
     && apt-get autoremove -y \
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/*
+
+COPY --from=csx-deps /usr/src/app/progs_consensx /usr/src/app/progs_consensx
 
 ENV PYROOT /pyroot
 ENV PYTHONPATH $PYROOT/lib/python:$PATH

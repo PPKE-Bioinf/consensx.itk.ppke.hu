@@ -5,6 +5,7 @@ class ThirdParty(object):
     """Class to store 3rd party software information"""
     pales = ""
     shiftx = ""
+    pepsiSAXS = ""
     prideDB = ""
     prideNMR = ""
 
@@ -18,6 +19,8 @@ class ThirdParty(object):
                 ThirdParty.pales = line.split("'")[1]
             elif line.startswith("shiftx"):
                 ThirdParty.shiftx = line.split("'")[1]
+            elif line.startswith("pepsiSAXS"):
+                ThirdParty.pepsiSAXS = line.split("'")[1]
             elif line.startswith("prideDB"):
                 ThirdParty.prideDB = line.split("'")[1]
             elif line.startswith("prideNMR"):
@@ -32,7 +35,7 @@ def check_3rd_party(install_dir):
         init_conf = (
             "# CoNSEnsX config file\n" +
             "# Please provide full paths\n" +
-            "pales=''\n" + "shiftx=''\n" +
+            "pales=''\n" + "shiftx=''\n" + "pepsiSAXS=''\n" +
             "prideDB=''\n" + "prideNMR=''"
         )
 
