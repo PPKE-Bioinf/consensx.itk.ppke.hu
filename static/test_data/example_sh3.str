@@ -17,7 +17,7 @@ data_00000
 
 save_residual_dipolar_couplings_set1
     _RDC_list.Sf_category                      RDCs
-    _RDC_list.Sf_framecode                     residual_dipolar_couplings
+    _RDC_list.Sf_framecode                     residual_dipolar_couplings_set1
    
     loop_
         _RDC.RDC_code
@@ -208,7 +208,7 @@ save_
 
 save_residual_dipolar_couplings_set2
     _RDC_list.Sf_category                      RDCs
-    _RDC_list.Sf_framecode                     residual_dipolar_couplings
+    _RDC_list.Sf_framecode                     residual_dipolar_couplings_set2
 
     loop_
         _RDC.RDC_code
@@ -399,7 +399,7 @@ save_
 
 save_residual_dipolar_couplings_set3
     _RDC_list.Sf_category                      RDCs
-    _RDC_list.Sf_framecode                     residual_dipolar_couplings
+    _RDC_list.Sf_framecode                     residual_dipolar_couplings_set3
 
     loop_
         _RDC.RDC_code
@@ -590,7 +590,7 @@ save_
 
 save_residual_dipolar_couplings_set4
     _RDC_list.Sf_category                      RDCs
-    _RDC_list.Sf_framecode                     residual_dipolar_couplings
+    _RDC_list.Sf_framecode                     residual_dipolar_couplings_set4
 
     loop_
         _RDC.RDC_code
@@ -781,7 +781,7 @@ save_
 
 save_residual_dipolar_couplings_set5
     _RDC_list.Sf_category                      RDCs
-    _RDC_list.Sf_framecode                     residual_dipolar_couplings
+    _RDC_list.Sf_framecode                     residual_dipolar_couplings_set5
 
     loop_
         _RDC.RDC_code
@@ -991,7 +991,7 @@ save_S2_parameters
         6 LYS N 0.8367912417
         7 HIS N 0.8155212292
         8 ASP N 0.7889593874
-        9 PEH N 0.847039065
+        9 PHE N 0.847039065
         10 SER N 0.8226876984
         11 ALA N 0.8898245704
         12 THR N 0.850827062
@@ -1001,7 +1001,7 @@ save_S2_parameters
         16 GLU N 0.8067536598
         17 LEU N 0.8132682075
         18 SER N 0.7432120967
-        19 PEH N 0.8995269765
+        19 PHE N 0.8995269765
         20 ARG N 0.8925778868
         21 LYS N 0.8692559814
         22 THR N 0.8888049406
@@ -1161,25 +1161,25 @@ save_chemical_shift_set_1
         95 8 ASP HB2 H 2.59755 . 1
         96 8 ASP HB3 H 2.46557 . 1
         97 8 ASP N N 120.462 . 1
-        98 9 PEH C C 173.231 . 1
-        99 9 PEH CA C 56.789 . 1
-        100 9 PEH CB C 43.1186 . 1
-        101 9 PEH CD1 C 131.866 . 1
-        102 9 PEH CD2 C 131.472 . 1
-        103 9 PEH CE1 C 130.803 . 1
-        104 9 PEH CE2 C 130.922 . 1
-        105 9 PEH CG C 139.292 . 1
-        106 9 PEH CZ C 129.81 . 1
-        107 9 PEH H H 8.5536 . 1
-        108 9 PEH HA H 4.5011 . 1
-        109 9 PEH HB2 H 2.49331 . 1
-        110 9 PEH HB3 H 1.97264 . 1
-        111 9 PEH HD1 H 6.95063 . 1
-        112 9 PEH HD2 H 6.98967 . 1
-        113 9 PEH HE1 H 7.08562 . 1
-        114 9 PEH HE2 H 7.15529 . 1
-        115 9 PEH HZ H 7.21692 . 1
-        116 9 PEH N N 122.667 . 1
+        98 9 PHE C C 173.231 . 1
+        99 9 PHE CA C 56.789 . 1
+        100 9 PHE CB C 43.1186 . 1
+        101 9 PHE CD1 C 131.866 . 1
+        102 9 PHE CD2 C 131.472 . 1
+        103 9 PHE CE1 C 130.803 . 1
+        104 9 PHE CE2 C 130.922 . 1
+        105 9 PHE CG C 139.292 . 1
+        106 9 PHE CZ C 129.81 . 1
+        107 9 PHE H H 8.5536 . 1
+        108 9 PHE HA H 4.5011 . 1
+        109 9 PHE HB2 H 2.49331 . 1
+        110 9 PHE HB3 H 1.97264 . 1
+        111 9 PHE HD1 H 6.95063 . 1
+        112 9 PHE HD2 H 6.98967 . 1
+        113 9 PHE HE1 H 7.08562 . 1
+        114 9 PHE HE2 H 7.15529 . 1
+        115 9 PHE HZ H 7.21692 . 1
+        116 9 PHE N N 122.667 . 1
         117 10 SER C C 172.987 . 1
         118 10 SER CA C 56.8639 . 1
         119 10 SER CB C 64.9929 . 1
@@ -1267,25 +1267,25 @@ save_chemical_shift_set_1
         201 18 SER HB2 H 3.81766 . 1
         202 18 SER HB3 H 3.79301 . 1
         203 18 SER N N 119.193 . 1
-        204 19 PEH C C 173.521 . 1
-        205 19 PEH CA C 56.2987 . 1
-        206 19 PEH CB C 41.3661 . 1
-        207 19 PEH CD1 C 132.228 . 1
-        208 19 PEH CD2 C 131.882 . 1
-        209 19 PEH CE1 C 130.722 . 1
-        210 19 PEH CE2 C 130.862 . 1
-        211 19 PEH CG C 139.305 . 1
-        212 19 PEH CZ C 129.414 . 1
-        213 19 PEH H H 8.53744 . 1
-        214 19 PEH HA H 5.18596 . 1
-        215 19 PEH HB2 H 3.07097 . 1
-        216 19 PEH HB3 H 2.96084 . 1
-        217 19 PEH HD1 H 6.95955 . 1
-        218 19 PEH HD2 H 7.06354 . 1
-        219 19 PEH HE1 H 7.06806 . 1
-        220 19 PEH HE2 H 7.05369 . 1
-        221 19 PEH HZ H 6.98682 . 1
-        222 19 PEH N N 118.004 . 1
+        204 19 PHE C C 173.521 . 1
+        205 19 PHE CA C 56.2987 . 1
+        206 19 PHE CB C 41.3661 . 1
+        207 19 PHE CD1 C 132.228 . 1
+        208 19 PHE CD2 C 131.882 . 1
+        209 19 PHE CE1 C 130.722 . 1
+        210 19 PHE CE2 C 130.862 . 1
+        211 19 PHE CG C 139.305 . 1
+        212 19 PHE CZ C 129.414 . 1
+        213 19 PHE H H 8.53744 . 1
+        214 19 PHE HA H 5.18596 . 1
+        215 19 PHE HB2 H 3.07097 . 1
+        216 19 PHE HB3 H 2.96084 . 1
+        217 19 PHE HD1 H 6.95955 . 1
+        218 19 PHE HD2 H 7.06354 . 1
+        219 19 PHE HE1 H 7.06806 . 1
+        220 19 PHE HE2 H 7.05369 . 1
+        221 19 PHE HZ H 6.98682 . 1
+        222 19 PHE N N 118.004 . 1
         223 20 ARG C C 175.55 . 1
         224 20 ARG CA C 54.8461 . 1
         225 20 ARG CB C 31.8321 . 1
