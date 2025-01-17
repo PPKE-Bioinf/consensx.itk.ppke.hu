@@ -400,7 +400,7 @@ class Selection:
                         model_line += model_num + " "
                     else:
                         output_pdb.write(model_line + "\n")
-                        model_line = "REMARK ORIGINAL MODELS: "
+                        model_line = f"REMARK ORIGINAL MODELS: {model_num} "
 
                 output_pdb.write(model_line + "\n")
 
